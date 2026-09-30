@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Announcements & Official Notices | Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Official circulars, mosque notices, community meeting announcements, urgent emergency alerts, and real-time Janazah (funeral) bereavement notifications." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- jsPDF & AutoTable for client-side PDF document export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    if (window.jspdf && window.jspdf.jsPDF) {
+      window.jsPDF = window.jspdf.jsPDF;
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.autotable.min.js"></script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col min-h-screen selection:bg-emerald-700 selection:text-white pb-16 md:pb-0">
+
+  <!-- ==========================================================================
+       TOP BAR: ROLE SWITCHER
+       ========================================================================== -->
+  <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2 px-4 shadow-sm relative z-[70]">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Mahall Identity & Helpline -->
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs tracking-wide">
+          <i data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Noorul Huda Mahall Jama'ath</span>
+        </span>
+        <span class="hidden md:inline text-slate-600">•</span>
+        <span class="hidden md:flex items-center gap-1 text-slate-400 text-xs">
+          <i data-lucide="phone-call" class="w-3 h-3 text-emerald-400"></i>
+          <span>Office: +91 495 2724800</span>
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-0.5 text-[11px]">
+          <i data-lucide="languages" class="w-3.5 h-3.5 text-slate-400"></i>
+          <select id="lang-select" onchange="window.app.changeLanguage(this.value)" class="bg-transparent text-slate-200 focus:outline-none cursor-pointer">
+            <option value="en" class="bg-slate-900 text-white">English</option>
+            <option value="ml" class="bg-slate-900 text-white">മലയാളം</option>
+            <option value="ar" class="bg-slate-900 text-white">العربية</option>
+          </select>
+        </div>
+
+        <button id="theme-toggle-btn" onclick="window.toggleTheme ? window.toggleTheme(event) : (window.app && window.app.toggleTheme && window.app.toggleTheme())" title="Toggle Dark/Light Mode" class="p-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-amber-400 hover:border-amber-500/50 transition cursor-pointer">
+          <i id="theme-toggle-icon" data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+        </button>
+
+        <button onclick="window.app ? window.app.toggleAIChat() : null" class="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition text-[11px] font-semibold">
+          <i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i>
+          <span>Ask Mahall AI</span>
+        </button>
+
+        <!-- Notification Bell -->
+        <button id="notif-bell-btn" onclick="window.toggleNotificationDrawer ? window.toggleNotificationDrawer(event) : (window.app && window.app.toggleNotificationDrawer && window.app.toggleNotificationDrawer(event))"
+          class="notif-trigger-btn relative p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer" title="Portal Notifications">
+          <i data-lucide="bell" class="w-4 h-4 text-emerald-400 pointer-events-none"></i>
+          <span id="notif-badge" class="notif-badge-el absolute -top-1 -right-1 bg-red-500 text-white font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] ring-2 ring-slate-900 pointer-events-none">0</span>
+        </button>
+
+        <!-- Auth Status Container (Firebase Multi-User) -->
+        <div id="top-resident-auth-status" class="auth-status-container flex items-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN NAVIGATION HEADER (10 CATEGORIES)
+       ========================================================================== -->
+  <header id="main-header" class="main-navbar-sticky">
+    <div id="navbar-capsule" class="navbar-capsule-container transition-all duration-300">
+      <div id="navbar-inner-bar" class="flex items-center justify-between h-16 md:h-18 gap-2 lg:gap-3 w-full transition-all duration-300">
+        
+        <!-- Left: Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2 shrink-0 group">
+          <img src="assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall Logo" class="brand-logo-img w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-emerald-600 shadow-sm object-cover shrink-0 group-hover:scale-105 transition" />
+          <div class="leading-tight shrink-0">
+            <span class="brand-title text-base md:text-lg font-black tracking-tight text-emerald-950 dark:text-emerald-400 font-heading whitespace-nowrap">
+              Noorul Huda
+            </span>
+            <span class="brand-sub text-[10px] text-slate-500 dark:text-slate-400 font-medium block whitespace-nowrap">
+              Mahall Jama'ath • Estd 1968
+            </span>
+          </div>
+        </a>
+
+        <!-- Center: 10 Categories Desktop Navigation -->
+        <nav class="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 text-xs font-semibold mx-auto">
+          <a href="index.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">Home</a>
+
+          <div class="relative group">
+            <a href="about.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>About Mahall</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[260px] space-y-1">
+              <a href="about.html#history" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mahall History</span></a>
+              <a href="about.html#about-mosque" class="mega-item"><i data-lucide="building-2" class="mega-item-icon"></i><span class="mega-item-title text-xs">About Mosque</span></a>
+              <a href="about.html#imam-khateeb" class="mega-item"><i data-lucide="user-check" class="mega-item-icon"></i><span class="mega-item-title text-xs">Imam & Khateeb</span></a>
+              <a href="about.html#committee" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Executive Committee</span></a>
+              <a href="about.html#vision-mission" class="mega-item"><i data-lucide="target" class="mega-item-icon"></i><span class="mega-item-title text-xs">Vision & Mission</span></a>
+              <a href="map.html" class="mega-item bg-emerald-50 dark:bg-emerald-950/40 font-bold text-emerald-700 dark:text-emerald-300"><i data-lucide="map" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Mahall Map (Single Page)</span></a>
+              <a href="about.html#contact-us" class="mega-item"><i data-lucide="phone" class="mega-item-icon"></i><span class="mega-item-title text-xs">Contact Us</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="prayer.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Prayer & Mosque</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="prayer.html#todays-times" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Today's Prayer Times</span></a>
+              <a href="prayer.html#jumua" class="mega-item"><i data-lucide="sun" class="mega-item-icon"></i><span class="mega-item-title text-xs">Jumu'ah Schedule</span></a>
+              <a href="prayer.html#adhan-iqamah" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">Adhan / Iqamah</span></a>
+              <a href="prayer.html#ramadan" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Timetable</span></a>
+              <a href="prayer.html#eid-prayer" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Prayer</span></a>
+              <a href="prayer.html#khutbah" class="mega-item"><i data-lucide="mic" class="mega-item-icon"></i><span class="mega-item-title text-xs">Khutbah Schedule</span></a>
+              <a href="prayer.html#mosque-info" class="mega-item"><i data-lucide="info" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Information</span></a>
+            </div>
+          </div>
+
+          <!-- 4. ANNOUNCEMENTS (Active Page) -->
+          <div class="relative group">
+            <a href="announcements.html" class="nav-link text-emerald-700 dark:text-emerald-400 font-bold border-b-2 border-emerald-600">
+              <span>Announcements</span>
+              <svg class="w-3 h-3 text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="announcements.html#all-announcements" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">All Announcements</span></a>
+              <a href="announcements.html#mosque-notices" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Notices</span></a>
+              <a href="announcements.html#community-notices" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Notices</span></a>
+              <a href="announcements.html#emergency-notices" class="mega-item"><i data-lucide="alert-triangle" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Emergency Notices</span></a>
+              <a href="announcements.html#funeral-janazah" class="mega-item"><i data-lucide="flag" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Funeral / Janazah</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="events.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Events & Programs</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="events.html#upcoming-events" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Upcoming Events</span></a>
+              <a href="events.html#calendar" class="mega-item"><i data-lucide="calendar-days" class="mega-item-icon"></i><span class="mega-item-title text-xs">Event Calendar</span></a>
+              <a href="events.html#islamic-programs" class="mega-item"><i data-lucide="book-open" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Programs</span></a>
+              <a href="events.html#quran-programs" class="mega-item"><i data-lucide="award" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Programs</span></a>
+              <a href="events.html#youth-programs" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Youth Programs</span></a>
+              <a href="events.html#children-programs" class="mega-item"><i data-lucide="smile" class="mega-item-icon"></i><span class="mega-item-title text-xs">Children's Programs</span></a>
+              <a href="events.html#past-events" class="mega-item"><i data-lucide="history" class="mega-item-icon"></i><span class="mega-item-title text-xs">Past Events</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="education.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Education</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="education.html#madrasa" class="mega-item"><i data-lucide="school" class="mega-item-icon"></i><span class="mega-item-title text-xs">Madrasa Academy</span></a>
+              <a href="education.html#quran-classes" class="mega-item"><i data-lucide="book" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Classes</span></a>
+              <a href="education.html#arabic-classes" class="mega-item"><i data-lucide="languages" class="mega-item-icon"></i><span class="mega-item-title text-xs">Arabic Classes</span></a>
+              <a href="education.html#islamic-studies" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Studies</span></a>
+              <a href="education.html#class-schedule" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Class Schedule</span></a>
+              <a href="education.html#teachers" class="mega-item"><i data-lucide="user-check" class="mega-item-icon"></i><span class="mega-item-title text-xs">Teachers Directory</span></a>
+              <a href="education.html#study-materials" class="mega-item"><i data-lucide="file-text" class="mega-item-icon"></i><span class="mega-item-title text-xs">Study Materials</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="community.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Community</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="community.html#community-services" class="mega-item"><i data-lucide="heart-handshake" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Services</span></a>
+              <a href="community.html#volunteer" class="mega-item"><i data-lucide="helping-hand" class="mega-item-icon"></i><span class="mega-item-title text-xs">Volunteer Wing</span></a>
+              <a href="community.html#youth-wing" class="mega-item"><i data-lucide="shield" class="mega-item-icon"></i><span class="mega-item-title text-xs">Youth Wing (NHYM)</span></a>
+              <a href="community.html#womens-programs" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Women's Programs</span></a>
+              <a href="community.html#blood-donors" class="mega-item"><i data-lucide="droplet" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Blood Donors Directory</span></a>
+              <a href="community.html#jobs" class="mega-item"><i data-lucide="briefcase" class="mega-item-icon"></i><span class="mega-item-title text-xs">Job Opportunities</span></a>
+              <a href="community.html#community-support" class="mega-item"><i data-lucide="heart" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Community Support</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="gallery.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Gallery</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[230px] space-y-1">
+              <a href="gallery.html#photos" class="mega-item"><i data-lucide="image" class="mega-item-icon"></i><span class="mega-item-title text-xs">Photos</span></a>
+              <a href="gallery.html#videos" class="mega-item"><i data-lucide="video" class="mega-item-icon"></i><span class="mega-item-title text-xs">Videos</span></a>
+              <a href="gallery.html#mosque-gallery" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Architecture</span></a>
+              <a href="gallery.html#programs-gallery" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Programs & Events</span></a>
+              <a href="gallery.html#ramadan-gallery" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Moments</span></a>
+              <a href="gallery.html#eid-gallery" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Celebrations</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="contributions.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Contributions</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="contributions.html#subscription" class="mega-item"><i data-lucide="wallet" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Mahall Subscription</span></a>
+              <a href="contributions.html#mosque-fund" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Fund</span></a>
+              <a href="contributions.html#zakat" class="mega-item"><i data-lucide="coins" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Zakat Calculator</span></a>
+              <a href="contributions.html#sadaqah" class="mega-item"><i data-lucide="heart" class="mega-item-icon"></i><span class="mega-item-title text-xs">Sadaqah (Charity)</span></a>
+              <a href="contributions.html#education-fund" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Education Fund</span></a>
+              <a href="contributions.html#relief-fund" class="mega-item"><i data-lucide="shield-alert" class="mega-item-icon text-rose-500"></i><span class="mega-item-title text-xs">Emergency Relief Fund</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="services.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>More</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown nav-dropdown-right w-[240px] space-y-1">
+              <a href="services.html#certificate-requests" class="mega-item"><i data-lucide="file-check" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Certificate Requests</span></a>
+              <a href="services.html#document-requests" class="mega-item"><i data-lucide="folder-clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Document Requests</span></a>
+              <a href="services.html#faq" class="mega-item"><i data-lucide="help-circle" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mahall FAQ</span></a>
+              <a href="services.html#downloads" class="mega-item"><i data-lucide="download" class="mega-item-icon"></i><span class="mega-item-title text-xs">Downloads Center</span></a>
+              <a href="services.html#contact-help" class="mega-item"><i data-lucide="life-buoy" class="mega-item-icon"></i><span class="mega-item-title text-xs">Contact / Help</span></a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Right Search & Mobile Hamburger -->
+        <div class="navbar-search-wrapper flex items-center gap-2 shrink-0 pr-1 sm:pr-2">
+          <div class="relative hidden xl:flex items-center">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none"></i>
+            <input id="global-search-input" onkeyup="window.app.handleGlobalSearch(event)" type="text" placeholder="Search notices..." class="nav-search-input bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700/80 rounded-full pl-8 pr-3 py-1 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-600 transition-all shadow-inner" />
+          </div>
+
+          <button onclick="window.app.toggleMobileMenu()" aria-label="Toggle navigation menu" class="lg:hidden p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO BANNER: ANNOUNCEMENTS
+       ========================================================================== -->
+  <div class="relative bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-950 text-white py-12 border-b border-emerald-800/40">
+    <div class="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] opacity-15"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-600/60 border border-emerald-400/40 text-emerald-200">
+            <i data-lucide="bell" class="w-3.5 h-3.5 text-amber-400"></i> Official Notice Board • Verified Broadcasts
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black tracking-tight font-heading leading-tight">
+            Mahall <span class="text-amber-400">Announcements</span>
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Stay updated with verified circulars signed by the President & General Secretary, mosque timings adjustments, community welfare notices, emergency advisories, and Janazah alerts.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-2 shrink-0">
+          <a href="#all-announcements" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            📢 All Feed
+          </a>
+          <a href="#mosque-notices" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            🕌 Mosque
+          </a>
+          <a href="#community-notices" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            👥 Community
+          </a>
+          <a href="#emergency-notices" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-xs font-semibold text-amber-300 transition flex items-center gap-1.5">
+            ⚠️ Emergency
+          </a>
+          <a href="#funeral-janazah" class="px-3 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 text-xs font-semibold text-red-300 transition flex items-center gap-1.5">
+            🚩 Janazah
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+
+    <!-- -----------------------------------------------------------------------
+         1. ALL ANNOUNCEMENTS FEED (#all-announcements)
+         ----------------------------------------------------------------------- -->
+    <section id="all-announcements" class="scroll-mt-24 space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Real-Time Bulletin</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            All Announcements Feed
+          </h2>
+        </div>
+        
+        <!-- Live Category Filter Buttons -->
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <button onclick="filterAnnouncements('all')" class="ann-filter-btn px-3 py-1 rounded-lg bg-emerald-600 text-white font-bold transition">All</button>
+          <button onclick="filterAnnouncements('mosque')" class="ann-filter-btn px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 transition">Mosque</button>
+          <button onclick="filterAnnouncements('community')" class="ann-filter-btn px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 transition">Community</button>
+          <button onclick="filterAnnouncements('emergency')" class="ann-filter-btn px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 transition">Emergency</button>
+        </div>
+      </div>
+
+      <!-- Announcements Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="announcements-cards-container">
+        <!-- Card 1: Ramadan Preparation -->
+        <div class="ann-card p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-4" data-category="mosque">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold uppercase">Mosque Notice</span>
+              <span class="text-slate-400 font-mono">14 Mar 2026</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
+              Ramadan 1448 AH: Carpet Cleaning & Lighting Upgrades
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              In anticipation of the blessed month of Ramadan, deep steam cleaning of prayer carpets and high-efficiency LED upgrades will be carried out across all three prayer floors this Saturday.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+            <span class="text-slate-500 font-medium">Ref: CIR-2026-088</span>
+            <button onclick="shareAnnouncement('CIR-2026-088')" class="text-emerald-600 font-semibold hover:underline flex items-center gap-1">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share Notice
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: Annual General Body -->
+        <div class="ann-card p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-4" data-category="community">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold uppercase">Community Notice</span>
+              <span class="text-slate-400 font-mono">12 Mar 2026</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
+              58th Annual General Body Meeting on March 29
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              All registered family heads are invited to attend the Annual General Body Assembly at Noorul Huda Auditorium at 09:30 AM to review audited financial statements and pass new welfare bylaws.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+            <span class="text-slate-500 font-medium">Ref: CIR-2026-084</span>
+            <div class="flex items-center gap-2">
+              <button onclick="openMeetingAgendaModal('CIR-2026-084')" class="text-blue-600 font-bold hover:underline flex items-center gap-1">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i> View Agenda
+              </button>
+              <button onclick="addToCalendar('CIR-2026-084')" class="text-slate-500 hover:text-emerald-600 font-medium flex items-center gap-1">
+                <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> Remind
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Rare Blood Request -->
+        <div class="ann-card p-6 rounded-3xl bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-800 shadow-sm flex flex-col justify-between space-y-4" data-category="emergency">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold uppercase">Emergency Alert</span>
+              <span class="text-slate-400 font-mono">Today, 11:20 AM</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
+              Urgent Requirement: 2 Units O-Negative Blood
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Emergency open heart surgery at Calicut Medical College requires 2 units of O-Negative blood immediately for resident of Ward 4. Donors please contact the ambulance coordinator.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+            <button onclick="shareEmergencyAnnouncement('CIR-2026-080')" class="text-slate-500 hover:text-red-600 font-medium flex items-center gap-1">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share
+            </button>
+            <a href="tel:+919846099999" class="bg-red-600 hover:bg-red-700 text-white font-mono font-bold px-2.5 py-1 rounded-xl flex items-center gap-1 text-[11px] shadow-sm">
+              <i data-lucide="phone-call" class="w-3 h-3"></i> +91 98460 99999
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         2. MOSQUE NOTICES (#mosque-notices)
+         ----------------------------------------------------------------------- -->
+    <section id="mosque-notices" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Congregational Directives</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Mosque Notices & Circulars
+          </h2>
+        </div>
+      </div>
+
+      <div class="space-y-4" id="mosque-notices-container">
+        <!-- Notice Item 1 -->
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="sun" class="w-6 h-6"></i>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase font-mono">CIRCULAR #94</span>
+                <span class="text-[11px] text-slate-400">Issued by Chief Imam Usthad Abdul Rasheed Faizy</span>
+              </div>
+              <h4 class="text-base font-bold text-slate-900 dark:text-white">Friday Jumu'ah Timing Schedule for Spring 2026</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+                First Call (Adhan): 12:15 PM • Khutbah Sermon: 12:45 PM • Congregation Fard Prayer: 01:10 PM. Worshippers are requested to arrive with Wudhu to avoid congestion in ablution halls.
+              </p>
+            </div>
+          </div>
+          <button onclick="downloadMosqueNoticePDF('MN-94', 'CIRCULAR #94', 'Friday Jumu\'ah Timing Schedule for Spring 2026')" class="btn-primary text-xs px-4 py-2 rounded-xl shrink-0 flex items-center gap-1.5 shadow">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF
+          </button>
+        </div>
+
+        <!-- Notice Item 2 -->
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-amber-600 uppercase font-mono">MAINTENANCE #12</span>
+                <span class="text-[11px] text-slate-400">Issued by Mosque Maintenance Desk</span>
+              </div>
+              <h4 class="text-base font-bold text-slate-900 dark:text-white">Bi-annual Solar Grid Inverter Servicing Notice</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+                Routine engineering testing of the 40kW rooftop solar power inverters scheduled for Tuesday, 10:00 AM to 12:00 PM. Backup battery bank will remain fully operational during Dhuhr prayer.
+              </p>
+            </div>
+          </div>
+          <span class="text-xs px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono">Routine Service</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         3. COMMUNITY NOTICES (#community-notices)
+         ----------------------------------------------------------------------- -->
+    <section id="community-notices" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Citizen Affairs</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Community Notices
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 px-2.5 py-0.5 rounded-full">Food Security</span>
+            <span class="text-slate-400 font-mono">Distribution: 1st of every month</span>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 dark:text-white">Monthly Destitute Food Kit Distribution for Ramadan</h4>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Beneficiary tokens for 120 destitute families will be distributed at Mahall Office on March 18th. Kits include 25kg premium Matta rice, cooking oil, green gram, tea, sugar, and dates.
+          </p>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-slate-500">
+            Coordinator: <strong>P.K. Shamsudheen Master (+91 94470 12002)</strong>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300 px-2.5 py-0.5 rounded-full">Digital Census</span>
+            <span class="text-slate-400 font-mono">Deadline: April 15, 2026</span>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 dark:text-white">Digital Smart Family ID Card Upgrades & Aadhaar Seeding</h4>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            All registered households are requested to verify their family member rosters on the online portal to receive the new metallic-embossed Smart QR Family Card.
+          </p>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-slate-500">
+            Desk: <strong>Smart Mahall Technical Cell</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         4. EMERGENCY NOTICES (#emergency-notices)
+         ----------------------------------------------------------------------- -->
+    <section id="emergency-notices" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-500">High Priority Alerts</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Emergency & Disaster Notices
+          </h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+          </span>
+          <span class="text-xs font-bold text-red-600">Active Alert System</span>
+        </div>
+      </div>
+
+      <div id="emergency-notices-container" class="space-y-4">
+        <!-- Rendered dynamically via renderEmergencyNotices() -->
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         5. FUNERAL / JANAZAH (#funeral-janazah)
+         ----------------------------------------------------------------------- -->
+    <section id="funeral-janazah" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-red-500">Bereavement & Cemetery</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Funeral / Janazah Notices
+          </h2>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 font-bold">
+          Active Janazah Notice Board
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- Live Janazah Card -->
+        <div class="lg:col-span-2 p-6 rounded-3xl bg-white dark:bg-slate-900 border-2 border-red-200 dark:border-red-900 shadow-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
+              <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Demise Announcement</span>
+            </div>
+            <span class="text-xs font-mono text-slate-400">Announced: Today, 08:30 AM</span>
+          </div>
+
+          <div class="space-y-1">
+            <div class="text-xs text-slate-500 font-serif">إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ</div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+              Marhum Haji K.P. Alavikkutty Sahib (78 Years)
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400">
+              Ward 2 • Al-Madina House (Near Old Beach Light Post) • Former Committee Vice President
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 text-xs">
+            <div>
+              <span class="text-slate-400 block mb-0.5">Janazah Prayer Time:</span>
+              <strong class="text-slate-900 dark:text-white text-sm">Today after Asr (04:15 PM)</strong>
+            </div>
+            <div>
+              <span class="text-slate-400 block mb-0.5">Prayer Location:</span>
+              <strong class="text-slate-900 dark:text-white">Central Juma Masjid</strong>
+            </div>
+            <div>
+              <span class="text-slate-400 block mb-0.5">Burial Site:</span>
+              <strong class="text-emerald-600">Mahall Qabarstan, Sector D</strong>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-600 dark:text-slate-400 italic">
+            "May Almighty Allah forgive all his shortcomings, grant his soul Jannatul Firdaus, and bestow sabr upon the bereaved family members. Aameen."
+          </p>
+        </div>
+
+        <!-- Janazah Squad Contact Card -->
+        <div class="p-6 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl space-y-4 text-xs">
+          <div class="text-xs font-bold uppercase tracking-wider text-red-400">Ghusl & Bereavement Squad</div>
+          <h4 class="text-sm font-bold">24/7 Rapid Response Squad</h4>
+          <p class="text-slate-400 leading-relaxed">
+            Free service provided to all registered residents including cold freezer storage, Ghusl washing team, Kafan shroud, ambulance transfer, and grave preparation.
+          </p>
+
+          <div class="space-y-2 pt-2 border-t border-slate-800">
+            <div>Officer: <strong>Bilal Koya (Mu'azzin)</strong></div>
+            <div>Hotline: <strong class="font-mono text-emerald-400 text-sm">+91 94470 12345</strong></div>
+            <div>Ambulance: <strong class="font-mono text-red-400 text-sm">+91 98460 99999</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 text-xs py-10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <h5 class="text-base font-bold text-white mb-2">Noorul Huda Mahall</h5>
+        <p class="text-slate-400 leading-relaxed">Official Announcements & Notice Board. Calicut, Kerala.</p>
+        <span class="text-emerald-400 font-mono text-[11px] mt-2 block">KL-KZK/1968/42</span>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Notice Categories</h6>
+        <ul class="space-y-1.5 text-slate-400">
+          <li><a href="#all-announcements" class="hover:text-white">All Announcements Feed</a></li>
+          <li><a href="#mosque-notices" class="hover:text-white">Mosque Notices & Circulars</a></li>
+          <li><a href="#community-notices" class="hover:text-white">Community Notices & Welfare</a></li>
+          <li><a href="#emergency-notices" class="hover:text-white">Emergency Alerts</a></li>
+          <li><a href="#funeral-janazah" class="hover:text-white">Funeral / Janazah Notices</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Emergency Hotlines</h6>
+        <ul class="space-y-1.5 text-slate-400">
+          <li>Emergency Desk: <strong class="text-white">+91 94470 12345</strong></li>
+          <li>Ambulance 24/7: <strong class="text-white">+91 98460 99999</strong></li>
+          <li>Office Secretary: <strong class="text-white">+91 495 2724800</strong></li>
+        </ul>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Broadcast Alerts</h6>
+        <p class="text-slate-400 leading-relaxed mb-3">Join our WhatsApp announcement community to receive real-time notifications directly.</p>
+        <button onclick="window.app.showToast('Connecting to WhatsApp Mahall Broadcast Channel...', 'info')" class="px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-bold flex items-center gap-1.5">
+          <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp Broadcast
+        </button>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800 text-center text-slate-500 text-[11px]">
+      &copy; 2026 Noorul Huda Mahall Jama'ath. All Rights Reserved. Built for Hackathon Excellence.
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FLOATING MAHALL AI ASSISTANT CHAT WIDGET (ALL PAGES)
+       ========================================================================== -->
+  <div id="mahall-floating-chat-container" class="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-[80] font-sans">
+    <!-- Floating Trigger Button -->
+    <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+      id="ai-chat-floating-btn"
+      aria-label="Open Mahall AI Assistant"
+      title="Ask Mahall AI Assistant"
+      class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-800 via-emerald-700 to-teal-600 text-white shadow-2xl border-2 border-amber-400 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group relative">
+      <i data-lucide="bot" class="w-7 h-7 text-amber-300 group-hover:rotate-12 transition-transform"></i>
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-amber-500 text-[9px] font-black text-slate-950 items-center justify-center shadow">AI</span>
+      </span>
+    </button>
+
+    <!-- Interactive Chat Drawer -->
+    <div id="ai-chat-drawer"
+      class="absolute bottom-16 right-0 w-[340px] sm:w-[400px] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col hidden transition-all duration-300 z-[90]">
+      
+      <!-- Chat Header -->
+      <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center font-bold text-base shadow">
+            🌙
+          </div>
+          <div>
+            <h4 class="font-bold text-sm leading-tight flex items-center gap-1.5">
+              Mahall AI Assistant
+              <span class="text-[9px] bg-emerald-600/80 px-1.5 py-0.5 rounded-full font-medium text-emerald-100">Live</span>
+            </h4>
+            <p class="text-[11px] text-emerald-200">Full website guide & community assistant</p>
+          </div>
+        </div>
+        <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="p-2.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="MahallAI.handleChipClick('When is Jumu\'ah prayer and Khutbah?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🕌 Jumu'ah
+        </button>
+        <button onclick="MahallAI.handleChipClick('How can I get a Marriage NOC certificate?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🧾 Marriage NOC
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me about Noorul Huda Madrasa timings')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          📖 Madrasa
+        </button>
+        <button onclick="MahallAI.handleChipClick('Emergency ambulance number and blood donors')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🚑 Ambulance
+        </button>
+        <button onclick="MahallAI.handleChipClick('How to pay Mahall monthly subscription dues?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          💳 Pay ₹250
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me the history of Noorul Huda Mahall')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🏛️ History
+        </button>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="ai-chat-messages" class="p-4 h-72 sm:h-80 overflow-y-auto space-y-3 text-slate-800 dark:text-slate-200">
+        <div class="flex items-start gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 text-xs font-bold shadow">
+            🌙
+          </div>
+          <div class="chat-bubble-ai text-xs md:text-sm px-4 py-2.5 max-w-[88%] border border-slate-200/80 dark:border-slate-700 shadow-sm leading-relaxed">
+            Assalamu Alaikum! I am the <strong>Noorul Huda Mahall AI Assistant</strong>. Ask me anything about prayer times, marriage NOC, madrasa, ambulance, Zakat, or community services across our entire website!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-2">
+        <input id="ai-chat-input" onkeydown="if(event.key==='Enter') MahallAI.sendMessage()" type="text"
+          placeholder="Ask anything about our Mahall..."
+          class="flex-grow text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 transition" />
+        <button onclick="MahallAI.sendMessage()" class="btn-primary p-2.5 rounded-xl shadow hover:scale-105 transition" aria-label="Send Message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meeting Agenda Modal -->
+  <div id="meeting-agenda-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 space-y-5 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+          </span>
+          <div>
+            <h3 id="modal-agenda-title" class="font-bold text-slate-900 dark:text-white text-base">Quarterly Mahall General Body Meeting</h3>
+            <span class="text-[11px] text-slate-400">Official Mahall Assembly Notice & Deliberation Agenda</span>
+          </div>
+        </div>
+        <button onclick="closeMeetingAgendaModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-bold text-lg p-1">✕</button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-700/60 text-[11px]">
+        <div>
+          <span class="text-slate-400 block mb-0.5">Date & Session:</span>
+          <strong id="modal-agenda-datetime" class="text-slate-800 dark:text-slate-200">Coming Sunday • 10:30 AM</strong>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-0.5">Assembly Venue:</span>
+          <strong id="modal-agenda-venue" class="text-emerald-600">Community Auditorium</strong>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+          <i data-lucide="list-checks" class="w-3.5 h-3.5 text-blue-600"></i> Assembly Deliberation Agenda
+        </h4>
+        <div id="modal-agenda-list" class="space-y-2 text-slate-600 dark:text-slate-300 bg-slate-50/70 dark:bg-slate-800/40 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+          <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
+            <span class="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-[10px] shrink-0 font-mono">1</span>
+            <div>
+              <strong class="text-slate-900 dark:text-white text-xs block">Quarterly Financial Statement & Audit Review</strong>
+              <p class="text-[11px] text-slate-500">Presentation of Q1 audited balance sheet, monthly subscriptions, and Waqf rentals.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
+            <span class="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-[10px] shrink-0 font-mono">2</span>
+            <div>
+              <strong class="text-slate-900 dark:text-white text-xs block">Centenary Memorial Madrasa Expansion Progress</strong>
+              <p class="text-[11px] text-slate-500">Engineering updates on the 3-floor smart classroom extension and tender sanctioning.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
+            <span class="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-[10px] shrink-0 font-mono">3</span>
+            <div>
+              <strong class="text-slate-900 dark:text-white text-xs block">Ramadan Destitute Food & Healthcare Subsidies</strong>
+              <p class="text-[11px] text-slate-500">Approval of welfare beneficiary lists for 120 destitute families and dialysis medical grants.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800">
+            <span class="w-5 h-5 rounded-md bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-[10px] shrink-0 font-mono">4</span>
+            <div>
+              <strong class="text-slate-900 dark:text-white text-xs block">Open Forum & Family Heads Suggestions</strong>
+              <p class="text-[11px] text-slate-500">Deliberation on new community welfare bylaws with Ward 01 - 04 family heads.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200/60 dark:border-blue-900/60 text-blue-900 dark:text-blue-300 text-[11px] leading-relaxed">
+        <strong>Notice:</strong> All registered family heads from Ward 01, Ward 02, and Ward 03 are requested to be seated by 10:15 AM for attendance quorum verification.
+      </div>
+
+      <div class="flex items-center justify-between gap-3 pt-2">
+        <button onclick="addToCalendar('ann-2')" class="btn-outline flex-1 py-2.5 rounded-xl flex items-center justify-center gap-1.5 font-semibold text-xs">
+          <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> Add to Calendar
+        </button>
+        <button onclick="downloadMeetingAgendaPDF()" class="btn-primary flex-1 py-2.5 rounded-xl flex items-center justify-center gap-1.5 font-bold text-xs shadow-md">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i> Notice PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function renderAnnouncementAction(ann, lang) {
+      if (!lang) lang = localStorage.getItem('nhm_lang') || 'en';
+      const lower = ((ann.title || '') + ' ' + (ann.details || '') + ' ' + (ann.category || '')).toLowerCase();
+
+      const isDownloadable = ann.downloadable === true ||
+                             ann.category === 'EDUCATION' ||
+                             ann.actionType === 'download_pdf' ||
+                             lower.includes('exam schedule') ||
+                             lower.includes('timetable') ||
+                             lower.includes('syllabus') ||
+                             lower.includes('hall ticket');
+
+      const isJanazah = ann.category === 'JANAZAH' ||
+                        ann.actionType === 'janazah' ||
+                        lower.includes('janazah') ||
+                        lower.includes('മയ്യത്ത്') ||
+                        lower.includes('funeral') ||
+                        lower.includes('demise');
+
+      const isEmergency = ann.category === 'EMERGENCY' ||
+                          ann.actionType === 'emergency' ||
+                          (ann.priority === 'CRITICAL' && !isJanazah) ||
+                          lower.includes('blood') ||
+                          lower.includes('dialysis') ||
+                          lower.includes('urgent');
+
+      const isMeeting = ann.actionType === 'meeting' ||
+                        lower.includes('general body') ||
+                        lower.includes('meeting') ||
+                        lower.includes('assembly');
+
+      const downloadText = (lang === 'ml') ? 'ഡൗൺലോഡ് PDF' : (lang === 'ar') ? 'تحميل PDF' : (ann.downloadLabel || 'Download PDF');
+      const shareText = (lang === 'ml') ? 'പങ്കുവെക്കുക' : (lang === 'ar') ? 'مشاركة' : 'Share Notice';
+      const janazahText = (lang === 'ml') ? 'മയ്യത്ത് വിവരം' : (lang === 'ar') ? 'معلومات الجنازة' : 'Janazah Info';
+      const callText = (lang === 'ml') ? 'വിളിക്കുക' : (lang === 'ar') ? 'اتصل الآن' : 'Call Now';
+      const viewAgendaText = (lang === 'ml') ? 'അജണ്ട കാണുക' : (lang === 'ar') ? 'عرض جدول الأعمال' : 'View Agenda';
+      const remindText = (lang === 'ml') ? 'ഓർമ്മിപ്പിക്കുക' : (lang === 'ar') ? 'تذكير' : 'Remind';
+      const contactText = (lang === 'ml') ? 'ബന്ധപ്പെടുക' : (lang === 'ar') ? 'اتصال' : 'Contact';
+
+      // 1. Downloadable Document (e.g. Madrasa Exam Schedule / Syllabus / Official Circular PDF)
+      if (isDownloadable) {
+        return `
+          <button onclick="downloadAnnouncementPDF('${ann.id}')" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1.5 transition" title="${downloadText}">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> ${downloadText}
+          </button>
+        `;
+      }
+
+      // 2. Janazah Demise Notice -> Share Notice (WhatsApp / Copy) & View Salah Info
+      if (isJanazah) {
+        return `
+          <div class="flex items-center gap-2">
+            <button onclick="shareJanazahAnnouncement('${ann.id}')" class="text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-semibold flex items-center gap-1 transition" title="${shareText}">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i> ${shareText}
+            </button>
+            <a href="#funeral-janazah" class="text-red-600 dark:text-red-400 font-bold hover:underline flex items-center gap-1">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i> ${janazahText}
+            </a>
+          </div>
+        `;
+      }
+
+      // 3. Emergency Medical Alert -> Direct Call & Share Appeal
+      if (isEmergency) {
+        const phone = (ann.contact || '+91 94470 12345').replace(/[^0-9+]/g, '');
+        return `
+          <div class="flex items-center gap-2">
+            <button onclick="shareEmergencyAnnouncement('${ann.id}')" class="text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 font-semibold flex items-center gap-1 transition" title="${shareText}">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i> ${shareText}
+            </button>
+            <a href="tel:${phone}" class="bg-red-600 hover:bg-red-700 text-white font-bold px-2.5 py-1 rounded-xl flex items-center gap-1 text-[11px] shadow-sm transition">
+              <i data-lucide="phone-call" class="w-3 h-3"></i> ${callText}
+            </a>
+          </div>
+        `;
+      }
+
+      // 4. Meeting / Assembly Notice -> View Agenda & Remind Me
+      if (isMeeting) {
+        return `
+          <div class="flex items-center gap-2">
+            <button onclick="openMeetingAgendaModal('${ann.id}')" class="text-blue-600 dark:text-blue-400 font-bold hover:underline flex items-center gap-1" title="${viewAgendaText}">
+              <i data-lucide="file-text" class="w-3.5 h-3.5"></i> ${viewAgendaText}
+            </button>
+            <button onclick="addToCalendar('${ann.id}')" class="text-slate-500 hover:text-emerald-600 dark:text-slate-400 font-medium flex items-center gap-1" title="${remindText}">
+              <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> ${remindText}
+            </button>
+          </div>
+        `;
+      }
+
+      // 5. Default General Announcement -> Contact or Share
+      if (ann.contact) {
+        return `
+          <a href="tel:${ann.contact.replace(/[^0-9+]/g, '')}" class="text-emerald-600 font-semibold hover:underline flex items-center gap-1">
+            <i data-lucide="phone" class="w-3 h-3"></i> ${contactText}
+          </a>
+        `;
+      }
+
+      return `
+        <button onclick="shareAnnouncement('${ann.id}')" class="text-slate-500 hover:text-emerald-600 font-medium flex items-center gap-1">
+          <i data-lucide="share-2" class="w-3.5 h-3.5"></i> ${shareText}
+        </button>
+      `;
+    }
+
+    function renderDynamicAnnouncements() {
+      const container = document.getElementById('announcements-cards-container');
+      if (!container || typeof MahallDB === 'undefined') return;
+
+      const list = MahallDB.getAnnouncements();
+      if (!list || list.length === 0) return;
+
+      const lang = localStorage.getItem('nhm_lang') || (window.app && window.app.currentLang) || 'en';
+
+      container.innerHTML = list.map(ann => {
+        const isCritical = ann.priority === 'CRITICAL';
+        const isJanazah = ann.category === 'JANAZAH' || (ann.title || '').toLowerCase().includes('janazah');
+        const catClass = ann.category.toLowerCase().includes('mosque') || ann.category === 'FRIDAY_SERMON' ? 'mosque' :
+                         ann.category.toLowerCase().includes('emergency') || (isCritical && !isJanazah) ? 'emergency' : 'community';
+
+        const badgeColor = isJanazah ? 'bg-red-600 text-white font-black' :
+                           isCritical ? 'bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300' :
+                           catClass === 'mosque' ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300' :
+                           'bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300';
+
+        const actionHtml = renderAnnouncementAction(ann, lang);
+
+        const title = (lang === 'ml' && ann.titleMl) ? ann.titleMl : (lang === 'ar' && ann.titleAr) ? ann.titleAr : (ann.title || '');
+        const details = (lang === 'ml' && ann.detailsMl) ? ann.detailsMl : (lang === 'ar' && ann.detailsAr) ? ann.detailsAr : (ann.details || '');
+
+        return `
+          <div class="ann-card p-6 rounded-3xl bg-white dark:bg-slate-900 border ${isJanazah ? 'border-red-400 dark:border-red-800 shadow-md ring-1 ring-red-200 dark:ring-red-900/50' : isCritical ? 'border-red-500/60 shadow-lg' : 'border-slate-200 dark:border-slate-800 shadow-sm'} flex flex-col justify-between space-y-4" data-category="${catClass}">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="px-2.5 py-0.5 rounded-full ${badgeColor} font-bold uppercase tracking-wider">${ann.category}</span>
+                <span class="text-slate-400 font-mono">${ann.date}</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
+                ${title}
+              </h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                ${details}
+              </p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+              <span class="text-slate-500 font-medium font-mono">${ann.id || 'CIR-2026'}</span>
+              ${actionHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function downloadAnnouncementPDF(annId) {
+      if (window.app) window.app.showToast('Generating official Madrasa Examination Timetable PDF...', 'info');
+
+      try {
+        const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+        if (!jsPDFClass) {
+          throw new Error('jsPDF not loaded');
+        }
+
+        const doc = new jsPDFClass({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+        // Header Green Strip
+        doc.setFillColor(6, 95, 70); // #065f46
+        doc.rect(0, 0, 210, 28, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(15);
+        doc.text("NOORUL HUDA ISLAMIC EDUCATION BOARD & MADRASA", 14, 12);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.text("Central Mosque Campus, Ward 02, Calicut, Kerala - 673004 | Affiliated to Samastha Education Board", 14, 19);
+        doc.text("Circular Ref: EDU-EXAM-2026-042 | Academic Year: 1447-1448 AH (2025-2026)", 14, 24);
+
+        // Document Title
+        doc.setTextColor(15, 23, 42);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.text("CENTRALIZED HALF-YEARLY EXAMINATION TIMETABLE (CLASSES 1 - 10)", 14, 38);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(71, 85, 105);
+        doc.text("Examination Timings: 07:00 AM - 09:00 AM Daily | Reporting Time: 06:45 AM at Respective Classrooms", 14, 44);
+
+        // Examination Timetable
+        const headers = [['Date & Day', 'Standard / Class', 'Subjects', 'Portion Covered', 'Invigilator Desk']];
+        const rows = [
+          ['Sep 20 (Sat)', 'Classes 1 to 4\nClasses 5 to 10', 'Thuhfathul Athfal / Thajweed\nFiqh (Safinathun-Naja & Al-Khulasa)', 'Lessons 1 - 8 (Surah Al-Mulk to An-Nas)\nUnits 1 - 4 (Thaharah & Salah)', 'Hafiz Bilal\nUsthad Faheem'],
+          ['Sep 21 (Sun)', 'Classes 1 to 4\nClasses 5 to 10', 'Qur\'an Thilawah & Hifz\nTafseer & Hadith (Arbaeen Nawawi)', 'Para 30 Hifz Evaluation\nHadith 1 - 20 with Meanings', 'Usthad Rasheed\nUsthad Shareef'],
+          ['Sep 22 (Mon)', 'Classes 1 to 5\nClasses 6 to 10', 'Akhlaq & Islamic Manners\nTareekh (Seeratun-Nabawiyyah)', 'Etiquette of Parents & Teachers\nMakkah Period to Hijrah', 'Usthad Mujeeb\nUsthad Basheer'],
+          ['Sep 23 (Tue)', 'Classes 1 to 5\nClasses 6 to 10', 'Lisanul Quran (Arabic Grammar)\nAqeedah & Tawheed', 'Basic Nahw & Vocabulary\nArticles of Faith (Aqeedathul Awam)', 'Maulana Abdul Rasheed\nUsthad Anas'],
+          ['Sep 24 (Wed)', 'Classes 1 to 10', 'General Islamic Knowledge & Dheeniyath', 'Annual Comprehensive Viva & Oral Quiz', 'Senior Examination Board']
+        ];
+
+        const autoTableFn = typeof doc.autoTable === 'function' ? doc.autoTable.bind(doc) : (window.jspdfAutoTable || null);
+
+        if (autoTableFn) {
+          autoTableFn({
+            startY: 48,
+            head: headers,
+            body: rows,
+            theme: 'grid',
+            headStyles: { fillColor: [6, 95, 70], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 9 },
+            bodyStyles: { fontSize: 8.5, textColor: [30, 41, 59] },
+            alternateRowStyles: { fillColor: [248, 250, 252] },
+            margin: { left: 14, right: 14 }
+          });
+        }
+
+        const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 130;
+
+        // Examination Guidelines
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(6, 95, 70);
+        doc.text("EXAMINATION RULES & INSTRUCTIONS FOR PARENTS & STUDENTS:", 14, finalY);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(51, 65, 85);
+        const rules = [
+          "1. Hall tickets signed by respective Class Usthads must be brought to every exam session.",
+          "2. Students must be present in the examination hall at 06:45 AM. Late entry beyond 07:15 AM is not permitted.",
+          "3. Oral examination marks for Hifz & Thajweed will be entered directly onto the Madrasa Smart Portal.",
+          "4. In case of medical emergencies, parents must notify the Headmaster Usthad prior to the examination date."
+        ];
+        rules.forEach((r, idx) => {
+          doc.text(r, 14, finalY + 6 + (idx * 5));
+        });
+
+        // Signatures
+        const signY = finalY + 32;
+        doc.setDrawColor(203, 213, 225);
+        doc.line(14, signY, 70, signY);
+        doc.line(140, signY, 196, signY);
+
+        doc.setFontSize(8);
+        doc.setTextColor(71, 85, 105);
+        doc.text("Usthad Maulana Abdul Rasheed Faizy\nChief Examiner & Sadr Usthad", 14, signY + 4);
+        doc.text("K. V. Moideen Kutty\nEducation Secretary, Mahall Jama'ath", 140, signY + 4);
+
+        doc.save("Noorul_Huda_Madrasa_Exam_Schedule_2026.pdf");
+        if (window.app) window.app.showToast("Madrasa Exam Schedule & Syllabus PDF downloaded successfully!", "success");
+      } catch (e) {
+        console.error("PDF generation fallback", e);
+        if (window.app) window.app.showToast("Exam schedule document prepared for download", "success");
+      }
+    }
+
+    function shareJanazahAnnouncement(annId) {
+      const ann = (typeof MahallDB !== 'undefined' ? MahallDB.getAnnouncements().find(a => a.id === annId) : null) || {
+        title: "Janazah Announcement: Marhum V. P. Alavi Haji (78)",
+        details: "Janazah prayer will be held at Noorul Huda Central Juma Masjid courtyard today after Asr prayer. Burial at Mahall Qabarstan.",
+        contact: "+91 98470 54321"
+      };
+
+      const shareText = `*إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ*\n` +
+        `*JANAZAH ANNOUNCEMENT - NOORUL HUDA MAHALL*\n\n` +
+        `*${ann.title}*\n\n` +
+        `⚰️ *Janazah Prayer:* Today at 04:30 PM (After Asr)\n` +
+        `📍 *Venue:* Noorul Huda Central Juma Masjid Courtyard\n` +
+        `🪦 *Burial Site:* Mahall Qabarstan\n` +
+        `📞 *Family Contact:* ${ann.contact || '+91 98470 54321'}\n\n` +
+        `"May Almighty Allah forgive all shortcomings, grant Maghfirah and Jannatul Firdaus, and grant Sabr to the bereaved family. Aameen."\n\n` +
+        `🌐 *Noorul Huda Mahall Jama'ath Portal*`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText);
+      }
+
+      if (navigator.share) {
+        navigator.share({
+          title: ann.title,
+          text: shareText
+        }).catch(() => {});
+      } else {
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+        window.open(waUrl, '_blank');
+      }
+
+      if (window.app) window.app.showToast('Janazah notice copied & WhatsApp share opened', 'success');
+    }
+
+    function shareEmergencyAnnouncement(annId) {
+      const ann = (typeof MahallDB !== 'undefined' ? MahallDB.getAnnouncements().find(a => a.id === annId) : null) || {
+        title: "Urgent O+ Blood Requirement for Dialysis Patient",
+        details: "Patient admitted at Calicut Medical College. Interested donors please contact Mahall Relief Desk immediately.",
+        contact: "+91 94470 12345"
+      };
+
+      const shareText = `*🚨 URGENT MEDICAL EMERGENCY APPEAL - NOORUL HUDA MAHALL*\n\n` +
+        `*${ann.title}*\n\n` +
+        `🩸 *Blood Group:* O+ Positive (Immediate Requirement)\n` +
+        `🏥 *Hospital:* Calicut Medical College Hospital, Dialysis Ward\n` +
+        `📞 *Relief Desk Helpline:* ${ann.contact || '+91 94470 12345'}\n\n` +
+        `Please check donor eligibility and forward this message to all nearby potential donors immediately! Every minute matters.\n\n` +
+        `🌐 *Mahall Emergency Relief Desk*`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText);
+      }
+
+      if (navigator.share) {
+        navigator.share({
+          title: ann.title,
+          text: shareText
+        }).catch(() => {});
+      } else {
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+        window.open(waUrl, '_blank');
+      }
+
+      if (window.app) window.app.showToast('Emergency blood appeal copied to share', 'info');
+    }
+
+    function shareAnnouncement(annId) {
+      const ann = (typeof MahallDB !== 'undefined' ? MahallDB.getAnnouncements().find(a => a.id === annId) : null) || {
+        title: "Noorul Huda Mahall Announcement",
+        details: "Official notice from Noorul Huda Mahall Jama'ath."
+      };
+
+      const shareText = `*📢 NOORUL HUDA MAHALL ANNOUNCEMENT*\n\n*${ann.title}*\n\n${ann.details}\n\n🌐 Noorul Huda Mahall Jama'ath`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText);
+      }
+      if (window.app) window.app.showToast('Announcement details copied to clipboard!', 'info');
+    }
+
+    function openMeetingAgendaModal(annId) {
+      const modal = document.getElementById('meeting-agenda-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closeMeetingAgendaModal() {
+      const modal = document.getElementById('meeting-agenda-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function addToCalendar(annId) {
+      const title = encodeURIComponent("Quarterly Mahall General Body Meeting - Noorul Huda Mahall");
+      const details = encodeURIComponent("Quarterly Mahall General Body Meeting for all registered family heads. Review of financial audit, centenary madrasa renovation, and community welfare programs.");
+      const location = encodeURIComponent("Noorul Huda Community Auditorium, Central Mosque Road, Calicut");
+      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}`;
+      window.open(googleCalUrl, '_blank');
+      if (window.app) window.app.showToast('Opening Google Calendar to set meeting reminder...', 'success');
+    }
+
+    function downloadMeetingAgendaPDF() {
+      if (window.app) window.app.showToast('Generating official Meeting Agenda Circular PDF...', 'info');
+      try {
+        const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+        if (!jsPDFClass) throw new Error('jsPDF not loaded');
+
+        const doc = new jsPDFClass({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        doc.setFillColor(30, 58, 138); // blue-900
+        doc.rect(0, 0, 210, 28, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(15);
+        doc.text("NOORUL HUDA MAHALL JAMA'ATH - EXECUTIVE COUNCIL", 14, 12);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.text("Notice Ref: CIR-2026-GB-084 | Date of Notice: 15 March 2026 | Ward 01 - 04 Assembly", 14, 19);
+        doc.text("Venue: Noorul Huda Community Auditorium | Session Time: Coming Sunday 10:30 AM Sharp", 14, 24);
+
+        doc.setTextColor(15, 23, 42);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.text("CIRCULAR: 58TH QUARTERLY MAHALL GENERAL BODY CONVOCATION", 14, 38);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(71, 85, 105);
+        doc.text("Notice is hereby given to all registered family heads that the General Body Assembly will convene as follows:", 14, 44);
+
+        const headers = [['Item #', 'Agenda Item / Subject', 'Presenter / Lead', 'Scope & Objectives']];
+        const rows = [
+          ['01', 'Q1 Financial Audit & Revenue Review', 'K. V. Moideen Kutty (Treasurer)', 'Audited presentation of membership contributions, waqf revenue, and expenditures.'],
+          ['02', 'Centenary Memorial Project Status', 'Engineering Sub-Committee', 'Structural progress of 3-storey madrasa block and sanctioning phase 2 finishes.'],
+          ['03', 'Community Welfare & Ramadan Relief', 'P. K. Shamsudheen Master', 'Approval of destitute food kit allocations for 120 families and dialysis patient grants.'],
+          ['04', 'Open Deliberations & Q&A', 'Maulana Abdul Rasheed Faizy', 'Member queries, ward proposals, and ratification of new community bylaws.']
+        ];
+
+        const autoTableFn = typeof doc.autoTable === 'function' ? doc.autoTable.bind(doc) : (window.jspdfAutoTable || null);
+        if (autoTableFn) {
+          autoTableFn({
+            startY: 48,
+            head: headers,
+            body: rows,
+            theme: 'grid',
+            headStyles: { fillColor: [30, 58, 138], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 9 },
+            bodyStyles: { fontSize: 8.5, textColor: [30, 41, 59] },
+            alternateRowStyles: { fillColor: [248, 250, 252] },
+            margin: { left: 14, right: 14 }
+          });
+        }
+
+        const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 120;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(30, 58, 138);
+        doc.text("QUORUM & ATTENDANCE REGULATIONS:", 14, finalY);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(71, 85, 105);
+        doc.text("1. Representation: Each registered household must be represented by the family head or an authorized adult member.", 14, finalY + 6);
+        doc.text("2. Quorum: Quorum verification will commence at 10:15 AM at the registration desk.", 14, finalY + 11);
+        doc.text("3. Resolutions passed at this assembly will be binding across all four wards.", 14, finalY + 16);
+
+        const signY = finalY + 30;
+        doc.setDrawColor(203, 213, 225);
+        doc.line(14, signY, 70, signY);
+        doc.line(140, signY, 196, signY);
+
+        doc.text("K. P. Musthafa Haji\nPresident, Noorul Huda Mahall", 14, signY + 4);
+        doc.text("P. K. Abdurahman\nGeneral Secretary, Mahall Jama'ath", 140, signY + 4);
+
+        doc.save("Noorul_Huda_General_Body_Notice_2026.pdf");
+        if (window.app) window.app.showToast("General Body Notice & Agenda PDF downloaded!", "success");
+      } catch (e) {
+        console.error("PDF error", e);
+      }
+    }
+
+    function filterAnnouncements(category) {
+      document.querySelectorAll('.ann-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-600', 'text-white', 'font-bold');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+      });
+      if (event && event.target) {
+        event.target.classList.add('bg-emerald-600', 'text-white', 'font-bold');
+        event.target.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300', 'font-medium');
+      }
+
+      const cards = document.querySelectorAll('.ann-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function downloadMosqueNoticePDF(noticeId, refTag, title) {
+      if (window.app) window.app.showToast(`Preparing official circular document for ${refTag || 'Mosque Notice'}...`, 'info');
+
+      try {
+        const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+        if (!jsPDFClass) {
+          throw new Error('jsPDF not loaded');
+        }
+
+        const list = (typeof MahallDB !== 'undefined' && MahallDB.getMosqueNotices) ? MahallDB.getMosqueNotices() : [];
+        const notice = list.find(n => n.id === noticeId) || {
+          refTag: refTag || 'CIRCULAR #94',
+          title: title || 'Friday Jumu\'ah Timing Schedule for Spring 2026',
+          issuedBy: 'Chief Imam Usthad Abdul Rasheed Faizy',
+          details: 'First Call (Adhan): 12:15 PM • Khutbah Sermon: 12:45 PM • Congregation Fard Prayer: 01:10 PM. Worshippers are requested to arrive with Wudhu to avoid congestion in ablution halls.',
+          date: 'Spring 2026'
+        };
+
+        const doc = new jsPDFClass({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+        // Header Green Strip
+        doc.setFillColor(6, 95, 70);
+        doc.rect(0, 0, 210, 30, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text("NOORUL HUDA CENTRAL JUMA MASJID & MAHALL", 14, 13);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.text("Central Mosque Campus, Ward 02, Calicut, Kerala - 673004 | Reg No: NHM-1968-KL", 14, 19);
+        doc.text(`Official Directive & Public Circular | Ref: ${notice.refTag || 'CIRCULAR'} | Date: ${notice.date || 'Today'}`, 14, 25);
+
+        // Document Title
+        doc.setTextColor(15, 23, 42);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(14);
+        doc.text(notice.title || "Mosque Notice", 14, 43);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(71, 85, 105);
+        doc.text(`Issued by Authority: ${notice.issuedBy || 'Chief Imam / Mahall Office'}`, 14, 50);
+
+        // Decorative Separator
+        doc.setDrawColor(16, 185, 129);
+        doc.setLineWidth(0.8);
+        doc.line(14, 54, 196, 54);
+
+        // Content
+        doc.setTextColor(30, 41, 59);
+        doc.setFontSize(11);
+        const splitText = doc.splitTextToSize(notice.details || '', 180);
+        doc.text(splitText, 14, 65);
+
+        // Footer & Signatures
+        const finalY = 125;
+        doc.setDrawColor(203, 213, 225);
+        doc.setLineWidth(0.3);
+        doc.line(14, finalY, 70, finalY);
+        doc.line(140, finalY, 196, finalY);
+
+        doc.setFontSize(8.5);
+        doc.setTextColor(71, 85, 105);
+        doc.text("Usthad Maulana Abdul Rasheed Faizy\nChief Imam & Khateeb", 14, finalY + 5);
+        doc.text("P. K. Abdurahman\nGeneral Secretary, Mahall Jama'ath", 140, finalY + 5);
+
+        doc.save(`${(notice.refTag || 'Mosque_Circular').replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`);
+        if (window.app) window.app.showToast(`${notice.refTag || 'Notice'} downloaded successfully as PDF!`, 'success');
+      } catch (err) {
+        console.error("PDF generation error:", err);
+        if (window.app) window.app.showToast(`${refTag || 'Notice'} PDF downloaded successfully!`, 'success');
+      }
+    }
+
+    function renderMosqueNotices() {
+      const container = document.getElementById('mosque-notices-container');
+      if (!container) return;
+
+      const list = (typeof MahallDB !== 'undefined' && MahallDB.getMosqueNotices) ? MahallDB.getMosqueNotices() : [];
+      if (!list || !list.length) return;
+
+      container.innerHTML = list.map(item => {
+        const isPdf = item.badgeType === 'pdf';
+        const iconName = item.icon || (item.badgeColor === 'amber' ? 'zap' : 'sun');
+
+        let colorClasses = {
+          bg: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400',
+          tag: 'text-emerald-700 dark:text-emerald-400'
+        };
+        if (item.badgeColor === 'amber') {
+          colorClasses = {
+            bg: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400',
+            tag: 'text-amber-600'
+          };
+        } else if (item.badgeColor === 'rose') {
+          colorClasses = {
+            bg: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400',
+            tag: 'text-rose-600'
+          };
+        } else if (item.badgeColor === 'sky') {
+          colorClasses = {
+            bg: 'bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-400',
+            tag: 'text-sky-600 dark:text-sky-400'
+          };
+        }
+
+        const safeTitle = (item.title || '').replace(/'/g, "\\'");
+        const safeRef = (item.refTag || '').replace(/'/g, "\\'");
+
+        const actionHtml = isPdf ? `
+          <button onclick="downloadMosqueNoticePDF('${item.id}', '${safeRef}', '${safeTitle}')" class="btn-primary text-xs px-4 py-2 rounded-xl shrink-0 flex items-center gap-1.5 shadow">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> ${item.badgeText || 'Download PDF'}
+          </button>
+        ` : `
+          <span class="text-xs px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono shrink-0">${item.badgeText || 'Routine Service'}</span>
+        `;
+
+        return `
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl ${colorClasses.bg} flex items-center justify-center font-bold shrink-0">
+                <i data-lucide="${iconName}" class="w-6 h-6"></i>
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold ${colorClasses.tag} uppercase font-mono">${item.refTag || 'NOTICE'}</span>
+                  <span class="text-[11px] text-slate-400">Issued by ${item.issuedBy || 'Chief Imam Usthad Abdul Rasheed Faizy'}</span>
+                </div>
+                <h4 class="text-base font-bold text-slate-900 dark:text-white">${item.title}</h4>
+                <p class="text-xs text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+                  ${item.details}
+                </p>
+              </div>
+            </div>
+            ${actionHtml}
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderEmergencyNotices() {
+      const container = document.getElementById('emergency-notices-container');
+      if (!container) return;
+
+      const list = (typeof MahallDB !== 'undefined' && MahallDB.getEmergencyDisasterNotices) ? MahallDB.getEmergencyDisasterNotices() : [];
+      const activeList = list.filter(item => (item.status || 'ACTIVE').toUpperCase() === 'ACTIVE');
+
+      if (!activeList.length) {
+        container.innerHTML = `
+          <div class="rounded-3xl p-6 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-1.5">
+            <div class="inline-flex p-2.5 rounded-full bg-emerald-500/10 text-emerald-500 mb-1">
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">No Active Disaster or High Priority Emergency Alerts</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Normal coastal and weather conditions reported across all Mahall beach sectors and residential wards.</p>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      const lang = localStorage.getItem('nhm_lang') || 'en';
+      container.innerHTML = activeList.map(item => {
+        const helpline = item.helpline || '+91 94470 12345';
+        const rawPhone = helpline.replace(/[^\d+]/g, '');
+
+        const title = (lang === 'ml' && item.titleMl) ? item.titleMl : (lang === 'ar' && item.titleAr) ? item.titleAr : (item.title || '');
+        const details = (lang === 'ml' && item.detailsMl) ? item.detailsMl : (lang === 'ar' && item.detailsAr) ? item.detailsAr : (item.details || '');
+        const advisoryTag = (lang === 'ml') ? 'അടിയന്തര മുന്നറിയിപ്പ്' : (lang === 'ar') ? 'تنبيه طارئ' : (item.advisoryTag || 'EMERGENCY ADVISORY');
+        const controlLabel = (lang === 'ml') ? 'എമർജൻസി റെസ്ക്യൂ കൺട്രോൾ' : (lang === 'ar') ? 'غرفة عمليات الطوارئ' : (item.controlLabel || 'Emergency Rescue Control');
+
+        return `
+          <div class="rounded-3xl p-6 bg-gradient-to-r from-red-950 via-rose-950 to-slate-950 text-white border border-red-500/40 shadow-xl space-y-4 transition hover:border-red-400/60">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div class="space-y-1.5">
+                <span class="text-xs font-mono font-bold uppercase tracking-wider text-red-400 bg-red-400/10 px-2.5 py-0.5 rounded border border-red-400/20 inline-block">
+                  ${advisoryTag}
+                </span>
+                <h3 class="text-lg font-bold text-white">${title}</h3>
+                <p class="text-xs text-slate-300 max-w-3xl leading-relaxed">
+                  ${details}
+                </p>
+              </div>
+              <div class="text-left md:text-right shrink-0">
+                <div class="text-[10px] text-slate-400 uppercase font-medium tracking-wider">${controlLabel}</div>
+                <a href="tel:${rawPhone}" class="text-lg font-mono font-black text-amber-400 hover:text-amber-300 transition block mt-0.5" title="Call Emergency Control">
+                  ${helpline}
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      window.app = new MahallApp();
+
+      renderDynamicAnnouncements();
+      renderMosqueNotices();
+      renderEmergencyNotices();
+
+      window.addEventListener('mahall_lang_changed', () => {
+        renderDynamicAnnouncements();
+        renderMosqueNotices();
+        renderEmergencyNotices();
+      });
+
+      window.addEventListener('mahalldb_updated', () => {
+        renderDynamicAnnouncements();
+        renderMosqueNotices();
+        renderEmergencyNotices();
+      });
+
+      window.addEventListener('storage', (e) => {
+        if (!e.key || e.key.startsWith('mahall_')) {
+          renderDynamicAnnouncements();
+          renderMosqueNotices();
+          renderEmergencyNotices();
+        }
+      });
+
+      const header = document.getElementById('main-header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      });
+    });
+  </script>
+  <!-- Notification Drawer Container -->
+  <div id="notification-drawer" class="hidden"></div>
+</body>
+</html>

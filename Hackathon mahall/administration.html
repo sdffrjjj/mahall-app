@@ -1,0 +1,3463 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0; url=ADMIN/index.html" />
+  <script>window.location.replace("ADMIN/index.html");</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executive Secretariat & Admin Portal | Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Full-featured Executive Administration & Secretariat Portal of Noorul Huda Mahall: Census register, dues ledger, certificate approvals, Sulhu arbitration, AI notice broadcaster, madrasa records, and donor dispatch." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Chart.js CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+  
+  <style>
+    /* Custom Admin Sidebar & Dashboard Tokens */
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 0.875rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #64748b;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .dark .admin-nav-item {
+      color: #94a3b8;
+    }
+    .admin-nav-item:hover {
+      background: rgba(5, 150, 105, 0.08);
+      color: #047857;
+    }
+    .dark .admin-nav-item:hover {
+      background: rgba(5, 150, 105, 0.15);
+      color: #34d399;
+    }
+    .admin-nav-item.active {
+      background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+    }
+    .admin-nav-item.active .badge-count {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    /* Official Certificate Ornamentation */
+    .certificate-frame {
+      border: 12px double #047857;
+      background: radial-gradient(circle at center, #ffffff 0%, #fbf9f4 100%);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15), inset 0 0 40px rgba(217, 119, 6, 0.05);
+    }
+    .seal-stamp {
+      border: 3px dashed #b91c1c;
+      color: #b91c1c;
+      border-radius: 50%;
+      transform: rotate(-10deg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+    .treasury-stamp {
+      border: 3px solid #047857;
+      color: #047857;
+      border-radius: 12px;
+      transform: rotate(4deg);
+      text-transform: uppercase;
+      font-weight: 800;
+      user-select: none;
+    }
+    .watermark-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(4, 120, 87, 0.04);
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* Print media overrides */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-certificate-container, #printable-certificate-container * {
+        visibility: visible;
+      }
+      #printable-certificate-container {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: white !important;
+      }
+      #printable-receipt-container, #printable-receipt-container * {
+        visibility: visible;
+      }
+      #printable-receipt-container {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col min-h-screen selection:bg-emerald-700 selection:text-white pb-16 md:pb-0">
+
+  <!-- ==========================================================================
+       TOP BAR: ROLE SWITCHER & EXECUTIVE ENVIRONMENT
+       ========================================================================== -->
+  <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2 px-4 shadow-sm relative z-[70]">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Mahall Identity & Helpline -->
+      <div class="flex items-center gap-3">
+        <span class="font-bold text-emerald-400 flex items-center gap-1.5 uppercase tracking-wider">
+          <i data-lucide="shield" class="w-4 h-4"></i> Noorul Huda Mahall
+        </span>
+        <span class="text-slate-600 hidden sm:inline">|</span>
+        <span class="text-slate-300 hidden sm:inline flex items-center gap-1">
+          <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-400"></i> Office: +91 94472 88990
+        </span>
+        <span class="text-slate-600 hidden md:inline">|</span>
+        <span class="text-amber-400 hidden md:inline flex items-center gap-1">
+          <i data-lucide="ambulance" class="w-3.5 h-3.5"></i> Emergency 24/7: +91 94470 12345
+        </span>
+      </div>
+
+      <!-- Quick Session Info, Date & Language Switcher -->
+      <div class="flex items-center gap-3">
+        
+        <!-- Live Clock & Hijri Indicator -->
+        <div class="hidden lg:flex items-center gap-2 text-slate-400 font-mono text-[11px] bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="admin-live-clock">07:50:00 PM</span>
+          <span class="text-slate-600">|</span>
+          <span class="text-emerald-400 font-sans">12 Rabi' al-Awwal 1448 AH</span>
+        </div>
+
+        <!-- Language Switcher Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-200 border border-slate-700 transition">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span id="current-lang-text" class="font-medium">English</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+          </button>
+          <div class="absolute right-0 mt-1.5 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl hidden group-hover:block z-[90] overflow-hidden py-1">
+            <button onclick="window.app.applyLanguage('en')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>English</span>
+              <span class="text-[10px] text-slate-400 font-mono">EN</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ml')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>മലയാളം (Malayalam)</span>
+              <span class="text-[10px] text-emerald-600 font-bold">ML</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ar')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium font-arabic flex items-center justify-between">
+              <span>العربية (Arabic)</span>
+              <span class="text-[10px] text-amber-600 font-bold">AR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button id="theme-toggle-btn" onclick="window.toggleTheme ? window.toggleTheme(event) : (window.app && window.app.toggleTheme && window.app.toggleTheme())" title="Toggle Theme" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer">
+          <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4 text-amber-400"></i>
+        </button>
+
+        <!-- Notification Bell -->
+        <button onclick="toggleAdminNotifications()" class="relative p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Administrative Notifications">
+          <i data-lucide="bell" class="w-4 h-4 text-amber-400"></i>
+          <span id="admin-notif-badge" class="absolute -top-1 -right-1 bg-red-500 text-white font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">3</span>
+        </button>
+
+        <!-- Exit to Public Portal -->
+        <a href="index.html" class="hidden sm:flex items-center gap-1.5 bg-emerald-900/60 hover:bg-emerald-800 text-emerald-300 px-3 py-1.5 rounded-lg border border-emerald-700/80 font-semibold transition">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Public Portal</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       ADMIN NOTIFICATIONS QUICK FLYOUT DRAWER
+       ========================================================================== -->
+  <div id="admin-notifications-drawer" class="fixed top-12 right-4 w-80 sm:w-96 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl z-[85] hidden p-5 space-y-3 text-xs">
+    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+      <div class="flex items-center gap-2">
+        <i data-lucide="bell" class="w-4 h-4 text-amber-500"></i>
+        <h4 class="font-bold text-slate-900 dark:text-white text-sm">Secretary Action Queue</h4>
+      </div>
+      <button onclick="toggleAdminNotifications()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+    </div>
+    <div class="space-y-2 max-h-72 overflow-y-auto pr-1">
+      <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 flex items-start gap-2.5 cursor-pointer" onclick="switchAdminSection('certificates')">
+        <span class="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0 animate-ping"></span>
+        <div>
+          <strong class="text-slate-900 dark:text-white block font-semibold">1 Certificate Application Pending</strong>
+          <p class="text-slate-500 text-[11px]">Suhail K. P. (Ward 1) requested Residence Certificate for passport renewal.</p>
+        </div>
+      </div>
+      <div class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/80 flex items-start gap-2.5 cursor-pointer" onclick="switchAdminSection('sulhu')">
+        <span class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+        <div>
+          <strong class="text-slate-900 dark:text-white block font-semibold">Sulhu Mediation Docket Active</strong>
+          <p class="text-slate-500 text-[11px]">Amicable boundary drainage resolution registered for Ward 02.</p>
+        </div>
+      </div>
+      <div class="p-2.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 flex items-start gap-2.5 cursor-pointer" onclick="switchAdminSection('emergency')">
+        <span class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+        <div>
+          <strong class="text-slate-900 dark:text-white block font-semibold">Urgent O+ Blood Alert Live</strong>
+          <p class="text-slate-500 text-[11px]">Patient admitted at Calicut Medical College Hospital.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN BRAND HEADER (EXECUTIVE SECRETARIAT CONSOLE)
+       ========================================================================== -->
+  <header class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-950 text-white border-b border-emerald-800/40 shadow-xl relative overflow-hidden">
+    <div class="absolute inset-0 islamic-bg-pattern pointer-events-none opacity-10"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3.5">
+        <a href="index.html" class="shrink-0 group">
+          <img src="assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall Emblem" class="w-12 h-12 rounded-full border-2 border-amber-400 shadow-lg object-cover group-hover:scale-105 transition" />
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="bg-amber-500/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+              <i data-lucide="shield" class="w-3 h-3 text-amber-400"></i> Executive Council 2024-2027
+            </span>
+            <span class="text-emerald-400 text-xs hidden sm:inline">• Central Secretariat</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black font-heading tracking-tight flex items-center gap-2 text-white">
+            Executive Administration & Management Portal
+          </h1>
+          <p class="text-slate-300 text-xs mt-0.5">
+            Democratic Community Governance • Digital Census & Housing • Treasury Ledger • Sulhu Arbitration
+          </p>
+        </div>
+      </div>
+
+      <!-- Current Secretary Profile & Fast Unlock -->
+      <div class="flex items-center gap-3 bg-black/40 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-white/10 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center font-bold text-sm shadow">
+          PA
+        </div>
+        <div class="text-left text-xs">
+          <strong id="session-user-name" class="text-white block font-bold">P. K. Abdurahman</strong>
+          <span class="text-amber-400 text-[11px] block font-semibold">General Secretary</span>
+          <span id="session-status-badge" class="inline-flex items-center gap-1 text-[10px] text-emerald-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Verified Session Active
+          </span>
+        </div>
+        <button onclick="quickToggleSession()" id="session-action-btn" class="ml-2 btn-outline !py-1 !px-2.5 text-[11px] border-slate-600 hover:border-amber-400 text-slate-200">
+          Lock
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       SECTION 0: GATEKEEPER LOCK SCREEN (Visible when Role != Admin)
+       ========================================================================== -->
+  <div id="admin-gatekeeper-screen" class="hidden max-w-xl mx-auto my-12 px-4 w-full">
+    <div class="glass-panel p-8 rounded-3xl border border-amber-500/30 text-center space-y-6 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-12 -top-12 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="w-16 h-16 rounded-3xl bg-amber-500/20 text-amber-500 border border-amber-500/40 flex items-center justify-center mx-auto shadow-inner">
+        <i data-lucide="lock" class="w-8 h-8"></i>
+      </div>
+      <div>
+        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300">
+          Executive Security Gate
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white mt-2">
+          Restricted Secretariat Console
+        </h2>
+        <p class="text-slate-500 text-xs mt-1 max-w-md mx-auto">
+          This portal manages official family census rolls, financial ledgers, certificate issuance, and in-camera Sulhu dispute arbitration under the Kerala Mahall Jama'ath Act.
+        </p>
+      </div>
+
+      <!-- Quick 1-Click Demo Login Button -->
+      <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-left space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-emerald-800 dark:text-emerald-300">✨ Evaluation / Demo Access:</span>
+          <span class="text-[10px] bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-0.5 rounded font-mono font-bold">1-Click</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-300">
+          Judges and committee members can immediately unlock the full admin portal as General Secretary P. K. Abdurahman without entering passwords.
+        </p>
+        <button onclick="unlockAsSecretaryDemo()" class="w-full btn-primary text-xs !py-2.5 font-bold shadow-md flex items-center justify-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Unlock Secretariat Console as General Secretary
+        </button>
+      </div>
+
+      <!-- Manual Passkey Form -->
+      <div class="pt-2 border-t border-slate-200 dark:border-slate-800 text-left space-y-2">
+        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">Or Enter Secretariat Passkey:</label>
+        <div class="flex gap-2">
+          <input id="gate-passkey-input" type="password" placeholder="Passkey (Hint: admin2026)" class="flex-grow bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 font-mono" />
+          <button onclick="verifyGatePasskey()" class="btn-gold text-xs !py-2 !px-4 font-bold">Unlock</button>
+        </div>
+      </div>
+
+      <!-- Public Info Mode Toggle -->
+      <div class="pt-2">
+        <a href="index.html" class="text-xs text-slate-500 hover:text-emerald-600 font-semibold underline">
+          &larr; Return to Public Website Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN PORTAL WORKSPACE (2-COLUMN: SIDEBAR NAV + SWITCHABLE MODULES)
+       ========================================================================== -->
+  <div id="admin-portal-workspace" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow flex flex-col lg:flex-row gap-6">
+
+    <!-- -----------------------------------------------------------------------
+         LEFT EXECUTIVE SIDEBAR (Sticky on desktop, horizontal scroll on mobile)
+         ----------------------------------------------------------------------- -->
+    <aside class="w-full lg:w-64 shrink-0 space-y-4">
+      
+      <!-- Navigation Pills -->
+      <div class="glass-panel p-3 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
+        
+        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1">
+          Secretariat Modules
+        </div>
+
+        <button onclick="switchAdminSection('overview')" id="nav-item-overview" class="admin-nav-item active w-full text-left">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span class="flex-grow">Executive Overview</span>
+        </button>
+
+        <button onclick="switchAdminSection('census')" id="nav-item-census" class="admin-nav-item w-full text-left">
+          <i data-lucide="folder-tree" class="w-4 h-4"></i>
+          <span class="flex-grow">Census & Families</span>
+          <span id="badge-census-count" class="badge-count text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">642</span>
+        </button>
+
+        <button onclick="switchAdminSection('treasury')" id="nav-item-treasury" class="admin-nav-item w-full text-left">
+          <i data-lucide="wallet" class="w-4 h-4"></i>
+          <span class="flex-grow">Treasury & Dues</span>
+          <span class="badge-count text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">₹3.42L</span>
+        </button>
+
+        <button onclick="switchAdminSection('certificates')" id="nav-item-certificates" class="admin-nav-item w-full text-left">
+          <i data-lucide="file-check" class="w-4 h-4"></i>
+          <span class="flex-grow">Certificate Desk</span>
+          <span id="badge-cert-count" class="badge-count text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">1</span>
+        </button>
+
+        <button onclick="switchAdminSection('sulhu')" id="nav-item-sulhu" class="admin-nav-item w-full text-left">
+          <i data-lucide="scale" class="w-4 h-4"></i>
+          <span class="flex-grow">Sulhu Arbitration</span>
+          <span class="badge-count text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800">94%</span>
+        </button>
+
+        <button onclick="switchAdminSection('announcements')" id="nav-item-announcements" class="admin-nav-item w-full text-left">
+          <i data-lucide="megaphone" class="w-4 h-4"></i>
+          <span class="flex-grow">Notices & AI Studio</span>
+          <span id="badge-ann-count" class="badge-count text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800">5</span>
+        </button>
+
+        <button onclick="switchAdminSection('madrasa')" id="nav-item-madrasa" class="admin-nav-item w-full text-left">
+          <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+          <span class="flex-grow">Madrasa Roster</span>
+          <span class="badge-count text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800">480</span>
+        </button>
+
+        <button onclick="switchAdminSection('emergency')" id="nav-item-emergency" class="admin-nav-item w-full text-left">
+          <i data-lucide="droplet" class="w-4 h-4 text-red-500"></i>
+          <span class="flex-grow">Donors & SOS Desk</span>
+          <span class="badge-count text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 text-red-800">145</span>
+        </button>
+
+        <button onclick="switchAdminSection('facilities')" id="nav-item-facilities" class="admin-nav-item w-full text-left">
+          <i data-lucide="building" class="w-4 h-4"></i>
+          <span class="flex-grow">Auditorium Bookings</span>
+        </button>
+
+        <button onclick="switchAdminSection('mosque')" id="nav-item-mosque" class="admin-nav-item w-full text-left">
+          <i data-lucide="clock" class="w-4 h-4"></i>
+          <span class="flex-grow">Prayer & Iqamah</span>
+        </button>
+
+        <button onclick="switchAdminSection('audit-logs')" id="nav-item-audit-logs" class="admin-nav-item w-full text-left">
+          <i data-lucide="history" class="w-4 h-4"></i>
+          <span class="flex-grow">Live Audit Logs</span>
+        </button>
+
+        <button onclick="switchAdminSection('settings')" id="nav-item-settings" class="admin-nav-item w-full text-left">
+          <i data-lucide="database" class="w-4 h-4"></i>
+          <span class="flex-grow">Data & Settings</span>
+        </button>
+
+      </div>
+
+      <!-- Quick Secretariat Summary Card -->
+      <div class="glass-panel p-4 rounded-3xl border border-slate-200 dark:border-slate-800 text-xs space-y-2 text-slate-500">
+        <div class="flex items-center justify-between text-slate-700 dark:text-slate-300 font-bold">
+          <span>System Status:</span>
+          <span class="text-emerald-600 flex items-center gap-1 font-mono text-[11px]"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Synced</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span>Local Storage:</span>
+          <span class="font-mono text-slate-700 dark:text-slate-300">Active (DB v2)</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span>Data Privacy:</span>
+          <span class="text-blue-600 font-semibold">DPDP Compliant</span>
+        </div>
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button onclick="downloadFullDatabaseBackup()" class="w-full btn-outline text-[11px] !py-1.5 flex items-center justify-center gap-1">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Backup DB (JSON)
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- -----------------------------------------------------------------------
+         RIGHT WORKSPACE: SWITCHABLE ADMIN MODULE PANELS
+         ----------------------------------------------------------------------- -->
+    <main class="flex-grow space-y-8 min-w-0">
+
+      <!-- =====================================================================
+           MODULE 1: EXECUTIVE OVERVIEW (DASHBOARD)
+           ===================================================================== -->
+      <div id="section-overview" class="admin-section space-y-6">
+
+        <!-- 6 Core KPI Metrics -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+          <div class="glass-panel p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <span class="text-slate-400 block font-medium">Census Families</span>
+            <span id="kpi-families" class="text-2xl font-black text-slate-900 dark:text-white font-mono mt-1 block">642</span>
+            <span class="text-[10px] text-emerald-600 font-semibold">8 Wards Tagged</span>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <span class="text-slate-400 block font-medium">Population</span>
+            <span id="kpi-members" class="text-2xl font-black text-slate-900 dark:text-white font-mono mt-1 block">2,840</span>
+            <span class="text-[10px] text-slate-400">Verified Citizens</span>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <span class="text-slate-400 block font-medium">Monthly Dues</span>
+            <span id="kpi-treasury" class="text-2xl font-black text-emerald-600 font-mono mt-1 block">₹3.42L</span>
+            <span class="text-[10px] text-emerald-600 font-semibold">91.2% Collected</span>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer" onclick="switchAdminSection('certificates')">
+            <span class="text-slate-400 block font-medium">Pending Certs</span>
+            <span id="kpi-certs" class="text-2xl font-black text-amber-500 font-mono mt-1 block">1</span>
+            <span class="text-[10px] text-amber-600 font-semibold">Action Required &rarr;</span>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer" onclick="switchAdminSection('sulhu')">
+            <span class="text-slate-400 block font-medium">Sulhu Cases</span>
+            <span id="kpi-sulhu" class="text-2xl font-black text-blue-500 font-mono mt-1 block">1</span>
+            <span class="text-[10px] text-blue-600 font-semibold">94% Amicable</span>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer" onclick="switchAdminSection('emergency')">
+            <span class="text-slate-400 block font-medium">Blood Donors</span>
+            <span id="kpi-donors" class="text-2xl font-black text-red-500 font-mono mt-1 block">145</span>
+            <span class="text-[10px] text-red-600 font-semibold">24/7 Dispatch Ready</span>
+          </div>
+        </div>
+
+        <!-- Quick Executive Actions Bar -->
+        <div class="p-4 rounded-3xl bg-slate-900 text-white shadow-lg flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+            <strong class="font-bold">Fast Executive Actions:</strong>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="openRegisterHouseholdModal()" class="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 font-bold transition flex items-center gap-1.5">
+              <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Register Household
+            </button>
+            <button onclick="openRecordPaymentModal()" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 font-bold transition flex items-center gap-1.5">
+              <i data-lucide="wallet" class="w-3.5 h-3.5"></i> Record Cash Dues
+            </button>
+            <button onclick="openBroadcastNoticeModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold transition flex items-center gap-1.5 border border-slate-700">
+              <i data-lucide="megaphone" class="w-3.5 h-3.5 text-amber-400"></i> Broadcast Notice
+            </button>
+            <button onclick="openEmergencySOSModal()" class="px-3 py-1.5 rounded-xl bg-red-700 hover:bg-red-600 font-bold transition flex items-center gap-1.5">
+              <i data-lucide="heart-pulse" class="w-3.5 h-3.5"></i> Trigger Blood SOS
+            </button>
+          </div>
+        </div>
+
+        <!-- Analytical Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Monthly Collections vs Target (2026)</h4>
+                <p class="text-[11px] text-slate-400">Ward subscription trends & Waqf returns</p>
+              </div>
+              <span class="text-xs font-mono font-bold text-emerald-600">₹3.42L / ₹3.75L</span>
+            </div>
+            <div class="h-60 flex items-center justify-center">
+              <canvas id="overview-collections-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Treasury Revenue Sources</h4>
+                <p class="text-[11px] text-slate-400">Audited distribution (Q1 2026)</p>
+              </div>
+              <span class="text-xs text-amber-600 font-bold">CA Verified</span>
+            </div>
+            <div class="h-60 flex items-center justify-center">
+              <canvas id="overview-revenue-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Activity Stream (Audit Logs Snapshot) -->
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 text-xs">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i>
+              <h4 class="font-bold text-slate-900 dark:text-white text-sm">Live Secretariat Activity Audit Stream</h4>
+            </div>
+            <button onclick="switchAdminSection('audit-logs')" class="text-emerald-600 font-bold hover:underline">
+              View Complete Immutable Log &rarr;
+            </button>
+          </div>
+          <div id="overview-activity-stream" class="space-y-2">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 2: CENSUS & FAMILIES REGISTER (FULL CRUD)
+           ===================================================================== -->
+      <div id="section-census" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="folder-tree" class="w-4 h-4"></i> Census Register • 642 Households
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Mahall Members Register & Digital Housing Roster
+            </h2>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openRegisterHouseholdModal()" class="btn-primary text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+              <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Register New Household
+            </button>
+            <button onclick="downloadCensusCSV()" class="btn-outline text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Bar: Wards, Dues Status & Search -->
+        <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between text-xs">
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none font-bold">
+            <span class="text-slate-400 uppercase mr-1">Ward:</span>
+            <button onclick="filterCensusWard('all')" class="census-ward-pill px-3 py-1.5 rounded-full bg-emerald-700 text-white shadow-sm">All Wards</button>
+            <button onclick="filterCensusWard('Ward 01')" class="census-ward-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Ward 1 (East Bazar)</button>
+            <button onclick="filterCensusWard('Ward 02')" class="census-ward-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Ward 2 (Masjid Central)</button>
+            <button onclick="filterCensusWard('Ward 03')" class="census-ward-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Ward 3 (North Gate)</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="census-status-filter" onchange="searchCensusDirectory()" class="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white">
+              <option value="all">All Subscriptions</option>
+              <option value="PAID">Paid / Active</option>
+              <option value="PENDING">Dues Pending</option>
+            </select>
+            <input id="census-search-input" onkeyup="searchCensusDirectory()" type="text" placeholder="Search Head, Family ID, House, or Phone..." class="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full sm:w-64" />
+          </div>
+        </div>
+
+        <!-- Census Table -->
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
+              <tr>
+                <th class="p-3">Family ID</th>
+                <th class="p-3">Family Head & Occupation</th>
+                <th class="p-3">House Name</th>
+                <th class="p-3">Ward</th>
+                <th class="p-3">Phone</th>
+                <th class="p-3">Members</th>
+                <th class="p-3">Monthly Status</th>
+                <th class="p-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="census-table-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 3: TREASURY & MONTHLY DUES LEDGER
+           ===================================================================== -->
+      <div id="section-treasury" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="wallet" class="w-4 h-4"></i> Finance Desk • ₹250 Monthly Fixed Subscription
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Treasury Ledger & Dues Collection Management
+            </h2>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openRecordPaymentModal()" class="btn-primary text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+              <i data-lucide="receipt" class="w-3.5 h-3.5"></i> Record Manual / Cash Receipt
+            </button>
+            <button onclick="downloadTreasuryLedgerCSV()" class="btn-outline text-xs !py-1.5 !px-3 shadow-sm">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Export Ledger (CSV)
+            </button>
+          </div>
+        </div>
+
+        <!-- Dues Overview Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+          <div class="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 space-y-1">
+            <span class="text-emerald-800 dark:text-emerald-300 font-bold uppercase text-[10px]">Monthly Target</span>
+            <span class="text-2xl font-black font-mono text-emerald-900 dark:text-emerald-100 block">₹3,75,000</span>
+            <span class="text-slate-500 text-[11px]">1,250 Families @ ₹250/mo</span>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 space-y-1">
+            <span class="text-slate-500 font-bold uppercase text-[10px]">Total Collected</span>
+            <span class="text-2xl font-black font-mono text-slate-900 dark:text-white block">₹3,42,000</span>
+            <span class="text-emerald-600 font-semibold text-[11px]">91.2% Performance</span>
+          </div>
+          <div class="p-5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 space-y-1">
+            <span class="text-amber-800 dark:text-amber-300 font-bold uppercase text-[10px]">Outstanding Dues</span>
+            <span class="text-2xl font-black font-mono text-amber-900 dark:text-amber-100 block">₹33,000</span>
+            <span class="text-amber-600 font-semibold text-[11px]">132 Families Pending</span>
+          </div>
+          <div class="p-5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-300 dark:border-blue-800 space-y-1">
+            <span class="text-blue-800 dark:text-blue-300 font-bold uppercase text-[10px]">Online UPI Ratio</span>
+            <span class="text-2xl font-black font-mono text-blue-900 dark:text-blue-100 block">74.5%</span>
+            <span class="text-blue-600 font-semibold text-[11px]">Instant Automated Dues</span>
+          </div>
+        </div>
+
+        <!-- Ledger Table -->
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h4 class="font-bold text-slate-900 dark:text-white text-sm">Official Dues & Donations Transaction Ledger</h4>
+              <p class="text-slate-500 text-[11px]">Chronological record of verified contributions with digital receipt identifiers.</p>
+            </div>
+            <input id="ledger-search-input" onkeyup="searchTreasuryLedger()" type="text" placeholder="Search payment ID, family head, or receipt..." class="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white sm:w-64" />
+          </div>
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Payment Ref</th>
+                <th class="p-3">Receipt No</th>
+                <th class="p-3">Family Head (ID)</th>
+                <th class="p-3">Amount</th>
+                <th class="p-3">Months Covered</th>
+                <th class="p-3">Mode</th>
+                <th class="p-3">Date & Time</th>
+                <th class="p-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="treasury-ledger-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 4: CERTIFICATE APPROVAL & VERIFICATION DESK
+           ===================================================================== -->
+      <div id="section-certificates" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="file-check" class="w-4 h-4"></i> Attestation Authority • Digital QR Seal
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Certificate Approvals & Verification Desk
+            </h2>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="filterCertStatus('ALL')" class="cert-status-pill px-3 py-1.5 rounded-full bg-emerald-700 text-white text-xs font-bold shadow-sm">All Requests</button>
+            <button onclick="filterCertStatus('PENDING')" class="cert-status-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">Pending Approval</button>
+            <button onclick="filterCertStatus('APPROVED')" class="cert-status-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">Approved</button>
+          </div>
+        </div>
+
+        <!-- Certificate Applications Queue -->
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Ref ID</th>
+                <th class="p-3">Applicant Name</th>
+                <th class="p-3">Family ID</th>
+                <th class="p-3">Certificate Type</th>
+                <th class="p-3">Purpose</th>
+                <th class="p-3">Date</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Secretary Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-cert-queue-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Public QR Certificate Inspector -->
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 text-xs">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i> Public Authenticity & Verifier Tool
+          </h4>
+          <p class="text-slate-500">
+            Verify any certificate issued by Noorul Huda Mahall using the Unique Certificate Reference Number.
+          </p>
+          <div class="flex gap-2 max-w-md">
+            <input id="cert-inspector-input" type="text" value="CERT-2026-1042" placeholder="e.g. CERT-2026-1042" class="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-mono uppercase focus:ring-2 focus:ring-emerald-500 flex-grow" />
+            <button onclick="inspectCertificateId()" class="btn-primary text-xs !py-2 !px-4">Verify Authenticity</button>
+          </div>
+          <div id="cert-inspect-result-box" class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs">
+            <strong id="cert-inspect-title" class="text-emerald-900 dark:text-emerald-100 block font-bold text-sm">Certificate CERT-2026-1042: VERIFIED AUTHENTIC</strong>
+            <p id="cert-inspect-body" class="text-emerald-800 dark:text-emerald-300 mt-1">
+              Marriage NOC issued to Mohammed Faheem Ahmed (Family ID: W02-F005). Attested by General Secretary P. K. Abdurahman.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 5: SULHU ARBITRATION COUNCIL
+           ===================================================================== -->
+      <div id="section-sulhu" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="scale" class="w-4 h-4"></i> Islamic Mediation • In-Camera Proceedings
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Sulhu Reconciliation & Dispute Arbitration Council
+            </h2>
+          </div>
+          <button onclick="openRegisterSulhuModal()" class="btn-gold text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Register New Arbitration Matter
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span class="font-bold text-emerald-600 uppercase text-[10px]">Council Bench</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Chief Imam & Legal Arbitrators</h4>
+            <p class="text-slate-500">Headed by Maulana Abdul Rasheed Faizy, Advocate K. M. Basheer, and two elected community ward arbitrators.</p>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span class="font-bold text-amber-600 uppercase text-[10px]">94% Settlement Rate</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Saving Families from Litigation</h4>
+            <p class="text-slate-500">Boundary disputes, matrimonial harmony, and commercial friction resolved with legally enforceable amicable settlement deeds.</p>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span class="font-bold text-blue-600 uppercase text-[10px]">Strict Secrecy</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Protected by Council Oath</h4>
+            <p class="text-slate-500">All submissions are held in strict confidence under the Council's code of confidentiality and data security.</p>
+          </div>
+        </div>
+
+        <!-- Sulhu Docket Table -->
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+              <strong class="text-slate-900 dark:text-white">Active Arbitration Docket (Confidential)</strong>
+            </div>
+            <span class="text-slate-400 text-[11px]">Presided by General Secretary & Chief Imam</span>
+          </div>
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Case ID</th>
+                <th class="p-3">Petitioner</th>
+                <th class="p-3">Family ID</th>
+                <th class="p-3">Category</th>
+                <th class="p-3">Preferred Mode</th>
+                <th class="p-3">Hearing Date</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Arbitration Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-sulhu-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 6: ANNOUNCEMENTS & AI BROADCAST STUDIO
+           ===================================================================== -->
+      <div id="section-announcements" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="megaphone" class="w-4 h-4"></i> Official Gazette & Broadcast Desk
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Mahall Announcements & Circulars Center
+            </h2>
+          </div>
+          <button onclick="openBroadcastNoticeModal()" class="btn-gold text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i> Broadcast New Circular
+          </button>
+        </div>
+
+        <!-- AI Notice Drafting Studio -->
+        <div class="glass-panel p-6 rounded-3xl border border-emerald-500/40 shadow-lg space-y-4 text-xs">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold">🤖</div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">AI Notice Assistant (Multi-Lingual Drafter)</h4>
+                <p class="text-slate-500 text-[11px]">Enter rough bullet points, and AI crafts formal notices in English, Malayalam, and Arabic simultaneously.</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[10px]">
+              AI Tri-Lingual Engine
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Notice Topic / Subject</label>
+              <input id="ai-draft-topic" type="text" value="Annual Madrasa Milad Festival & Speech Contest" placeholder="e.g. Annual Madrasa Fest" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500" />
+            </div>
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Notice Category</label>
+              <select id="ai-draft-category" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+                <option value="GENERAL">General Mahall Notice</option>
+                <option value="EDUCATION">Madrasa & Education</option>
+                <option value="EMERGENCY">Medical / Emergency</option>
+                <option value="JANAZAH">Janazah Notice</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Key Points & Details (Rough points)</label>
+            <textarea id="ai-draft-points" rows="2" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500">Coming Saturday and Sunday 08:30 AM at Community Hall. Quran recitation, Islamic speech, quiz. Chief guest Usthad Maulana Faizy. All parents invited.</textarea>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <button onclick="generateTriLingualNotice()" class="btn-primary text-xs !py-2 !px-4 font-bold flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i> Generate Tri-Lingual Draft
+            </button>
+          </div>
+
+          <!-- AI Generated Output Boxes -->
+          <div id="ai-notice-outputs" class="hidden space-y-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <span class="font-bold text-slate-700 dark:text-slate-300 block mb-1">English Official Notice:</span>
+                <textarea id="ai-notice-en" rows="5" class="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono"></textarea>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 dark:text-slate-300 block mb-1">മലയാളം ഔദ്യോഗിക അറിയിപ്പ്:</span>
+                <textarea id="ai-notice-ml" rows="5" class="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-sans"></textarea>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 dark:text-slate-300 block mb-1">الإعلان الرسمي بالعربية:</span>
+                <textarea id="ai-notice-ar" dir="rtl" rows="5" class="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-arabic"></textarea>
+              </div>
+            </div>
+            <button onclick="publishAIDraftedNotice()" class="btn-gold text-xs !py-2 !px-4 font-bold">
+              📢 Publish Circular Site-Wide
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Announcements List -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Active Circulars & Announcements Feed</h4>
+          <div id="admin-announcements-feed" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 7: MADRASA & STUDENTS ROSTER
+           ===================================================================== -->
+      <div id="section-madrasa" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="graduation-cap" class="w-4 h-4"></i> Education Wing • 480 Students
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Noorul Huda Madrasa Student Roster & Academic Records
+            </h2>
+          </div>
+          <button onclick="openEnrollStudentModal()" class="btn-primary text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Enroll New Student
+          </button>
+        </div>
+
+        <!-- Students Table -->
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <strong class="text-slate-900 dark:text-white">Enrolled Students Roster</strong>
+            <span class="text-slate-500 text-[11px]">14 Certified Muallims • Classes 1 to 10</span>
+          </div>
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Roll No</th>
+                <th class="p-3">Student Name</th>
+                <th class="p-3">Class</th>
+                <th class="p-3">Attendance</th>
+                <th class="p-3">Hifdh Stage</th>
+                <th class="p-3">Tajweed Grade</th>
+                <th class="p-3">Mahall Standing</th>
+                <th class="p-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-students-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 8: EMERGENCY BLOOD DONORS & DISPATCH DESK
+           ===================================================================== -->
+      <div id="section-emergency" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-red-600 dark:text-red-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="heart-pulse" class="w-4 h-4"></i> 24/7 Relief Desk • 145 Registered Donors
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Emergency Blood Donor Directory & Dispatch Console
+            </h2>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="openEmergencySOSModal()" class="px-3.5 py-1.5 rounded-xl bg-red-700 hover:bg-red-600 text-white font-bold text-xs shadow-sm flex items-center gap-1.5">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i> Trigger WhatsApp SOS
+            </button>
+            <button onclick="openAddDonorModal()" class="btn-outline text-xs !py-1.5 !px-3 shadow-sm">
+              <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add Donor
+            </button>
+          </div>
+        </div>
+
+        <!-- Donors Table with Filter -->
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-1.5 overflow-x-auto">
+              <span class="text-slate-400 uppercase font-bold text-[10px] mr-1">Filter Group:</span>
+              <button onclick="filterDonorGroup('all')" class="donor-filter-pill px-2.5 py-1 rounded-lg bg-red-700 text-white font-bold">All (145)</button>
+              <button onclick="filterDonorGroup('O+')" class="donor-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">O+</button>
+              <button onclick="filterDonorGroup('A+')" class="donor-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">A+</button>
+              <button onclick="filterDonorGroup('B+')" class="donor-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">B+</button>
+              <button onclick="filterDonorGroup('AB+')" class="donor-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">AB+</button>
+              <button onclick="filterDonorGroup('O-')" class="donor-filter-pill px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">O- (Rare)</button>
+            </div>
+            <input id="donor-search-input" onkeyup="searchDonorsList()" type="text" placeholder="Search donor name or phone..." class="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white" />
+          </div>
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Donor Name</th>
+                <th class="p-3">Blood Group</th>
+                <th class="p-3">Phone Number</th>
+                <th class="p-3">Ward</th>
+                <th class="p-3">Availability</th>
+                <th class="p-3">Last Donated</th>
+                <th class="p-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-donors-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 24/7 Ambulance Fleet Log -->
+        <div class="glass-panel p-5 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+              <i data-lucide="truck" class="w-4 h-4 text-emerald-600"></i> Mahall 24/7 Life Support Ambulance (KL-11-AX-9999)
+            </h4>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[10px]">
+              Oxygen & ICU Equipped
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 space-y-1">
+              <span class="text-slate-400 block text-[10px]">Chief Pilot / Driver:</span>
+              <strong class="text-slate-900 dark:text-white">Moideen Kutty P. (+91 98460 99999)</strong>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 space-y-1">
+              <span class="text-slate-400 block text-[10px]">Current Station:</span>
+              <strong class="text-slate-900 dark:text-white">Masjid Central Bay (Ward 2)</strong>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 space-y-1 flex items-center justify-between">
+              <div>
+                <span class="text-slate-400 block text-[10px]">On-Duty Status:</span>
+                <strong class="text-emerald-600">Active & Ready</strong>
+              </div>
+              <button onclick="window.app.showToast('Ambulance status toggled', 'success')" class="btn-outline !py-1 !px-2 text-[10px]">Toggle</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 9: AUDITORIUM & COMMUNITY FACILITIES
+           ===================================================================== -->
+      <div id="section-facilities" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="building" class="w-4 h-4"></i> Community Assets • 800 Seats
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Community Auditorium & Banquet Hall Bookings
+            </h2>
+          </div>
+          <button onclick="openBookingModal()" class="btn-primary text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+            <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> New Booking Entry
+          </button>
+        </div>
+
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Booking ID</th>
+                <th class="p-3">Booked By & Contact</th>
+                <th class="p-3">Event Purpose</th>
+                <th class="p-3">Event Date</th>
+                <th class="p-3">Time Slot</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Secretary Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-bookings-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 10: MOSQUE PRAYER OFFSETS & IQAMAH SETTINGS
+           ===================================================================== -->
+      <div id="section-mosque" class="admin-section hidden space-y-6">
+
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+          <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-4 h-4"></i> Spiritual Rhythms • Central Juma Masjid
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Congregational Prayer Timings & Iqamah Offsets Manager
+          </h2>
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6 text-xs">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Adhan-to-Iqamah Waiting Minutes (Congregation Delay)</h4>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            <div class="space-y-1">
+              <label class="font-bold text-slate-700 dark:text-slate-300 block">Fajr Iqamah Delay</label>
+              <div class="flex items-center gap-2">
+                <input id="offset-fajr" type="number" value="18" min="5" max="45" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs text-center font-bold" />
+                <span class="text-slate-400 font-mono">min</span>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="font-bold text-slate-700 dark:text-slate-300 block">Dhuhr Iqamah Delay</label>
+              <div class="flex items-center gap-2">
+                <input id="offset-dhuhr" type="number" value="17" min="5" max="45" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs text-center font-bold" />
+                <span class="text-slate-400 font-mono">min</span>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="font-bold text-slate-700 dark:text-slate-300 block">Asr Iqamah Delay</label>
+              <div class="flex items-center gap-2">
+                <input id="offset-asr" type="number" value="15" min="5" max="45" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs text-center font-bold" />
+                <span class="text-slate-400 font-mono">min</span>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="font-bold text-slate-700 dark:text-slate-300 block">Maghrib Iqamah Delay</label>
+              <div class="flex items-center gap-2">
+                <input id="offset-maghrib" type="number" value="11" min="5" max="45" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs text-center font-bold" />
+                <span class="text-slate-400 font-mono">min</span>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="font-bold text-slate-700 dark:text-slate-300 block">Isha Iqamah Delay</label>
+              <div class="flex items-center gap-2">
+                <input id="offset-isha" type="number" value="17" min="5" max="45" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs text-center font-bold" />
+                <span class="text-slate-400 font-mono">min</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Friday Jumu'ah Timetable & Khutbah Configuration</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="space-y-1">
+                <label class="font-bold text-slate-700 dark:text-slate-300 block">Chief Khatib</label>
+                <input id="jumua-khatib" type="text" value="Usthad Maulana Abdul Rasheed Faizy" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs" />
+              </div>
+              <div class="space-y-1">
+                <label class="font-bold text-slate-700 dark:text-slate-300 block">Khutbah Commences</label>
+                <input id="jumua-khutbah" type="text" value="12:45 PM" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs" />
+              </div>
+              <div class="space-y-1">
+                <label class="font-bold text-slate-700 dark:text-slate-300 block">Congregational Prayer</label>
+                <input id="jumua-prayer" type="text" value="01:15 PM" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-2 text-xs" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-2">
+            <button onclick="savePrayerOffsets()" class="btn-primary text-xs !py-2 !px-5 font-bold">
+              Save Timetable Adjustments Site-Wide
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 11: LIVE AUDIT TRAIL & EVENT LOGS
+           ===================================================================== -->
+      <div id="section-audit-logs" class="admin-section hidden space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <span class="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="shield" class="w-4 h-4"></i> Immutable Security Ledger
+            </span>
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Secretariat Activity Audit Trail & Log Register
+            </h2>
+          </div>
+          <button onclick="downloadAuditLogCSV()" class="btn-outline text-xs !py-1.5 !px-3 shadow-sm flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Export Audit Log (CSV)
+          </button>
+        </div>
+
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+          <table class="w-full text-left">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Log ID</th>
+                <th class="p-3">Timestamp</th>
+                <th class="p-3">Operator</th>
+                <th class="p-3">Action Domain</th>
+                <th class="p-3">Event Description</th>
+              </tr>
+            </thead>
+            <tbody id="admin-audit-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           MODULE 12: DATA BACKUP, EXPORT & SETTINGS
+           ===================================================================== -->
+      <div id="section-settings" class="admin-section hidden space-y-6">
+
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+          <span class="text-slate-500 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="database" class="w-4 h-4"></i> System Maintenance & Data Integrity
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Database Backup, Restore & Secretariat Settings
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+          
+          <!-- Full Backup & Restore -->
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex items-center gap-2">
+              <i data-lucide="download-cloud" class="w-5 h-5 text-emerald-600"></i>
+              <h4 class="font-bold text-slate-900 dark:text-white text-sm">Download Complete Database Backup</h4>
+            </div>
+            <p class="text-slate-500">
+              Generates a certified JSON snapshot containing all 642 family census records, financial transactions, certificate logs, Sulhu arbitration records, and announcements.
+            </p>
+            <div class="flex gap-2">
+              <button onclick="downloadFullDatabaseBackup()" class="btn-primary text-xs !py-2 !px-4 font-bold flex items-center gap-1.5">
+                <i data-lucide="download" class="w-4 h-4"></i> Download Full JSON Backup
+              </button>
+              <button onclick="triggerRestoreJSONInput()" class="btn-outline text-xs !py-2 !px-4 font-bold flex items-center gap-1.5">
+                <i data-lucide="upload" class="w-4 h-4"></i> Restore from JSON
+              </button>
+              <input type="file" id="json-restore-file-input" accept=".json" class="hidden" onchange="handleRestoreFileSelected(event)" />
+            </div>
+          </div>
+
+          <!-- Factory Reset to Certified Dataset -->
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex items-center gap-2">
+              <i data-lucide="rotate-ccw" class="w-5 h-5 text-amber-600"></i>
+              <h4 class="font-bold text-slate-900 dark:text-white text-sm">Reset to Official Baseline Demo Data</h4>
+            </div>
+            <p class="text-slate-500">
+              Restore the initial verified dataset with Ahmed Koya (Ward 2), Musthafa Haji, Dr. Ibrahim, and seeded community records.
+            </p>
+            <button onclick="resetSystemDataWithConfirmation()" class="btn-outline !text-amber-600 !border-amber-500 hover:!bg-amber-50 text-xs !py-2 !px-4 font-bold flex items-center gap-1.5">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i> Reset System to Baseline
+            </button>
+          </div>
+
+          <!-- Secretarial Access Controls -->
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 md:col-span-2">
+            <div class="flex items-center gap-2">
+              <i data-lucide="key" class="w-5 h-5 text-amber-500"></i>
+              <h4 class="font-bold text-slate-900 dark:text-white text-sm">Secretariat Security & Passkey Settings</h4>
+            </div>
+            <p class="text-slate-500">
+              Configure executive passkey required for admin actions. Current demo passkey is <code class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono font-bold text-emerald-600">admin2026</code>.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 max-w-md">
+              <input id="settings-new-passkey" type="password" placeholder="Enter new passkey..." class="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-mono flex-grow" />
+              <button onclick="updateSecretariatPasskey()" class="btn-gold text-xs !py-2 !px-4 font-bold shrink-0">Update Passkey</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==========================================================================
+       ALL ADMIN MODALS: REGISTER HOUSEHOLD, DOSSIER, PAYMENT, RECEIPT,
+       CERTIFICATE PREVIEW, SULHU SCHEDULE, SOS BROADCAST, ETC.
+       ========================================================================== -->
+
+  <!-- 1. REGISTER / EDIT HOUSEHOLD MODAL -->
+  <div id="register-household-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 id="household-modal-title" class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="user-plus" class="w-4 h-4 text-emerald-600"></i> Register New Household in Mahall Census
+        </h3>
+        <button onclick="closeRegisterHouseholdModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <input type="hidden" id="edit-household-id" value="" />
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Head of Household Name *</label>
+          <input id="household-head" type="text" placeholder="e.g. Ubaidullah K. P." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">House Name / Villa *</label>
+            <input id="household-house" type="text" placeholder="e.g. Baitul Aman" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Ward *</label>
+            <select id="household-ward" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="Ward 01 (East Bazar)">Ward 01 (East Bazar)</option>
+              <option value="Ward 02 (Masjid Central)" selected>Ward 02 (Masjid Central)</option>
+              <option value="Ward 03 (North Gate)">Ward 03 (North Gate)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Occupation</label>
+            <input id="household-occ" type="text" placeholder="e.g. Merchant / Accountant" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Blood Group (Head)</label>
+            <select id="household-blood" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="O+">O+</option>
+              <option value="A+">A+</option>
+              <option value="B+">B+</option>
+              <option value="AB+">AB+</option>
+              <option value="O-">O-</option>
+              <option value="A-">A-</option>
+              <option value="B-">B-</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Phone Number *</label>
+            <input id="household-phone" type="text" placeholder="+91 94470 ..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Family Members Count</label>
+            <input id="household-count" type="number" value="4" min="1" max="25" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeRegisterHouseholdModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="saveHouseholdData()" class="flex-1 btn-primary text-xs !py-2 font-bold">Save Household</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. FAMILY DOSSIER MODAL WITH FULL MEMBERS BREAKDOWN -->
+  <div id="family-dossier-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div>
+          <h3 id="dossier-head" class="font-bold text-slate-900 dark:text-white text-base">Ahmed Koya P. K.</h3>
+          <span id="dossier-id" class="text-[11px] font-mono text-emerald-600 font-bold">W02-F005</span>
+        </div>
+        <button onclick="closeFamilyDossierModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="overflow-y-auto space-y-4 pr-1">
+        <!-- Household Summary -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl">
+          <div><span class="text-slate-400 block text-[10px]">House Name:</span><strong id="dossier-house" class="text-slate-800 dark:text-slate-200">Al-Falah Villa</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">Ward:</span><strong id="dossier-ward" class="text-slate-800 dark:text-slate-200">Ward 02</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">Phone:</span><strong id="dossier-phone" class="text-slate-800 dark:text-slate-200">+91 94472 88990</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">Occupation:</span><strong id="dossier-occ" class="text-slate-800 dark:text-slate-200">Senior Accountant</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">Head Blood:</span><strong id="dossier-blood" class="text-red-600 font-bold">O+</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">Dues Status:</span><strong id="dossier-status" class="text-emerald-600 font-bold">PAID</strong></div>
+        </div>
+
+        <!-- Family Members List -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-slate-800 dark:text-slate-200">Registered Household Members</h4>
+            <button onclick="toggleAddMemberForm()" class="text-emerald-600 font-bold hover:underline text-[11px]">+ Add Member</button>
+          </div>
+          
+          <!-- Add Member Inline Subform -->
+          <div id="add-member-form-box" class="hidden p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <input id="new-member-name" type="text" placeholder="Member Name" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-1.5 text-xs" />
+              <input id="new-member-relation" type="text" placeholder="Relation (e.g. Spouse, Son)" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-1.5 text-xs" />
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <input id="new-member-age" type="number" placeholder="Age" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-1.5 text-xs" />
+              <select id="new-member-blood" class="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-1.5 text-xs">
+                <option value="O+">O+</option>
+                <option value="A+">A+</option>
+                <option value="B+">B+</option>
+                <option value="AB+">AB+</option>
+              </select>
+              <button onclick="saveDependentMember()" class="btn-primary text-xs !py-1 font-bold">Save Member</button>
+            </div>
+          </div>
+
+          <div id="dossier-members-container" class="space-y-1.5">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeFamilyDossierModal()" class="flex-1 btn-outline text-xs !py-2">Close</button>
+        <button onclick="printFamilyDossier()" class="flex-1 btn-primary text-xs !py-2 font-bold flex items-center justify-center gap-1.5">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Household Census Card
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. RECORD MANUAL DUES PAYMENT MODAL -->
+  <div id="record-payment-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="receipt" class="w-4 h-4 text-amber-500"></i> Record Cash / Dues Contribution
+        </h3>
+        <button onclick="closeRecordPaymentModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Select Household (Family ID) *</label>
+          <select id="pay-family-select" onchange="updatePayFamilyPreview()" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Number of Months</label>
+            <select id="pay-months-count" onchange="updatePaymentCalculation()" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-bold">
+              <option value="1">1 Month (₹250)</option>
+              <option value="2">2 Months (₹500)</option>
+              <option value="3">3 Months / Quarter (₹750)</option>
+              <option value="6">6 Months / Half Year (₹1,500)</option>
+              <option value="12">12 Months / Full Year (₹3,000)</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Payment Mode</label>
+            <select id="pay-mode" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="Office Cash">Office Cash</option>
+              <option value="UPI (Google Pay / PhonePe)">UPI (Google Pay / PhonePe)</option>
+              <option value="Bank NEFT / IMPS">Bank NEFT / IMPS</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl flex items-center justify-between border border-emerald-200 dark:border-emerald-800 font-bold">
+          <span class="text-emerald-800 dark:text-emerald-300">Total Collection Amount:</span>
+          <span id="pay-calc-total" class="text-base text-emerald-900 dark:text-emerald-100 font-mono">₹250</span>
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Receipt Remarks / Collector Note</label>
+          <input id="pay-note" type="text" placeholder="e.g. Received at Friday Counter by K. V. Moideen Kutty" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeRecordPaymentModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="submitManualPayment()" class="flex-1 btn-primary text-xs !py-2 font-bold">Issue Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. OFFICIAL PRINTABLE TREASURY RECEIPT MODAL -->
+  <div id="official-receipt-modal" class="fixed inset-0 bg-black/80 z-[110] hidden items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 shadow-2xl space-y-4 text-xs">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div class="flex items-center gap-2">
+          <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-emerald-600" />
+          <div>
+            <h4 class="font-bold text-sm">NOORUL HUDA MAHALL JAMA'ATH</h4>
+            <span class="text-[10px] text-slate-500">Official Treasury Receipt • Reg No: KL-KZK/1968/42</span>
+          </div>
+        </div>
+        <button onclick="closeOfficialReceiptModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <!-- Receipt Content -->
+      <div id="printable-receipt-content" class="p-4 bg-amber-50/50 rounded-2xl border border-amber-200 space-y-3 font-sans relative">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] uppercase font-bold text-amber-800">NOORUL HUDA TREASURY</span>
+          <span id="rcp-number" class="font-mono font-bold text-slate-900">RCP-2026-8491</span>
+        </div>
+        <div class="text-center py-1">
+          <h3 class="text-base font-black tracking-tight uppercase text-emerald-950">CONTRIBUTION ACKNOWLEDGEMENT</h3>
+          <span id="rcp-date" class="text-[10px] text-slate-500">Date: 24-Sep-2026 07:50 PM</span>
+        </div>
+        <div class="space-y-1.5 border-t border-b border-amber-200 py-2.5">
+          <div class="flex justify-between"><span>Received With Thanks From:</span><strong id="rcp-head">Ahmed Koya P. K.</strong></div>
+          <div class="flex justify-between"><span>Family Reference ID:</span><span id="rcp-family-id" class="font-mono font-bold text-emerald-800">W02-F005</span></div>
+          <div class="flex justify-between"><span>Residence House:</span><span id="rcp-house">Al-Falah Villa (Ward 02)</span></div>
+          <div class="flex justify-between"><span>Sum of Rupees:</span><strong id="rcp-amount-words" class="text-emerald-900">₹250 (Two Hundred Fifty Only)</strong></div>
+          <div class="flex justify-between"><span>Towards:</span><span id="rcp-months">Monthly Mahall Subscription</span></div>
+          <div class="flex justify-between"><span>Payment Mode:</span><span id="rcp-mode">Office Cash</span></div>
+        </div>
+        <div class="flex items-center justify-between pt-2">
+          <div class="treasury-stamp p-1.5 text-[9px] text-center w-24">
+            MAHALL SEAL<br/>PAID & VERIFIED
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] text-slate-400 block">Authorized Treasury Signatory</span>
+            <strong class="text-xs block text-slate-800">K. V. Moideen Kutty</strong>
+            <span class="text-[9px] text-slate-500">Treasurer, Noorul Huda Mahall</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t">
+        <button onclick="closeOfficialReceiptModal()" class="flex-1 btn-outline text-xs !py-2">Close</button>
+        <button onclick="printOfficialReceipt()" class="flex-1 btn-primary text-xs !py-2 font-bold flex items-center justify-center gap-1.5">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Official Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. FULL ORNAMENTAL OFFICIAL CERTIFICATE PREVIEW MODAL -->
+  <div id="official-cert-modal" class="fixed inset-0 bg-black/85 z-[120] hidden items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl p-6 max-w-2xl w-full border border-slate-200 shadow-2xl space-y-4 text-xs max-h-[95vh] flex flex-col">
+      <div class="flex items-center justify-between border-b pb-2">
+        <span class="text-emerald-800 font-bold uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+          <i data-lucide="award" class="w-4 h-4 text-emerald-700"></i> Official Attested Certificate Preview (A4 Printable)
+        </span>
+        <button onclick="closeOfficialCertModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <!-- Printable Certificate Container -->
+      <div id="printable-certificate-container" class="overflow-y-auto pr-1">
+        <div class="certificate-frame p-8 sm:p-10 rounded-2xl relative space-y-6 text-center">
+          
+          <!-- Subtle Watermark -->
+          <div class="watermark-text font-serif">NOORUL HUDA</div>
+
+          <!-- Bismillah Header -->
+          <div class="font-arabic text-xl sm:text-2xl text-emerald-950 font-bold select-none">
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+          </div>
+
+          <!-- Official Insignia & Crest -->
+          <div class="flex items-center justify-center gap-3">
+            <img src="assets/images/mahall_logo.jpg" alt="Seal" class="w-14 h-14 rounded-full border-2 border-amber-600 shadow-md object-cover" />
+            <div class="text-center">
+              <h2 class="text-xl sm:text-2xl font-black font-heading tracking-tight text-emerald-950 uppercase">
+                NOORUL HUDA MAHALL JAMA'ATH
+              </h2>
+              <span class="text-xs text-amber-800 font-bold block font-sans">
+                CENTRAL MOSQUE ROAD, WARD 02, CALICUT, KERALA • ESTD. 1968
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">Reg. No: KL-KZK/1968/42 • Office of the Executive Secretariat</span>
+            </div>
+          </div>
+
+          <!-- Certificate Title -->
+          <div class="py-2 border-t-2 border-b-2 border-amber-500/40">
+            <h3 id="cert-doc-title" class="text-lg sm:text-xl font-black text-amber-900 tracking-wider uppercase font-serif">
+              OFFICIAL MARRIAGE NO-OBJECTION & CLEARANCE CERTIFICATE
+            </h3>
+            <span id="cert-doc-id" class="text-xs font-mono font-bold text-emerald-800">REF NO: CERT-2026-1042</span>
+          </div>
+
+          <!-- Attestation Body Text -->
+          <div class="text-left text-slate-800 leading-relaxed space-y-3 text-xs sm:text-sm font-serif">
+            <p>
+              This is to formally certify that <strong><span id="cert-doc-applicant">Mohammed Faheem Ahmed</span></strong>, residing at <strong><span id="cert-doc-house">Al-Falah Villa</span></strong>, Ward No. <strong><span id="cert-doc-ward">Ward 02 (Masjid Central)</span></strong>, is a bonafide registered resident under Noorul Huda Mahall Jama'ath registered roll <strong><span id="cert-doc-family-id">W02-F005</span></strong>.
+            </p>
+            <p>
+              According to the census register and confidential verification conducted by the Ward Conciliation Committee, there are no religious or communal impediments recorded against the applicant. This certificate is granted upon verified request for the purpose of: <strong><span id="cert-doc-purpose">Marriage Registration at Calicut Municipal Sub-Registrar Office</span></strong>.
+            </p>
+            <p class="text-xs text-slate-500">
+              This document is digitally secured with a unique cryptographic hash and QR verification seal recognized by governmental sub-registrars and consular authorities.
+            </p>
+          </div>
+
+          <!-- Signatures & Official Stamps -->
+          <div class="grid grid-cols-3 items-end pt-6 text-center text-xs">
+            <div class="space-y-1">
+              <span class="font-serif italic text-emerald-950 font-bold block text-sm">Usthad M. Abdul Rasheed</span>
+              <span class="text-[10px] text-slate-500 block border-t border-slate-400 pt-1">Chief Imam & Qatib</span>
+              <span class="text-[9px] text-slate-400">Spiritual Head</span>
+            </div>
+
+            <!-- Red Rubber Stamp -->
+            <div class="flex justify-center">
+              <div class="seal-stamp w-24 h-24 p-2 text-[9px] shadow-sm">
+                <span>NOORUL HUDA</span>
+                <span class="text-[11px] font-black">OFFICIAL</span>
+                <span>SEAL • 1968</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <span class="font-serif italic text-emerald-950 font-bold block text-sm">P. K. Abdurahman</span>
+              <span class="text-[10px] text-slate-500 block border-t border-slate-400 pt-1">General Secretary</span>
+              <span class="text-[9px] text-slate-400">Executive Secretariat</span>
+            </div>
+          </div>
+
+          <!-- Bottom Cryptographic Seal -->
+          <div class="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between text-[10px] text-slate-400 font-mono">
+            <span id="cert-doc-hash">HASH: NHM-NOC-8941-VERIFIED-SEAL</span>
+            <span id="cert-doc-date">Issued: 11-Sep-2026</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t">
+        <button onclick="closeOfficialCertModal()" class="flex-1 btn-outline text-xs !py-2">Close</button>
+        <button onclick="printOfficialCertificate()" class="flex-1 btn-primary text-xs !py-2 font-bold flex items-center justify-center gap-1.5">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Official Attested Certificate
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. BROADCAST NOTICE MODAL -->
+  <div id="broadcast-notice-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="send" class="w-4 h-4 text-amber-500"></i> Broadcast Official Announcement
+        </h3>
+        <button onclick="closeBroadcastNoticeModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Notice Headline / Title *</label>
+          <input id="broadcast-title" type="text" placeholder="e.g. Ramadan Hilal Moon Sighting Protocols" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Category</label>
+            <select id="broadcast-category" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="GENERAL">General Notice</option>
+              <option value="JANAZAH">Janazah Alert (Critical)</option>
+              <option value="EDUCATION">Madrasa Education</option>
+              <option value="EMERGENCY">Emergency / Blood</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Priority Level</label>
+            <select id="broadcast-priority" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-bold">
+              <option value="NORMAL">Normal</option>
+              <option value="HIGH">High Priority</option>
+              <option value="CRITICAL">Critical Alert</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Circular Text & Schedule</label>
+          <textarea id="broadcast-details" rows="3" placeholder="Provide full details of the notice..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-900 dark:text-white"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeBroadcastNoticeModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="publishManualAnnouncement()" class="flex-1 btn-gold text-xs !py-2 font-bold">Broadcast Notice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. EMERGENCY SOS BLOOD MODAL -->
+  <div id="emergency-sos-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2 text-red-600">
+          <i data-lucide="heart-pulse" class="w-5 h-5"></i> Trigger Emergency Blood SOS Broadcast
+        </h3>
+        <button onclick="closeEmergencySOSModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Required Blood Group *</label>
+            <select id="sos-blood-group" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-red-600">
+              <option value="O+">O+ Positive</option>
+              <option value="A+">A+ Positive</option>
+              <option value="B+">B+ Positive</option>
+              <option value="AB+">AB+ Positive</option>
+              <option value="O-">O- Negative (Rare)</option>
+              <option value="A-">A- Negative</option>
+              <option value="B-">B- Negative</option>
+              <option value="AB-">AB- Negative</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Units Needed</label>
+            <input id="sos-units" type="number" value="2" min="1" max="10" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Hospital / Ward Name *</label>
+          <input id="sos-hospital" type="text" value="Calicut Medical College Hospital, Dialysis Ward" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Patient Name & Contact Phone *</label>
+          <input id="sos-contact" type="text" value="Patient Bystander: +91 94470 12345" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+      </div>
+
+      <div class="p-3 bg-red-50 dark:bg-red-950/40 rounded-xl border border-red-200 dark:border-red-900 text-slate-700 dark:text-slate-300 space-y-1">
+        <strong class="text-red-700 dark:text-red-400 block font-bold">Auto-Generated WhatsApp Message:</strong>
+        <p id="sos-preview-text" class="text-[11px] font-mono leading-relaxed">
+          🚨 URGENT BLOOD NEED: O+ Positive (2 Units) required immediately at Calicut Medical College Hospital. Contact +91 94470 12345.
+        </p>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeEmergencySOSModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="copyAndBroadcastSOS()" class="flex-1 btn-primary !bg-red-700 hover:!bg-red-600 text-xs !py-2 font-bold flex items-center justify-center gap-1">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy & Broadcast
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. AUDITORIUM BOOKING MODAL -->
+  <div id="booking-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="building" class="w-4 h-4 text-emerald-600"></i> Reserve Community Auditorium
+        </h3>
+        <button onclick="closeBookingModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Applicant / Booked By *</label>
+          <input id="bkg-name" type="text" placeholder="e.g. K. P. Musthafa Haji" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Contact Phone *</label>
+          <input id="bkg-phone" type="text" placeholder="+91 98471 ..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Event Purpose</label>
+          <input id="bkg-event" type="text" placeholder="e.g. Nikah & Family Banquet" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Event Date</label>
+            <input id="bkg-date" type="date" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Time Slot</label>
+            <select id="bkg-slot" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs">
+              <option value="Morning (09:00 AM - 01:00 PM)">Morning Session</option>
+              <option value="Evening (04:00 PM - 09:00 PM)">Evening Session</option>
+              <option value="Full Day (09:00 AM - 08:00 PM)" selected>Full Day</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeBookingModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="saveAuditoriumBooking()" class="flex-1 btn-primary text-xs !py-2 font-bold">Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. SULHU HEARING & RECONCILIATION MODAL -->
+  <div id="sulhu-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="scale" class="w-4 h-4 text-amber-500"></i> Register Confidential Sulhu Petition
+        </h3>
+        <button onclick="closeSulhuModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Petitioner Name *</label>
+          <input id="sulhu-name" type="text" placeholder="e.g. Ahmed Koya P. K." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Family ID</label>
+            <input id="sulhu-family-id" type="text" placeholder="e.g. W02-F005" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-mono uppercase" />
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Contact Phone *</label>
+            <input id="sulhu-phone" type="text" placeholder="+91 9447..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+          </div>
+        </div>
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Matter Category</label>
+          <select id="sulhu-category" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs">
+            <option value="Boundary & Land Consultation">Boundary & Land Consultation</option>
+            <option value="Family Guidance & Reconciliation">Family Guidance & Reconciliation</option>
+            <option value="Commercial & Debt Mediation">Commercial & Debt Mediation</option>
+            <option value="Inheritance & Estate Settlement">Inheritance & Estate Settlement</option>
+          </select>
+        </div>
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Confidential Description</label>
+          <textarea id="sulhu-desc" rows="3" placeholder="Brief outline of the consultation matter..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-xs"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeSulhuModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="saveSulhuPetition()" class="flex-1 btn-gold text-xs !py-2 font-bold">Register in Docket</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. ENROLL STUDENT MODAL -->
+  <div id="enroll-student-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="graduation-cap" class="w-4 h-4 text-emerald-600"></i> Enroll Madrasa Student
+        </h3>
+        <button onclick="closeEnrollStudentModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Student Name *</label>
+          <input id="stud-name" type="text" placeholder="e.g. Mohammed Rayan" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Assigned Class</label>
+            <select id="stud-class" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs">
+              <option value="Class 1A">Class 1A</option>
+              <option value="Class 2C">Class 2C</option>
+              <option value="Class 3B">Class 3B</option>
+              <option value="Class 5A">Class 5A</option>
+              <option value="Class 7B" selected>Class 7B</option>
+              <option value="Class 10A">Class 10A</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Hifdh Progress</label>
+            <input id="stud-hifdh" type="text" value="Juz 1 Completed" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+          </div>
+        </div>
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Tajweed Assessment</label>
+          <select id="stud-tajweed" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs">
+            <option value="A+ (Exemplary)">A+ (Exemplary)</option>
+            <option value="A (Good)">A (Good)</option>
+            <option value="B+ (Satisfactory)">B+ (Satisfactory)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeEnrollStudentModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="saveStudentEnrollment()" class="flex-1 btn-primary text-xs !py-2 font-bold">Enroll Student</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. ADD DONOR MODAL -->
+  <div id="add-donor-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="droplet" class="w-4 h-4 text-red-500"></i> Register Emergency Blood Donor
+        </h3>
+        <button onclick="closeAddDonorModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Donor Full Name *</label>
+          <input id="donor-name" type="text" placeholder="e.g. Mohammed Sahal" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Blood Group *</label>
+            <select id="donor-group" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-red-600">
+              <option value="O+">O+</option>
+              <option value="A+">A+</option>
+              <option value="B+">B+</option>
+              <option value="AB+">AB+</option>
+              <option value="O-">O-</option>
+              <option value="A-">A-</option>
+              <option value="B-">B-</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Ward</label>
+            <select id="donor-ward" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs">
+              <option value="Ward 01">Ward 01</option>
+              <option value="Ward 02">Ward 02</option>
+              <option value="Ward 03">Ward 03</option>
+            </select>
+          </div>
+        </div>
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Phone Number *</label>
+          <input id="donor-phone" type="text" placeholder="+91 98470 ..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <button onclick="closeAddDonorModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="saveDonorRegistration()" class="flex-1 btn-primary text-xs !py-2 font-bold">Register Donor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       GLOBAL FOOTER
+       ========================================================================== -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 text-xs mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-6 h-6 rounded-full border border-emerald-500" />
+        <span class="text-slate-300 font-bold">Noorul Huda Mahall Secretariat Portal</span>
+        <span class="text-slate-600">|</span>
+        <span>Executive Management Console 2026</span>
+      </div>
+      <div class="flex gap-4 text-slate-500">
+        <a href="index.html" class="hover:text-emerald-400">Portal Home</a>
+        <a href="prayer.html" class="hover:text-emerald-400">Prayer</a>
+        <a href="my-mahall.html" class="hover:text-emerald-400">Resident Portal</a>
+        <span>Reg. No: KL-KZK/1968/42</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       SCRIPTS: DATA STORE, ENGINE & REACTIVE ADMIN CONTROLLER
+       ========================================================================== -->
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ai-assistant.js"></script>
+
+  <script>
+    // Global State for Admin Portal
+    let activeAdminTab = 'overview';
+    let currentCensusWard = 'all';
+    let currentCertStatusFilter = 'ALL';
+    let currentDonorFilter = 'all';
+    let collectionsChartInstance = null;
+    let revenueChartInstance = null;
+
+    // =========================================================================
+    // 1. INITIALIZATION & SESSION GATEKEEPER
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      if (!window.app) {
+        window.app = new MahallApp();
+      }
+
+      // Check current auth role
+      syncAdminAccessView();
+
+      // Start live clock
+      setInterval(updateAdminClock, 1000);
+      updateAdminClock();
+
+      // Render all admin modules
+      refreshAdminData();
+
+      // Multi-tab reactivity
+      window.addEventListener('mahalldb_updated', () => {
+        refreshAdminData();
+      });
+      window.addEventListener('mahall_auth_changed', () => {
+        syncAdminAccessView();
+      });
+    });
+
+    function syncAdminAccessView() {
+      const currentRole = (typeof AuthService !== 'undefined') ? AuthService.getCurrentRole() : (localStorage.getItem('nhm_role') || 'public');
+      const gateScreen = document.getElementById('admin-gatekeeper-screen');
+      const workspace = document.getElementById('admin-portal-workspace');
+      const statusBadge = document.getElementById('session-status-badge');
+      const sessionUser = document.getElementById('session-user-name');
+      const sessionBtn = document.getElementById('session-action-btn');
+
+      if (currentRole === 'admin') {
+        if (gateScreen) gateScreen.classList.add('hidden');
+        if (workspace) workspace.classList.remove('hidden');
+        if (statusBadge) statusBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Verified Session Active`;
+        if (sessionUser) sessionUser.innerText = 'P. K. Abdurahman';
+        if (sessionBtn) sessionBtn.innerText = 'Lock';
+      } else {
+        // Unauthenticated or Public / Member mode
+        if (gateScreen) gateScreen.classList.remove('hidden');
+        if (workspace) workspace.classList.add('hidden');
+        if (statusBadge) statusBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Role: ${currentRole.toUpperCase()}`;
+        if (sessionBtn) sessionBtn.innerText = 'Unlock';
+      }
+
+      // Update Top Bar role pills
+      if (typeof AuthService !== 'undefined') {
+        AuthService.syncUIRole(currentRole);
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function unlockAsSecretaryDemo() {
+      if (typeof AuthService !== 'undefined') {
+        AuthService.setRole('admin');
+      } else {
+        localStorage.setItem('nhm_role', 'admin');
+      }
+      if (window.app) window.app.showToast('Unlocked Secretariat Console as General Secretary P. K. Abdurahman', 'success');
+      syncAdminAccessView();
+      switchAdminSection('overview');
+    }
+
+    function verifyGatePasskey() {
+      const pass = (document.getElementById('gate-passkey-input').value || '').trim();
+      try {
+        if (typeof AuthService !== 'undefined') {
+          AuthService.loginSecretary(pass);
+        } else if (pass === 'admin2026' || pass === 'admin') {
+          localStorage.setItem('nhm_role', 'admin');
+        } else {
+          throw new Error('Invalid Passkey. (Hint: admin2026)');
+        }
+        if (window.app) window.app.showToast('Passkey verified! Welcome General Secretary.', 'success');
+        syncAdminAccessView();
+      } catch (err) {
+        if (window.app) window.app.showToast(err.message, 'error');
+      }
+    }
+
+    function quickToggleSession() {
+      const currentRole = (typeof AuthService !== 'undefined') ? AuthService.getCurrentRole() : (localStorage.getItem('nhm_role') || 'public');
+      if (currentRole === 'admin') {
+        if (typeof AuthService !== 'undefined') AuthService.logout();
+        else localStorage.setItem('nhm_role', 'public');
+        if (window.app) window.app.showToast('Secretariat console locked.', 'info');
+      } else {
+        unlockAsSecretaryDemo();
+      }
+      syncAdminAccessView();
+    }
+
+    function updateAdminClock() {
+      const el = document.getElementById('admin-live-clock');
+      if (el) {
+        el.innerText = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      }
+    }
+
+    function toggleAdminNotifications() {
+      const drawer = document.getElementById('admin-notifications-drawer');
+      if (drawer) drawer.classList.toggle('hidden');
+    }
+
+    // =========================================================================
+    // 2. TAB NAVIGATION
+    // =========================================================================
+    function switchAdminSection(sectionId) {
+      activeAdminTab = sectionId;
+
+      // Hide all sections
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
+
+      // Show selected section
+      const target = document.getElementById(`section-${sectionId}`);
+      if (target) {
+        target.classList.remove('hidden');
+      }
+
+      // Update sidebar nav items
+      document.querySelectorAll('.admin-nav-item').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById(`nav-item-${sectionId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+
+      // Re-trigger layout or charts if needed
+      if (sectionId === 'overview') {
+        setTimeout(initOverviewCharts, 50);
+      }
+
+      if (window.lucide) lucide.createIcons();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // 3. DATA REFRESH FOR ALL MODULES
+    // =========================================================================
+    function refreshAdminData() {
+      renderOverviewKPIs();
+      renderCensusTable();
+      renderTreasuryLedger();
+      renderCertificatesDesk();
+      renderSulhuDocket();
+      renderAnnouncementsFeed();
+      renderStudentsRoster();
+      renderDonorsDirectory();
+      renderBookingsTable();
+      renderAuditLogsTable();
+      populateFamilySelectDropdown();
+    }
+
+    // =========================================================================
+    // 4. OVERVIEW DASHBOARD
+    // =========================================================================
+    function renderOverviewKPIs() {
+      if (typeof MahallDB === 'undefined') return;
+      const families = MahallDB.getFamilies();
+      const certs = MahallDB.getCertificates();
+      const sulhu = MahallDB.getSulhuPetitions();
+      const donors = MahallDB.getBloodDonors();
+      const pendingCerts = certs.filter(c => c.status === 'PENDING').length;
+      const activeSulhu = sulhu.filter(s => s.status !== 'RESOLVED').length;
+
+      // Update numbers
+      const elFam = document.getElementById('kpi-families');
+      if (elFam) elFam.innerText = families.length;
+      const elCert = document.getElementById('kpi-certs');
+      if (elCert) elCert.innerText = pendingCerts;
+      const elSulhu = document.getElementById('kpi-sulhu');
+      if (elSulhu) elSulhu.innerText = activeSulhu;
+      const elDonors = document.getElementById('kpi-donors');
+      if (elDonors) elDonors.innerText = donors.length;
+
+      // Update badges in sidebar
+      const badgeCerts = document.getElementById('badge-cert-count');
+      if (badgeCerts) badgeCerts.innerText = pendingCerts;
+      const notifBadge = document.getElementById('admin-notif-badge');
+      if (notifBadge) notifBadge.innerText = pendingCerts + activeSulhu + 1;
+
+      // Render activity logs stream in overview
+      const stream = document.getElementById('overview-activity-stream');
+      if (stream) {
+        const logs = MahallDB.getActivityLogs().slice(0, 4);
+        stream.innerHTML = logs.map(l => `
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full ${l.type === 'PAYMENT' ? 'bg-emerald-500' : l.type === 'CERTIFICATE' ? 'bg-amber-500' : 'bg-blue-500'}"></span>
+              <span class="text-slate-800 dark:text-slate-200 font-medium">${l.message}</span>
+            </div>
+            <span class="text-slate-400 text-[10px] font-mono">${l.timestamp}</span>
+          </div>
+        `).join('');
+      }
+
+      initOverviewCharts();
+    }
+
+    function initOverviewCharts() {
+      const ctxColl = document.getElementById('overview-collections-chart');
+      if (ctxColl) {
+        if (collectionsChartInstance) collectionsChartInstance.destroy();
+        collectionsChartInstance = new Chart(ctxColl, {
+          type: 'line',
+          data: {
+            labels: ['May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026', 'Sep 2026', 'Oct 2026 (Est)'],
+            datasets: [
+              {
+                label: 'Actual Collected (₹)',
+                data: [315000, 328000, 335000, 338000, 342000, 355000],
+                borderColor: '#059669',
+                backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                tension: 0.35,
+                fill: true,
+                pointBackgroundColor: '#047857'
+              },
+              {
+                label: 'Target Budget (₹)',
+                data: [350000, 350000, 360000, 375000, 375000, 375000],
+                borderColor: '#d97706',
+                borderDash: [5, 5],
+                tension: 0,
+                fill: false,
+                pointRadius: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+            scales: { y: { beginAtZero: false, ticks: { font: { size: 9 } } }, x: { ticks: { font: { size: 9 } } } }
+          }
+        });
+      }
+
+      const ctxRev = document.getElementById('overview-revenue-chart');
+      if (ctxRev) {
+        if (revenueChartInstance) revenueChartInstance.destroy();
+        revenueChartInstance = new Chart(ctxRev, {
+          type: 'doughnut',
+          data: {
+            labels: ['Monthly Subscriptions', 'General Sadaqah', 'Waqf Rents', 'Zakat Relief Fund'],
+            datasets: [{
+              data: [160500, 72000, 54500, 55000],
+              backgroundColor: ['#059669', '#d97706', '#0284c7', '#8b5cf6']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // 5. CENSUS & HOUSEHOLDS (CRUD)
+    // =========================================================================
+    function renderCensusTable(ward = currentCensusWard, query = '', statusFilter = 'all') {
+      const tbody = document.getElementById('census-table-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      let list = MahallDB.getFamilies();
+      if (ward !== 'all') {
+        list = list.filter(f => f.ward && f.ward.includes(ward));
+      }
+      if (statusFilter !== 'all') {
+        list = list.filter(f => (f.monthlyStatus || (f.subscriptionPaid ? 'PAID' : 'PENDING')) === statusFilter);
+      }
+      if (query) {
+        const q = query.toLowerCase();
+        list = list.filter(f => 
+          (f.head && f.head.toLowerCase().includes(q)) ||
+          (f.familyId && f.familyId.toLowerCase().includes(q)) ||
+          (f.houseName && f.houseName.toLowerCase().includes(q)) ||
+          (f.phone && f.phone.includes(q))
+        );
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">No matching household records found in census register.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(f => {
+        const isPaid = (f.monthlyStatus === 'PAID') || f.subscriptionPaid;
+        const memberCount = (f.members && f.members.length) || f.membersCount || 4;
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+            <td class="p-3 font-mono font-bold text-emerald-600">${f.familyId}</td>
+            <td class="p-3">
+              <strong class="text-slate-900 dark:text-white block">${f.head}</strong>
+              <span class="text-[10px] text-slate-400">${f.occupation || 'Resident'}</span>
+            </td>
+            <td class="p-3 font-medium text-slate-700 dark:text-slate-300">${f.houseName}</td>
+            <td class="p-3 text-slate-500">${f.ward}</td>
+            <td class="p-3 font-mono text-[11px] text-slate-600 dark:text-slate-300">${f.phone || 'N/A'}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-bold text-[10px]">${memberCount} Members</span></td>
+            <td class="p-3">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isPaid ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'}">
+                ${isPaid ? 'PAID' : 'PENDING'}
+              </span>
+            </td>
+            <td class="p-3">
+              <div class="flex items-center gap-1.5">
+                <button onclick="viewHouseholdDossier('${f.familyId}')" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] transition" title="View Household Dossier">
+                  Dossier
+                </button>
+                <button onclick="quickPayHousehold('${f.familyId}')" class="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] transition" title="Record Dues Payment">
+                  Pay
+                </button>
+                <button onclick="editHousehold('${f.familyId}')" class="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-slate-200" title="Edit Household">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="deleteHousehold('${f.familyId}')" class="p-1 rounded text-slate-400 hover:text-red-600" title="Delete Household">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterCensusWard(ward) {
+      currentCensusWard = ward;
+      document.querySelectorAll('.census-ward-pill').forEach(btn => {
+        btn.classList.remove('bg-emerald-700', 'text-white');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      });
+      if (event && event.target) {
+        event.target.classList.add('bg-emerald-700', 'text-white');
+        event.target.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      }
+      searchCensusDirectory();
+    }
+
+    function searchCensusDirectory() {
+      const q = document.getElementById('census-search-input').value;
+      const status = document.getElementById('census-status-filter').value;
+      renderCensusTable(currentCensusWard, q, status);
+    }
+
+    function openRegisterHouseholdModal() {
+      document.getElementById('household-modal-title').innerText = 'Register New Household in Mahall Census';
+      document.getElementById('edit-household-id').value = '';
+      document.getElementById('household-head').value = '';
+      document.getElementById('household-house').value = '';
+      document.getElementById('household-occ').value = '';
+      document.getElementById('household-phone').value = '';
+      document.getElementById('household-count').value = '4';
+      const modal = document.getElementById('register-household-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeRegisterHouseholdModal() {
+      const modal = document.getElementById('register-household-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function saveHouseholdData() {
+      const editId = document.getElementById('edit-household-id').value;
+      const head = (document.getElementById('household-head').value || '').trim();
+      const house = (document.getElementById('household-house').value || '').trim();
+      const ward = document.getElementById('household-ward').value;
+      const occ = (document.getElementById('household-occ').value || '').trim();
+      const blood = document.getElementById('household-blood').value;
+      const phone = (document.getElementById('household-phone').value || '').trim();
+      const count = parseInt(document.getElementById('household-count').value) || 4;
+
+      if (!head || !house) {
+        window.app.showToast('Please provide both family head name and house name', 'error');
+        return;
+      }
+
+      if (editId) {
+        // Edit existing
+        MahallDB.updateFamily(editId, {
+          head,
+          houseName: house,
+          ward,
+          occupation: occ,
+          bloodGroup: blood,
+          phone,
+          membersCount: count
+        });
+        MahallDB.logActivity('CENSUS', `Updated household ${head} (${editId})`);
+        window.app.showToast(`Updated household ${head}`, 'success');
+      } else {
+        // Add new
+        const newFam = MahallDB.addFamily({
+          head,
+          houseName: house,
+          ward,
+          occupation: occ,
+          bloodGroup: blood,
+          phone: phone || '+91 94470 00000',
+          membersCount: count
+        });
+        MahallDB.logActivity('CENSUS', `Enrolled new household ${newFam.head} (${newFam.familyId}) in ${newFam.ward}`);
+        window.app.showToast(`Registered new household ${newFam.head} (${newFam.familyId})`, 'success');
+      }
+
+      closeRegisterHouseholdModal();
+      refreshAdminData();
+    }
+
+    function editHousehold(familyId) {
+      const fam = MahallDB.getFamilyById(familyId);
+      if (!fam) return;
+
+      document.getElementById('household-modal-title').innerText = `Edit Household: ${fam.familyId}`;
+      document.getElementById('edit-household-id').value = fam.familyId;
+      document.getElementById('household-head').value = fam.head;
+      document.getElementById('household-house').value = fam.houseName;
+      document.getElementById('household-ward').value = fam.ward;
+      document.getElementById('household-occ').value = fam.occupation || '';
+      document.getElementById('household-blood').value = fam.bloodGroup || 'O+';
+      document.getElementById('household-phone').value = fam.phone || '';
+      document.getElementById('household-count').value = (fam.members && fam.members.length) || fam.membersCount || 4;
+
+      const modal = document.getElementById('register-household-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function deleteHousehold(familyId) {
+      if (confirm(`Are you sure you want to deactivate and remove household ${familyId}?`)) {
+        MahallDB.deleteFamily(familyId);
+        MahallDB.logActivity('CENSUS', `Deactivated household ${familyId}`);
+        window.app.showToast(`Deactivated household ${familyId}`, 'info');
+        refreshAdminData();
+      }
+    }
+
+    // Family Dossier Detailed Viewer
+    let currentDossierFamilyId = null;
+
+    function viewHouseholdDossier(familyId) {
+      currentDossierFamilyId = familyId;
+      const fam = MahallDB.getFamilyById(familyId);
+      if (!fam) return;
+
+      document.getElementById('dossier-head').innerText = fam.head;
+      document.getElementById('dossier-id').innerText = fam.familyId;
+      document.getElementById('dossier-house').innerText = fam.houseName;
+      document.getElementById('dossier-ward').innerText = fam.ward;
+      document.getElementById('dossier-phone').innerText = fam.phone || 'N/A';
+      document.getElementById('dossier-occ').innerText = fam.occupation || 'Resident';
+      document.getElementById('dossier-blood').innerText = fam.bloodGroup || 'O+';
+      document.getElementById('dossier-status').innerText = (fam.monthlyStatus || (fam.subscriptionPaid ? 'PAID' : 'PENDING'));
+
+      renderDossierMembers(fam);
+
+      const modal = document.getElementById('family-dossier-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderDossierMembers(fam) {
+      const container = document.getElementById('dossier-members-container');
+      if (!container) return;
+      const members = fam.members || [];
+
+      if (members.length === 0) {
+        container.innerHTML = `<div class="p-3 text-slate-400 text-center">No individual dependents catalogued yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = members.map((m, idx) => `
+        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between">
+          <div>
+            <strong class="text-slate-800 dark:text-slate-200 block text-xs">${m.name}</strong>
+            <span class="text-[10px] text-slate-400">${m.relation || 'Member'} • Age ${m.age || 22} • ${m.occ || m.occupation || 'Resident'}</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-bold text-[9px]">${m.blood || m.bloodGroup || 'O+'}</span>
+        </div>
+      `).join('');
+    }
+
+    function toggleAddMemberForm() {
+      const box = document.getElementById('add-member-form-box');
+      if (box) box.classList.toggle('hidden');
+    }
+
+    function saveDependentMember() {
+      if (!currentDossierFamilyId) return;
+      const name = (document.getElementById('new-member-name').value || '').trim();
+      const relation = (document.getElementById('new-member-relation').value || '').trim();
+      const age = parseInt(document.getElementById('new-member-age').value) || 20;
+      const blood = document.getElementById('new-member-blood').value;
+
+      if (!name) {
+        window.app.showToast('Please enter member name', 'error');
+        return;
+      }
+
+      const fam = MahallDB.getFamilyById(currentDossierFamilyId);
+      if (fam) {
+        if (!fam.members) fam.members = [];
+        fam.members.push({ name, relation, age, blood, occ: 'Resident' });
+        MahallDB.updateFamily(currentDossierFamilyId, { members: fam.members, membersCount: fam.members.length });
+        renderDossierMembers(fam);
+        toggleAddMemberForm();
+        window.app.showToast(`Added ${name} to household ${fam.familyId}`, 'success');
+        refreshAdminData();
+      }
+    }
+
+    function closeFamilyDossierModal() {
+      const modal = document.getElementById('family-dossier-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function printFamilyDossier() {
+      window.app.showToast('Printing official Household Census Dossier Card', 'success');
+      window.print();
+    }
+
+    function downloadCensusCSV() {
+      const families = MahallDB.getFamilies();
+      const headers = ['Family ID', 'Head of Household', 'House Name', 'Ward', 'Dependents', 'Status', 'Phone', 'Blood Group', 'Occupation'];
+      const rows = families.map(f => [
+        `"${f.familyId}"`,
+        `"${f.head}"`,
+        `"${f.houseName}"`,
+        `"${f.ward}"`,
+        (f.members ? f.members.length : (f.membersCount || 4)),
+        f.monthlyStatus || (f.subscriptionPaid ? 'PAID' : 'PENDING'),
+        `"${f.phone || ''}"`,
+        `"${f.bloodGroup || 'O+'}"`,
+        `"${f.occupation || ''}"`
+      ]);
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `Noorul_Huda_Census_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.app.showToast('Downloaded official Census CSV Register', 'success');
+    }
+
+    // =========================================================================
+    // 6. TREASURY & DUES LEDGER
+    // =========================================================================
+    function renderTreasuryLedger(query = '') {
+      const tbody = document.getElementById('treasury-ledger-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      let payments = MahallDB.getPayments();
+      if (query) {
+        const q = query.toLowerCase();
+        payments = payments.filter(p => 
+          (p.paymentId && p.paymentId.toLowerCase().includes(q)) ||
+          (p.receiptNo && p.receiptNo.toLowerCase().includes(q)) ||
+          (p.familyHead && p.familyHead.toLowerCase().includes(q)) ||
+          (p.familyId && p.familyId.toLowerCase().includes(q))
+        );
+      }
+
+      if (payments.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">No payment transaction records in ledger.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = payments.map(p => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3 font-mono font-bold text-amber-600">${p.paymentId}</td>
+          <td class="p-3 font-mono text-emerald-600 font-bold">${p.receiptNo || 'RCP-2026-0000'}</td>
+          <td class="p-3">
+            <strong class="text-slate-900 dark:text-white block">${p.familyHead}</strong>
+            <span class="text-[10px] font-mono text-slate-400">${p.familyId}</span>
+          </td>
+          <td class="p-3 font-mono font-black text-slate-900 dark:text-white text-sm">₹${p.amount}</td>
+          <td class="p-3 text-slate-500">${p.months || '1 Month'}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-bold">${p.mode}</span></td>
+          <td class="p-3 font-mono text-[10px] text-slate-400">${p.timestamp}</td>
+          <td class="p-3">
+            <button onclick="viewOfficialReceipt('${p.paymentId}')" class="px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-700 dark:text-amber-300 font-bold text-[10px] transition">
+              Receipt &rarr;
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function searchTreasuryLedger() {
+      const q = document.getElementById('ledger-search-input').value;
+      renderTreasuryLedger(q);
+    }
+
+    function populateFamilySelectDropdown() {
+      const sel = document.getElementById('pay-family-select');
+      if (!sel || typeof MahallDB === 'undefined') return;
+      const families = MahallDB.getFamilies();
+      sel.innerHTML = families.map(f => `
+        <option value="${f.familyId}">${f.familyId} - ${f.head} (${f.houseName})</option>
+      `).join('');
+      updatePaymentCalculation();
+    }
+
+    function updatePayFamilyPreview() {
+      updatePaymentCalculation();
+    }
+
+    function updatePaymentCalculation() {
+      const count = parseInt(document.getElementById('pay-months-count').value) || 1;
+      const total = count * 250;
+      const el = document.getElementById('pay-calc-total');
+      if (el) el.innerText = `₹${total}`;
+    }
+
+    function openRecordPaymentModal() {
+      populateFamilySelectDropdown();
+      const modal = document.getElementById('record-payment-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeRecordPaymentModal() {
+      const modal = document.getElementById('record-payment-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function quickPayHousehold(familyId) {
+      openRecordPaymentModal();
+      const sel = document.getElementById('pay-family-select');
+      if (sel) sel.value = familyId;
+      updatePaymentCalculation();
+    }
+
+    function submitManualPayment() {
+      const familyId = document.getElementById('pay-family-select').value;
+      const monthsCount = parseInt(document.getElementById('pay-months-count').value) || 1;
+      const mode = document.getElementById('pay-mode').value;
+      const note = (document.getElementById('pay-note').value || '').trim();
+
+      try {
+        const payment = MahallDB.recordPayment({
+          familyId,
+          monthsCount,
+          mode,
+          note
+        });
+
+        closeRecordPaymentModal();
+        refreshAdminData();
+        window.app.showToast(`Recorded ₹${payment.amount} dues payment for ${payment.familyHead}`, 'success');
+
+        // Immediately open the generated official printable receipt
+        viewOfficialReceipt(payment.paymentId);
+      } catch (err) {
+        window.app.showToast(err.message, 'error');
+      }
+    }
+
+    function viewOfficialReceipt(paymentId) {
+      const payments = MahallDB.getPayments();
+      const p = payments.find(item => item.paymentId === paymentId);
+      if (!p) return;
+
+      document.getElementById('rcp-number').innerText = p.receiptNo;
+      document.getElementById('rcp-date').innerText = `Date: ${p.timestamp}`;
+      document.getElementById('rcp-head').innerText = p.familyHead;
+      document.getElementById('rcp-family-id').innerText = p.familyId;
+      document.getElementById('rcp-house').innerText = p.ward || 'Masjid Central';
+      document.getElementById('rcp-amount-words').innerText = `₹${p.amount} (${p.amount === 250 ? 'Two Hundred Fifty Only' : p.amount === 500 ? 'Five Hundred Only' : 'One Thousand Five Hundred Only'})`;
+      document.getElementById('rcp-months').innerText = p.months || 'Monthly Mahall Subscription';
+      document.getElementById('rcp-mode').innerText = p.mode;
+
+      const modal = document.getElementById('official-receipt-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeOfficialReceiptModal() {
+      const modal = document.getElementById('official-receipt-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function printOfficialReceipt() {
+      window.app.showToast('Printing official Treasury receipt', 'success');
+      window.print();
+    }
+
+    function downloadTreasuryLedgerCSV() {
+      const payments = MahallDB.getPayments();
+      const headers = ['Payment Ref', 'Receipt No', 'Family ID', 'Family Head', 'Amount', 'Months', 'Mode', 'Timestamp', 'Collector'];
+      const rows = payments.map(p => [
+        `"${p.paymentId}"`,
+        `"${p.receiptNo || ''}"`,
+        `"${p.familyId}"`,
+        `"${p.familyHead}"`,
+        p.amount,
+        `"${p.months || ''}"`,
+        `"${p.mode}"`,
+        `"${p.timestamp}"`,
+        `"${p.collector || 'Treasury'}"`
+      ]);
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `Noorul_Huda_Treasury_Ledger_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.app.showToast('Exported Treasury Ledger CSV', 'success');
+    }
+
+    // =========================================================================
+    // 7. CERTIFICATE APPROVAL & VERIFICATION
+    // =========================================================================
+    function renderCertificatesDesk(statusFilter = currentCertStatusFilter) {
+      const tbody = document.getElementById('admin-cert-queue-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      let certs = MahallDB.getCertificates();
+      if (statusFilter !== 'ALL') {
+        certs = certs.filter(c => c.status === statusFilter);
+      }
+
+      if (certs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">No applications matching filter "${statusFilter}".</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = certs.map(c => {
+        const isPending = c.status === 'PENDING';
+        const isApproved = c.status === 'APPROVED';
+
+        const badgeClass = isApproved ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' :
+                           isPending ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' :
+                           'bg-red-100 text-red-800';
+
+        const actionBtns = isPending ? `
+          <div class="flex items-center gap-1.5">
+            <button onclick="approveCertificateAction('${c.certId}')" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] transition">
+              Approve
+            </button>
+            <button onclick="rejectCertificateAction('${c.certId}')" class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 hover:bg-red-600 hover:text-white text-slate-700 dark:text-slate-300 font-bold text-[10px] transition">
+              Reject
+            </button>
+          </div>
+        ` : `
+          <button onclick="previewOfficialCertificate('${c.certId}')" class="text-emerald-600 font-bold hover:underline text-[10px] flex items-center gap-1">
+            <i data-lucide="award" class="w-3.5 h-3.5"></i> Attestation &rarr;
+          </button>
+        `;
+
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+            <td class="p-3 font-mono font-bold text-emerald-600">${c.certId}</td>
+            <td class="p-3 font-bold text-slate-900 dark:text-white">${c.applicantName}</td>
+            <td class="p-3 font-mono text-slate-500">${c.familyId}</td>
+            <td class="p-3 uppercase text-[10px] font-bold text-slate-700 dark:text-slate-300">${c.certType || c.type}</td>
+            <td class="p-3 text-slate-500">${c.purpose}</td>
+            <td class="p-3 text-slate-400 text-[10px] font-mono">${c.submittedAt || c.requestDate || '2026'}</td>
+            <td class="p-3"><span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold ${badgeClass}">${c.status}</span></td>
+            <td class="p-3">${actionBtns}</td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterCertStatus(status) {
+      currentCertStatusFilter = status;
+      document.querySelectorAll('.cert-status-pill').forEach(btn => {
+        btn.classList.remove('bg-emerald-700', 'text-white');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      });
+      if (event && event.target) {
+        event.target.classList.add('bg-emerald-700', 'text-white');
+        event.target.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      }
+      renderCertificatesDesk(status);
+    }
+
+    function approveCertificateAction(certId) {
+      MahallDB.updateCertificateStatus(certId, 'APPROVED');
+      MahallDB.logActivity('CERTIFICATE', `Approved and sealed certificate ${certId}`);
+      window.app.showToast(`Certificate ${certId} approved! Digital QR Seal generated.`, 'success');
+      refreshAdminData();
+      previewOfficialCertificate(certId);
+    }
+
+    function rejectCertificateAction(certId) {
+      const reason = prompt('Please enter official rejection reason to notify applicant:');
+      if (reason) {
+        MahallDB.updateCertificateStatus(certId, 'REJECTED', reason);
+        MahallDB.logActivity('CERTIFICATE', `Rejected certificate ${certId}: ${reason}`);
+        window.app.showToast(`Marked application ${certId} as rejected`, 'info');
+        refreshAdminData();
+      }
+    }
+
+    function previewOfficialCertificate(certId) {
+      const cert = MahallDB.getCertificateById(certId);
+      if (!cert) return;
+
+      const fam = MahallDB.getFamilyById(cert.familyId) || { houseName: 'Al-Falah Villa', ward: 'Ward 02' };
+
+      document.getElementById('cert-doc-title').innerText = `OFFICIAL ${(cert.certType || cert.type).toUpperCase()} CERTIFICATE`;
+      document.getElementById('cert-doc-id').innerText = `REF NO: ${cert.certId}`;
+      document.getElementById('cert-doc-applicant').innerText = cert.applicantName;
+      document.getElementById('cert-doc-house').innerText = fam.houseName;
+      document.getElementById('cert-doc-ward').innerText = fam.ward;
+      document.getElementById('cert-doc-family-id').innerText = cert.familyId;
+      document.getElementById('cert-doc-purpose').innerText = cert.purpose;
+      document.getElementById('cert-doc-hash').innerText = `HASH: ${cert.verificationHash || 'NHM-VERIFIED-SEAL-8941'}`;
+      document.getElementById('cert-doc-date').innerText = `Issued: ${cert.approvedAt || '11-Sep-2026'}`;
+
+      const modal = document.getElementById('official-cert-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeOfficialCertModal() {
+      const modal = document.getElementById('official-cert-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function printOfficialCertificate() {
+      window.app.showToast('Opening print dialog for official certificate (A4 Landscape / Portrait)', 'success');
+      window.print();
+    }
+
+    function inspectCertificateId() {
+      const id = (document.getElementById('cert-inspector-input').value || '').trim();
+      const cert = MahallDB.getCertificateById(id);
+      const titleEl = document.getElementById('cert-inspect-title');
+      const bodyEl = document.getElementById('cert-inspect-body');
+      const box = document.getElementById('cert-inspect-result-box');
+
+      if (cert) {
+        box.className = 'p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs';
+        titleEl.className = 'text-emerald-900 dark:text-emerald-100 block font-bold text-sm';
+        titleEl.innerText = `Certificate ${cert.certId}: VERIFIED AUTHENTIC (${cert.status})`;
+        bodyEl.innerText = `${(cert.certType || cert.type).toUpperCase()} issued to ${cert.applicantName} (Family ID: ${cert.familyId}). Purpose: ${cert.purpose}. Attested by Secretary P. K. Abdurahman.`;
+        window.app.showToast(`Verified authentic certificate ${cert.certId}`, 'success');
+      } else {
+        box.className = 'p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-800 text-xs';
+        titleEl.className = 'text-red-900 dark:text-red-100 block font-bold text-sm';
+        titleEl.innerText = `Certificate "${id}": RECORD NOT FOUND`;
+        bodyEl.innerText = `No digital certificate matching reference ID "${id}" exists in the Mahall registry. Please verify document credentials.`;
+        window.app.showToast(`No certificate found for ID ${id}`, 'error');
+      }
+    }
+
+    // =========================================================================
+    // 8. SULHU ARBITRATION
+    // =========================================================================
+    function renderSulhuDocket() {
+      const tbody = document.getElementById('admin-sulhu-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      const petitions = MahallDB.getSulhuPetitions();
+      if (petitions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">No active mediation petitions in docket.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = petitions.map(p => {
+        const isResolved = p.status === 'RESOLVED';
+        const isHearing = p.status === 'IN_HEARING';
+        const badgeClass = isResolved ? 'bg-emerald-100 text-emerald-800' :
+                           isHearing ? 'bg-blue-100 text-blue-800' :
+                           'bg-amber-100 text-amber-800';
+
+        const action = isResolved ? `<span class="text-slate-400 text-[10px]">Closed Amicably</span>` :
+                       isHearing ? `<button onclick="advanceSulhuCase('${p.petitionId}', 'RESOLVED')" class="px-2.5 py-1 rounded bg-emerald-600 text-white font-bold text-[10px]">Mark Resolved</button>` :
+                       `<button onclick="advanceSulhuCase('${p.petitionId}', 'IN_HEARING')" class="px-2.5 py-1 rounded bg-blue-600 text-white font-bold text-[10px]">Start Hearing</button>`;
+
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+            <td class="p-3 font-mono font-bold text-amber-600">${p.petitionId}</td>
+            <td class="p-3 font-bold text-slate-900 dark:text-white">${p.petitionerName}</td>
+            <td class="p-3 font-mono text-slate-500">${p.familyId || 'N/A'}</td>
+            <td class="p-3 font-medium">${p.category}</td>
+            <td class="p-3 text-slate-500">${p.preferredMode || 'In-Person Chamber'}</td>
+            <td class="p-3 text-slate-400 text-[10px] font-mono">${p.meetingDate || p.preferredDate || 'Pending'}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[9px] font-bold ${badgeClass}">${p.status}</span></td>
+            <td class="p-3">${action}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function advanceSulhuCase(petitionId, nextStatus) {
+      MahallDB.updateSulhuStatus(petitionId, nextStatus);
+      MahallDB.logActivity('SULHU', `Advanced case ${petitionId} to ${nextStatus}`);
+      window.app.showToast(`Sulhu Case ${petitionId} updated to ${nextStatus}`, 'success');
+      refreshAdminData();
+    }
+
+    function openRegisterSulhuModal() {
+      const modal = document.getElementById('sulhu-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeSulhuModal() {
+      const modal = document.getElementById('sulhu-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function saveSulhuPetition() {
+      const name = (document.getElementById('sulhu-name').value || '').trim();
+      const famId = (document.getElementById('sulhu-family-id').value || '').trim();
+      const phone = (document.getElementById('sulhu-phone').value || '').trim();
+      const cat = document.getElementById('sulhu-category').value;
+      const desc = (document.getElementById('sulhu-desc').value || '').trim();
+
+      if (!name || !phone) {
+        window.app.showToast('Please provide petitioner name and contact phone', 'error');
+        return;
+      }
+
+      MahallDB.createSulhuPetition({
+        familyId: famId || 'W02-F005',
+        petitionerName: name,
+        phone,
+        category: cat,
+        description: desc
+      });
+
+      MahallDB.logActivity('SULHU', `Registered confidential dispute petition for ${name} (${cat})`);
+      closeSulhuModal();
+      refreshAdminData();
+      window.app.showToast('Confidential Sulhu petition docketed successfully', 'success');
+    }
+
+    // =========================================================================
+    // 9. ANNOUNCEMENTS & AI STUDIO
+    // =========================================================================
+    function renderAnnouncementsFeed() {
+      const container = document.getElementById('admin-announcements-feed');
+      if (!container || typeof MahallDB === 'undefined') return;
+
+      const list = MahallDB.getAnnouncements();
+      container.innerHTML = list.map(ann => `
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs relative group">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ann.priority === 'CRITICAL' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-800'}">
+              ${ann.category}
+            </span>
+            <span class="text-slate-400 font-mono">${ann.date} • ${ann.time || 'Circular'}</span>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">${ann.title}</h4>
+          <p class="text-slate-500 leading-relaxed">${ann.details}</p>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-slate-400 text-[10px]">📍 ${ann.location || 'Central Masjid'}</span>
+            <button onclick="removeAnnouncement('${ann.id}')" class="text-red-600 hover:text-red-700 font-bold text-[10px] flex items-center gap-1">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function removeAnnouncement(id) {
+      if (confirm('Delete this announcement circular from the live site?')) {
+        MahallDB.deleteAnnouncement(id);
+        window.app.showToast('Announcement removed', 'info');
+        refreshAdminData();
+      }
+    }
+
+    function openBroadcastNoticeModal(category = 'GENERAL') {
+      const catSelect = document.getElementById('broadcast-category');
+      if (catSelect) catSelect.value = category;
+      const modal = document.getElementById('broadcast-notice-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeBroadcastNoticeModal() {
+      const modal = document.getElementById('broadcast-notice-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function publishManualAnnouncement() {
+      const title = (document.getElementById('broadcast-title').value || '').trim();
+      const cat = document.getElementById('broadcast-category').value;
+      const prio = document.getElementById('broadcast-priority').value;
+      const details = (document.getElementById('broadcast-details').value || '').trim();
+
+      if (!title || !details) {
+        window.app.showToast('Please provide both headline and circular details', 'error');
+        return;
+      }
+
+      MahallDB.createAnnouncement({
+        titleEn: title,
+        category: cat,
+        priority: prio,
+        details: details
+      });
+
+      MahallDB.logActivity('ANNOUNCEMENT', `Broadcasted notice "${title}" (${cat})`);
+      closeBroadcastNoticeModal();
+      refreshAdminData();
+      window.app.showToast(`Broadcasted notice "${title}" site-wide!`, 'success');
+    }
+
+    // AI Notice Drafter Engine
+    function generateTriLingualNotice() {
+      const topic = (document.getElementById('ai-draft-topic').value || 'Notice').trim();
+      const points = (document.getElementById('ai-draft-points').value || '').trim();
+
+      document.getElementById('ai-notice-en').value = `OFFICIAL NOTICE: ${topic.toUpperCase()}\n\nAll families and residents under Noorul Huda Mahall Jama'ath are hereby notified that the ${topic} will take place as follows:\n\n• Key Information: ${points}\n• Venue: Noorul Huda Community Hall\n\nBy Order of the Executive Secretariat\nP. K. Abdurahman (General Secretary)`;
+
+      document.getElementById('ai-notice-ml').value = `ഔദ്യോഗിക അറിയിപ്പ്: ${topic}\n\nനൂറുൽ ഹുദാ മഹല്ല് ജമാഅത്ത് പരിധിയിലെ മുഴുവൻ കുടുംബാംഗങ്ങളുടെയും ശ്രദ്ധയ്ക്കായി:\n\n• വിശദാംശങ്ങൾ: ${points}\n• സ്ഥലം: നൂറുൽ ഹുദാ കമ്മ്യൂണിറ്റി ഹാൾ\n\nഎക്സിക്യൂട്ടീവ് സെക്രട്ടറിയേറ്റിന്റെ നിർദ്ദേശപ്രകാരം,\nപി. കെ. അബ്ദുറഹ്മാൻ (ജനറൽ സെക്രട്ടറി)`;
+
+      document.getElementById('ai-notice-ar').value = `إعلان رسمي من جماعة نور الهدى للمحلّة\n\nالموضوع: ${topic}\n\nنحيط علماً جميع أهالي المحلّة الكرام بأنّ البرنامج سيعقد بإذن الله تعالى:\n\n• التفاصيل: ${points}\n• المكان: قاعة المحلّة المركزية\n\nعن الأمانة العامة،\nبي. كي. عبد الرحمن (الأمين العام)`;
+
+      const out = document.getElementById('ai-notice-outputs');
+      if (out) out.classList.remove('hidden');
+      window.app.showToast('Generated Tri-Lingual Notice Drafts with AI!', 'success');
+    }
+
+    function publishAIDraftedNotice() {
+      const title = document.getElementById('ai-draft-topic').value;
+      const details = document.getElementById('ai-notice-en').value;
+      const cat = document.getElementById('ai-draft-category').value;
+
+      MahallDB.createAnnouncement({
+        titleEn: title,
+        titleMl: title,
+        titleAr: title,
+        category: cat,
+        priority: 'NORMAL',
+        details: details
+      });
+
+      MahallDB.logActivity('ANNOUNCEMENT', `Published AI-drafted circular: ${title}`);
+      refreshAdminData();
+      window.app.showToast('Published Tri-Lingual Notice site-wide!', 'success');
+    }
+
+    // =========================================================================
+    // 10. MADRASA ROSTER
+    // =========================================================================
+    function renderStudentsRoster() {
+      const tbody = document.getElementById('admin-students-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      const students = MahallDB.getStudents();
+      tbody.innerHTML = students.map(s => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3 font-mono font-bold text-emerald-600">${s.roll}</td>
+          <td class="p-3 font-bold text-slate-900 dark:text-white">${s.name}</td>
+          <td class="p-3">${s.class}</td>
+          <td class="p-3 font-bold text-emerald-600">${s.att}</td>
+          <td class="p-3 text-slate-500">${s.hifdh}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">${s.tajweed}</span></td>
+          <td class="p-3 font-medium text-slate-600 dark:text-slate-300">${s.rank}</td>
+          <td class="p-3">
+            <button onclick="removeMadrasaStudent('${s.roll}')" class="text-red-600 hover:text-red-700 font-bold text-[10px]">
+              Remove
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function removeMadrasaStudent(roll) {
+      if (confirm(`Remove student ${roll} from active madrasa register?`)) {
+        MahallDB.deleteStudent(roll);
+        window.app.showToast(`Removed student ${roll}`, 'info');
+        refreshAdminData();
+      }
+    }
+
+    function openEnrollStudentModal() {
+      const modal = document.getElementById('enroll-student-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeEnrollStudentModal() {
+      const modal = document.getElementById('enroll-student-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function saveStudentEnrollment() {
+      const name = (document.getElementById('stud-name').value || '').trim();
+      const cls = document.getElementById('stud-class').value;
+      const hifdh = (document.getElementById('stud-hifdh').value || 'Juz Amma').trim();
+      const tajweed = document.getElementById('stud-tajweed').value;
+
+      if (!name) {
+        window.app.showToast('Please enter student name', 'error');
+        return;
+      }
+
+      MahallDB.addStudent({
+        name,
+        class: cls,
+        hifdh,
+        tajweed,
+        att: '98.5%',
+        rank: 'Active'
+      });
+
+      closeEnrollStudentModal();
+      refreshAdminData();
+      window.app.showToast(`Enrolled student ${name} in ${cls}`, 'success');
+    }
+
+    // =========================================================================
+    // 11. EMERGENCY BLOOD DONORS
+    // =========================================================================
+    function renderDonorsDirectory(group = currentDonorFilter, query = '') {
+      const tbody = document.getElementById('admin-donors-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      let donors = MahallDB.getBloodDonors(group);
+      if (query) {
+        const q = query.toLowerCase();
+        donors = donors.filter(d => (d.name && d.name.toLowerCase().includes(q)) || (d.phone && d.phone.includes(q)));
+      }
+
+      tbody.innerHTML = donors.map(d => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3 font-bold text-slate-900 dark:text-white">${d.name}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">${d.group}</span></td>
+          <td class="p-3 font-mono font-bold text-emerald-600">${d.phone}</td>
+          <td class="p-3 text-slate-500">${d.ward}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">${d.status}</span></td>
+          <td class="p-3 text-slate-400 text-[10px]">${d.lastDonation}</td>
+          <td class="p-3">
+            <button onclick="removeDonorEntry('${d.phone}')" class="text-red-600 hover:text-red-700 text-[10px] font-bold">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterDonorGroup(grp) {
+      currentDonorFilter = grp;
+      document.querySelectorAll('.donor-filter-pill').forEach(btn => {
+        btn.classList.remove('bg-red-700', 'text-white');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      });
+      if (event && event.target) {
+        event.target.classList.add('bg-red-700', 'text-white');
+        event.target.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      }
+      searchDonorsList();
+    }
+
+    function searchDonorsList() {
+      const q = document.getElementById('donor-search-input').value;
+      renderDonorsDirectory(currentDonorFilter, q);
+    }
+
+    function removeDonorEntry(phone) {
+      if (confirm(`Remove donor entry for ${phone}?`)) {
+        MahallDB.deleteDonor(phone);
+        window.app.showToast('Donor removed from roster', 'info');
+        refreshAdminData();
+      }
+    }
+
+    function openAddDonorModal() {
+      const modal = document.getElementById('add-donor-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeAddDonorModal() {
+      const modal = document.getElementById('add-donor-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function saveDonorRegistration() {
+      const name = (document.getElementById('donor-name').value || '').trim();
+      const group = document.getElementById('donor-group').value;
+      const ward = document.getElementById('donor-ward').value;
+      const phone = (document.getElementById('donor-phone').value || '').trim();
+
+      if (!name || !phone) {
+        window.app.showToast('Please provide donor name and phone', 'error');
+        return;
+      }
+
+      MahallDB.addDonor({
+        name,
+        group,
+        ward,
+        phone,
+        status: 'Available',
+        lastDonation: 'Ready now'
+      });
+
+      closeAddDonorModal();
+      refreshAdminData();
+      window.app.showToast(`Registered donor ${name} (${group})`, 'success');
+    }
+
+    function openEmergencySOSModal() {
+      const modal = document.getElementById('emergency-sos-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeEmergencySOSModal() {
+      const modal = document.getElementById('emergency-sos-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function copyAndBroadcastSOS() {
+      const grp = document.getElementById('sos-blood-group').value;
+      const units = document.getElementById('sos-units').value;
+      const hosp = document.getElementById('sos-hospital').value;
+      const contact = document.getElementById('sos-contact').value;
+
+      const broadcastMsg = `🚨 URGENT BLOOD REQUIREMENT - NOORUL HUDA MAHALL RELIEF DESK\n🩸 Blood Group: ${grp} (${units} Units Required)\n🏥 Hospital: ${hosp}\n📞 Contact: ${contact}\n\nPlease share across ward WhatsApp groups immediately for life-saving assistance!`;
+
+      navigator.clipboard.writeText(broadcastMsg);
+      MahallDB.createAnnouncement({
+        titleEn: `Urgent ${grp} Blood Needed: ${units} Units at ${hosp}`,
+        category: 'EMERGENCY',
+        priority: 'CRITICAL',
+        details: `Emergency requirement: ${grp} blood needed immediately at ${hosp}. Contact ${contact}.`
+      });
+
+      MahallDB.logActivity('DONOR', `Triggered emergency blood SOS broadcast for ${grp} at ${hosp}`);
+      closeEmergencySOSModal();
+      refreshAdminData();
+      window.app.showToast('Copied WhatsApp SOS broadcast and published emergency alert site-wide!', 'success');
+    }
+
+    // =========================================================================
+    // 12. AUDITORIUM FACILITIES BOOKINGS
+    // =========================================================================
+    function renderBookingsTable() {
+      const tbody = document.getElementById('admin-bookings-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      const bookings = MahallDB.getBookings();
+      tbody.innerHTML = bookings.map(b => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3 font-mono font-bold text-amber-600">${b.id}</td>
+          <td class="p-3">
+            <strong class="text-slate-900 dark:text-white block">${b.bookedBy}</strong>
+            <span class="text-[10px] text-slate-400 font-mono">${b.phone || 'N/A'}</span>
+          </td>
+          <td class="p-3 font-medium">${b.event}</td>
+          <td class="p-3 font-mono font-bold text-emerald-600">${b.date}</td>
+          <td class="p-3 text-slate-500">${b.slot}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">${b.status}</span></td>
+          <td class="p-3">
+            <button onclick="removeBooking('${b.id}')" class="text-red-600 hover:text-red-700 text-[10px] font-bold">Cancel</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function removeBooking(id) {
+      if (confirm(`Cancel reservation ${id}?`)) {
+        MahallDB.deleteBooking(id);
+        window.app.showToast('Reservation cancelled', 'info');
+        refreshAdminData();
+      }
+    }
+
+    function openBookingModal() {
+      const modal = document.getElementById('booking-modal');
+      if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    }
+
+    function closeBookingModal() {
+      const modal = document.getElementById('booking-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    }
+
+    function saveAuditoriumBooking() {
+      const name = (document.getElementById('bkg-name').value || '').trim();
+      const phone = (document.getElementById('bkg-phone').value || '').trim();
+      const event = (document.getElementById('bkg-event').value || '').trim();
+      const date = document.getElementById('bkg-date').value;
+      const slot = document.getElementById('bkg-slot').value;
+
+      if (!name || !date) {
+        window.app.showToast('Please provide booking party name and date', 'error');
+        return;
+      }
+
+      MahallDB.createBooking({
+        bookedBy: name,
+        phone,
+        event: event || 'Community Event',
+        date,
+        slot
+      });
+
+      closeBookingModal();
+      refreshAdminData();
+      window.app.showToast(`Auditorium booked for ${event} on ${date}`, 'success');
+    }
+
+    // =========================================================================
+    // 13. PRAYER TIMINGS & IQAMAH OFFSETS
+    // =========================================================================
+    function savePrayerOffsets() {
+      const fajr = parseInt(document.getElementById('offset-fajr').value) || 18;
+      const dhuhr = parseInt(document.getElementById('offset-dhuhr').value) || 17;
+      const asr = parseInt(document.getElementById('offset-asr').value) || 15;
+      const maghrib = parseInt(document.getElementById('offset-maghrib').value) || 11;
+      const isha = parseInt(document.getElementById('offset-isha').value) || 17;
+      const khatib = document.getElementById('jumua-khatib').value;
+      const khutbah = document.getElementById('jumua-khutbah').value;
+      const prayer = document.getElementById('jumua-prayer').value;
+
+      MahallDB.updatePrayerOffsets({
+        fajr,
+        dhuhr,
+        asr,
+        maghrib,
+        isha,
+        khatib,
+        jumuaKhutbah: khutbah,
+        jumuaPrayer: prayer
+      });
+
+      window.app.showToast('Updated congregational prayer timings & Iqamah offsets site-wide', 'success');
+      refreshAdminData();
+    }
+
+    // =========================================================================
+    // 14. LIVE AUDIT LOGS
+    // =========================================================================
+    function renderAuditLogsTable() {
+      const tbody = document.getElementById('admin-audit-tbody');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      const logs = MahallDB.getActivityLogs();
+      tbody.innerHTML = logs.map(l => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+          <td class="p-3 font-mono font-bold text-slate-400">${l.id}</td>
+          <td class="p-3 font-mono text-slate-600 dark:text-slate-300 text-[10px]">${l.timestamp}</td>
+          <td class="p-3 font-bold text-slate-900 dark:text-white">${l.user || 'General Secretary'}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-bold text-[10px]">${l.type}</span></td>
+          <td class="p-3 font-medium text-slate-700 dark:text-slate-300">${l.message}</td>
+        </tr>
+      `).join('');
+    }
+
+    function downloadAuditLogCSV() {
+      const logs = MahallDB.getActivityLogs();
+      const headers = ['Log Ref', 'Timestamp', 'Operator', 'Action Type', 'Event Details'];
+      const rows = logs.map(l => [
+        `"${l.id}"`,
+        `"${l.timestamp}"`,
+        `"${l.user || 'Admin'}"`,
+        `"${l.type}"`,
+        `"${l.message.replace(/"/g, '""')}"`
+      ]);
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `Noorul_Huda_Audit_Logs_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.app.showToast('Exported Audit Log Register (CSV)', 'success');
+    }
+
+    // =========================================================================
+    // 15. DATA BACKUP, RESTORE & SETTINGS
+    // =========================================================================
+    function downloadFullDatabaseBackup() {
+      const json = MahallDB.exportDatabaseJSON();
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Noorul_Huda_Mahall_Full_Backup_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      window.app.showToast('Downloaded complete certified database backup JSON', 'success');
+    }
+
+    function triggerRestoreJSONInput() {
+      const input = document.getElementById('json-restore-file-input');
+      if (input) input.click();
+    }
+
+    function handleRestoreFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        const ok = MahallDB.importDatabaseJSON(content);
+        if (ok) {
+          window.app.showToast('Restored complete Mahall Database from backup!', 'success');
+          refreshAdminData();
+        } else {
+          window.app.showToast('Failed to restore: Invalid JSON structure', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetSystemDataWithConfirmation() {
+      if (confirm('Are you sure you want to reset all data to factory baseline? (This re-seeds families, payments, certificates, and madrasa rolls)')) {
+        MahallDB.resetToDefaultData();
+        window.app.showToast('Reset system to baseline certified demo data!', 'success');
+        refreshAdminData();
+      }
+    }
+
+    function updateSecretariatPasskey() {
+      const pass = (document.getElementById('settings-new-passkey').value || '').trim();
+      if (!pass || pass.length < 4) {
+        window.app.showToast('Passkey must be at least 4 characters', 'error');
+        return;
+      }
+      if (typeof AuthService !== 'undefined') {
+        AuthService.ADMIN_PASSKEY = pass;
+      }
+      localStorage.setItem('nhm_admin_passkey', pass);
+      MahallDB.logActivity('SECURITY', 'Updated General Secretary administrative passkey');
+      window.app.showToast('Secretariat passkey updated successfully', 'success');
+    }
+  </script>
+</body>
+</html>

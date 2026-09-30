@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributions, Zakat & Dues | Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Pay Mahall monthly subscriptions, calculate Zakat with live Nisab rates, contribute to the Mosque operational fund, Sadaqah, Education fund, and Emergency Relief fund." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col min-h-screen selection:bg-emerald-700 selection:text-white pb-16 md:pb-0">
+
+  <!-- ==========================================================================
+       TOP BAR: ROLE SWITCHER
+       ========================================================================== -->
+  <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2 px-4 shadow-sm relative z-[70]">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Mahall Identity & Helpline -->
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs tracking-wide">
+          <i data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Noorul Huda Mahall Jama'ath</span>
+        </span>
+        <span class="hidden md:inline text-slate-600">•</span>
+        <span class="hidden md:flex items-center gap-1 text-slate-400 text-xs">
+          <i data-lucide="phone-call" class="w-3 h-3 text-emerald-400"></i>
+          <span>Office: +91 495 2724800</span>
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-0.5 text-[11px]">
+          <i data-lucide="languages" class="w-3.5 h-3.5 text-slate-400"></i>
+          <select id="lang-select" onchange="window.app.changeLanguage(this.value)" class="bg-transparent text-slate-200 focus:outline-none cursor-pointer">
+            <option value="en" class="bg-slate-900 text-white">English</option>
+            <option value="ml" class="bg-slate-900 text-white">മലയാളം</option>
+            <option value="ar" class="bg-slate-900 text-white">العربية</option>
+          </select>
+        </div>
+
+        <button id="theme-toggle-btn" onclick="window.toggleTheme ? window.toggleTheme(event) : (window.app && window.app.toggleTheme && window.app.toggleTheme())" title="Toggle Dark/Light Mode" class="p-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-amber-400 hover:border-amber-500/50 transition cursor-pointer">
+          <i id="theme-toggle-icon" data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+        </button>
+
+        <button onclick="window.app ? window.app.toggleAIChat() : null" class="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition text-[11px] font-semibold">
+          <i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i>
+          <span>Ask Mahall AI</span>
+        </button>
+
+        <!-- Notification Bell -->
+        <button id="notif-bell-btn" onclick="window.toggleNotificationDrawer ? window.toggleNotificationDrawer(event) : (window.app && window.app.toggleNotificationDrawer && window.app.toggleNotificationDrawer(event))"
+          class="notif-trigger-btn relative p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer" title="Portal Notifications">
+          <i data-lucide="bell" class="w-4 h-4 text-emerald-400 pointer-events-none"></i>
+          <span id="notif-badge" class="notif-badge-el absolute -top-1 -right-1 bg-red-500 text-white font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] ring-2 ring-slate-900 pointer-events-none">0</span>
+        </button>
+
+        <!-- Auth Status Container (Firebase Multi-User) -->
+        <div id="top-resident-auth-status" class="auth-status-container flex items-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN NAVIGATION HEADER (10 CATEGORIES)
+       ========================================================================== -->
+  <header id="main-header" class="main-navbar-sticky">
+    <div id="navbar-capsule" class="navbar-capsule-container transition-all duration-300">
+      <div id="navbar-inner-bar" class="flex items-center justify-between h-16 md:h-18 gap-2 lg:gap-3 w-full transition-all duration-300">
+        
+        <!-- Left: Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2 shrink-0 group">
+          <img src="assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall Logo" class="brand-logo-img w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-emerald-600 shadow-sm object-cover shrink-0 group-hover:scale-105 transition" />
+          <div class="leading-tight shrink-0">
+            <span class="brand-title text-base md:text-lg font-black tracking-tight text-emerald-950 dark:text-emerald-400 font-heading whitespace-nowrap">
+              Noorul Huda
+            </span>
+            <span class="brand-sub text-[10px] text-slate-500 dark:text-slate-400 font-medium block whitespace-nowrap">
+              Mahall Jama'ath • Estd 1968
+            </span>
+          </div>
+        </a>
+
+        <!-- Center: 10 Categories Desktop Navigation -->
+        <nav class="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 text-xs font-semibold mx-auto">
+          <a href="index.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">Home</a>
+
+          <div class="relative group">
+            <a href="about.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>About Mahall</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[260px] space-y-1">
+              <a href="about.html#history" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mahall History</span></a>
+              <a href="about.html#about-mosque" class="mega-item"><i data-lucide="building-2" class="mega-item-icon"></i><span class="mega-item-title text-xs">About Mosque</span></a>
+              <a href="about.html#imam-khateeb" class="mega-item"><i data-lucide="user-check" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Imam & Khateeb</span></a>
+              <a href="about.html#committee" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Executive Committee</span></a>
+              <a href="about.html#vision-mission" class="mega-item"><i data-lucide="target" class="mega-item-icon"></i><span class="mega-item-title text-xs">Vision & Mission</span></a>
+              <a href="map.html" class="mega-item bg-emerald-50 dark:bg-emerald-950/40 font-bold text-emerald-700 dark:text-emerald-300"><i data-lucide="map" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Mahall Map (Single Page)</span></a>
+              <a href="about.html#contact-us" class="mega-item"><i data-lucide="phone" class="mega-item-icon"></i><span class="mega-item-title text-xs">Contact Us</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="prayer.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Prayer & Mosque</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="prayer.html#todays-times" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Today's Prayer Times</span></a>
+              <a href="prayer.html#jumua" class="mega-item"><i data-lucide="sun" class="mega-item-icon"></i><span class="mega-item-title text-xs">Jumu'ah Schedule</span></a>
+              <a href="prayer.html#adhan-iqamah" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">Adhan / Iqamah</span></a>
+              <a href="prayer.html#ramadan" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Timetable</span></a>
+              <a href="prayer.html#eid-prayer" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Prayer</span></a>
+              <a href="prayer.html#khutbah" class="mega-item"><i data-lucide="mic" class="mega-item-icon"></i><span class="mega-item-title text-xs">Khutbah Schedule</span></a>
+              <a href="prayer.html#mosque-info" class="mega-item"><i data-lucide="info" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Information</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="announcements.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Announcements</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="announcements.html#all-announcements" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">All Announcements</span></a>
+              <a href="announcements.html#mosque-notices" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Notices</span></a>
+              <a href="announcements.html#community-notices" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Notices</span></a>
+              <a href="announcements.html#emergency-notices" class="mega-item"><i data-lucide="alert-triangle" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Emergency Notices</span></a>
+              <a href="announcements.html#funeral-janazah" class="mega-item"><i data-lucide="flag" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Funeral / Janazah</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="events.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Events & Programs</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="events.html#upcoming-events" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Upcoming Events</span></a>
+              <a href="events.html#calendar" class="mega-item"><i data-lucide="calendar-days" class="mega-item-icon"></i><span class="mega-item-title text-xs">Event Calendar</span></a>
+              <a href="events.html#islamic-programs" class="mega-item"><i data-lucide="book-open" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Programs</span></a>
+              <a href="events.html#quran-programs" class="mega-item"><i data-lucide="award" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Programs</span></a>
+              <a href="events.html#youth-programs" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Youth Programs</span></a>
+              <a href="events.html#children-programs" class="mega-item"><i data-lucide="smile" class="mega-item-icon"></i><span class="mega-item-title text-xs">Children's Programs</span></a>
+              <a href="events.html#past-events" class="mega-item"><i data-lucide="history" class="mega-item-icon"></i><span class="mega-item-title text-xs">Past Events</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="education.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Education</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="education.html#madrasa" class="mega-item"><i data-lucide="school" class="mega-item-icon"></i><span class="mega-item-title text-xs">Madrasa Academy</span></a>
+              <a href="education.html#quran-classes" class="mega-item"><i data-lucide="book" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Classes</span></a>
+              <a href="education.html#arabic-classes" class="mega-item"><i data-lucide="languages" class="mega-item-icon"></i><span class="mega-item-title text-xs">Arabic Classes</span></a>
+              <a href="education.html#islamic-studies" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Studies</span></a>
+              <a href="education.html#class-schedule" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Class Schedule</span></a>
+              <a href="education.html#teachers" class="mega-item"><i data-lucide="user-check" class="mega-item-icon"></i><span class="mega-item-title text-xs">Teachers Directory</span></a>
+              <a href="education.html#study-materials" class="mega-item"><i data-lucide="file-text" class="mega-item-icon"></i><span class="mega-item-title text-xs">Study Materials</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="community.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Community</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="community.html#community-services" class="mega-item"><i data-lucide="heart-handshake" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Services</span></a>
+              <a href="community.html#volunteer" class="mega-item"><i data-lucide="helping-hand" class="mega-item-icon"></i><span class="mega-item-title text-xs">Volunteer Wing</span></a>
+              <a href="community.html#youth-wing" class="mega-item"><i data-lucide="shield" class="mega-item-icon"></i><span class="mega-item-title text-xs">Youth Wing (NHYM)</span></a>
+              <a href="community.html#womens-programs" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Women's Programs</span></a>
+              <a href="community.html#blood-donors" class="mega-item"><i data-lucide="droplet" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Blood Donors Directory</span></a>
+              <a href="community.html#jobs" class="mega-item"><i data-lucide="briefcase" class="mega-item-icon"></i><span class="mega-item-title text-xs">Job Opportunities</span></a>
+              <a href="community.html#community-support" class="mega-item"><i data-lucide="heart" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Community Support</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="gallery.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Gallery</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[230px] space-y-1">
+              <a href="gallery.html#photos" class="mega-item"><i data-lucide="image" class="mega-item-icon"></i><span class="mega-item-title text-xs">Photos</span></a>
+              <a href="gallery.html#videos" class="mega-item"><i data-lucide="video" class="mega-item-icon"></i><span class="mega-item-title text-xs">Videos</span></a>
+              <a href="gallery.html#mosque-gallery" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Architecture</span></a>
+              <a href="gallery.html#programs-gallery" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Programs & Events</span></a>
+              <a href="gallery.html#ramadan-gallery" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Moments</span></a>
+              <a href="gallery.html#eid-gallery" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Celebrations</span></a>
+            </div>
+          </div>
+
+          <!-- 9. CONTRIBUTIONS (Active Page) -->
+          <div class="relative group">
+            <a href="contributions.html" class="nav-link text-emerald-700 dark:text-emerald-400 font-bold border-b-2 border-emerald-600">
+              <span>Contributions</span>
+              <svg class="w-3 h-3 text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="contributions.html#subscription" class="mega-item"><i data-lucide="wallet" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Mahall Subscription</span></a>
+              <a href="contributions.html#mosque-fund" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Fund</span></a>
+              <a href="contributions.html#sadaqah" class="mega-item"><i data-lucide="heart" class="mega-item-icon"></i><span class="mega-item-title text-xs">Sadaqah (Charity)</span></a>
+              <a href="contributions.html#education-fund" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Education Fund</span></a>
+              <a href="contributions.html#relief-fund" class="mega-item"><i data-lucide="shield-alert" class="mega-item-icon text-rose-500"></i><span class="mega-item-title text-xs">Emergency Relief Fund</span></a>
+            </div>
+          </div>
+
+          <div class="relative group">
+            <a href="services.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>More</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1 0-.708z"/></svg>
+            </a>
+            <div class="nav-dropdown nav-dropdown-right w-[240px] space-y-1">
+              <a href="services.html#certificate-requests" class="mega-item"><i data-lucide="file-check" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Certificate Requests</span></a>
+              <a href="services.html#document-requests" class="mega-item"><i data-lucide="folder-clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Document Requests</span></a>
+              <a href="services.html#faq" class="mega-item"><i data-lucide="help-circle" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mahall FAQ</span></a>
+              <a href="services.html#downloads" class="mega-item"><i data-lucide="download" class="mega-item-icon"></i><span class="mega-item-title text-xs">Downloads Center</span></a>
+              <a href="services.html#contact-help" class="mega-item"><i data-lucide="life-buoy" class="mega-item-icon"></i><span class="mega-item-title text-xs">Contact / Help</span></a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="navbar-search-wrapper flex items-center gap-2 shrink-0 pr-1 sm:pr-2">
+          <div class="relative hidden xl:flex items-center">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none"></i>
+            <input id="global-search-input" onkeyup="window.app.handleGlobalSearch(event)" type="text" placeholder="Search funds..." class="nav-search-input bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700/80 rounded-full pl-8 pr-3 py-1 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-600 transition-all shadow-inner" />
+          </div>
+
+          <button onclick="window.app.toggleMobileMenu()" aria-label="Toggle navigation menu" class="lg:hidden p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO BANNER: CONTRIBUTIONS & ZAKAT
+       ========================================================================== -->
+  <div class="relative bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-950 text-white py-12 border-b border-emerald-800/40">
+    <div class="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] opacity-15"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-600/60 border border-emerald-400/40 text-emerald-200">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i> 100% Transparent Audited Fund Accounts
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black tracking-tight font-heading leading-tight">
+            Contributions & <span class="text-amber-400">Charity Funds</span>
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Pay monthly household dues, support mosque maintenance, voluntary Sadaqah, educational scholarships, and emergency dialysis relief trusts.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-2 shrink-0">
+          <a href="#subscription" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            💳 Subscription
+          </a>
+          <a href="#mosque-fund" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            🕌 Mosque Fund
+          </a>
+          <a href="#sadaqah" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            ❤️ Sadaqah
+          </a>
+          <a href="#education-fund" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            🎓 Education
+          </a>
+          <a href="#relief-fund" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition flex items-center gap-1.5">
+            🏥 Relief Fund
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+
+    <!-- -----------------------------------------------------------------------
+         1. MAHALL SUBSCRIPTION CALCULATOR (#subscription)
+         ----------------------------------------------------------------------- -->
+    <section id="subscription" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Household Membership</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Mahall Monthly Subscription
+          </h2>
+        </div>
+        <span class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
+          Standard Tariff: ₹250 / Month
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div class="lg:col-span-2 glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-4 text-xs">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pay Monthly Subscription (Instant UPI / NetBanking)</h3>
+          <p class="text-slate-600 dark:text-slate-400">
+            Household subscriptions support the daily operational maintenance of our Central Mosque, Madrasa teachers' honorariums, and the 24/7 ICU ambulance fleet.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block font-semibold text-slate-700 dark:text-slate-300">Select Resident Family ID</label>
+                <button type="button" onclick="toggleCustomResidentInput()" id="toggle-custom-resident-btn" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline font-semibold flex items-center gap-1">
+                  <i data-lucide="edit-3" class="w-3 h-3"></i> <span id="toggle-resident-label">Custom Name</span>
+                </button>
+              </div>
+              <div id="sub-resident-select-wrap">
+                <select id="sub-resident-select" onchange="onResidentSelectChange()" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 font-bold">
+                  <option value="W02-F005" data-head="Ahmed Koya P. K." selected>W02-F005 (Ahmed Koya)</option>
+                </select>
+              </div>
+              <div id="sub-custom-resident-wrap" class="hidden space-y-1">
+                <input type="text" id="sub-custom-resident-input" placeholder="Type Resident Name & ID (e.g. Ahmed Koya / W02-F005)" 
+                  class="w-full p-2.5 rounded-xl border border-emerald-500 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono text-xs" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Payment Duration (Months)</label>
+              <select id="sub-months-select" onchange="calculateSubTotal()" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 font-bold">
+                <option value="1">1 Month (₹250)</option>
+                <option value="3" selected>3 Months (₹750)</option>
+                <option value="6">6 Months (₹1,500)</option>
+                <option value="12">1 Year (₹3,000)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 flex items-center justify-between">
+            <div>
+              <span class="text-[11px] text-emerald-800 dark:text-emerald-300 block">Total Subscription Amount:</span>
+              <span id="sub-total-display" class="text-2xl font-black text-emerald-700 dark:text-emerald-400 font-mono">₹750</span>
+            </div>
+            <button onclick="openSubscriptionUpiModal()" class="btn-primary text-xs px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition">
+              <i data-lucide="qr-code" class="w-4 h-4"></i> Pay with UPI QR &rarr;
+            </button>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 text-xs">
+          <div class="font-bold text-sm text-slate-900 dark:text-white">Subscription Benefits</div>
+          <ul class="space-y-2 text-slate-600 dark:text-slate-400">
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+              <span>Official Mahall voting rights in General Body elections.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+              <span>Instant digital Marriage NOC & Residence certificates without processing fees.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+              <span>60% subsidized tariff on Noorul Huda Community Auditorium booking.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+              <span>Free 24/7 ICU ambulance transfers and complete Janazah burial services.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         2. MOSQUE OPERATIONAL FUND (#mosque-fund)
+         ----------------------------------------------------------------------- -->
+    <section id="mosque-fund" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Masjid Upkeep</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Mosque Operational & Maintenance Fund
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 dark:text-white">Solar Grid Maintenance</h4>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Annual servicing of 40kW rooftop solar panels, high-capacity inverter battery replacements, and green grid monitoring.
+          </p>
+          <button onclick="openContributionModal('Mosque Operational: Solar Grid Maintenance', 500)" class="btn-primary text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow hover:scale-105 transition font-bold">
+            <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Contribute ₹500
+          </button>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold">
+            <i data-lucide="droplet" class="w-5 h-5"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 dark:text-white">Ablution & Pure Water Filtration</h4>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Replacement of multi-stage water purifiers, plumbing fixtures, and wudhu pool maintenance ensuring pristine cleanliness.
+          </p>
+          <button onclick="openContributionModal('Mosque Operational: Ablution & Pure Water Filtration', 500)" class="btn-primary text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow hover:scale-105 transition font-bold">
+            <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Contribute ₹500
+          </button>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center font-bold">
+            <i data-lucide="mic" class="w-5 h-5"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 dark:text-white">Acoustic Sound & Microphones</h4>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Upkeep of noise-calibrated amplifiers, cordless wireless microphones for Usthads, and digital Adhan timing synchronizers.
+          </p>
+          <button onclick="openContributionModal('Mosque Operational: Acoustic Sound & Microphones', 500)" class="btn-primary text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow hover:scale-105 transition font-bold">
+            <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Contribute ₹500
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         3. SADAQAH (#sadaqah)
+         ----------------------------------------------------------------------- -->
+    <section id="sadaqah" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Voluntary Charity</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Sadaqah (Charity Fund)
+          </h2>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-900 to-teal-900 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-2 max-w-xl text-center md:text-left">
+          <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">Prophetic Guidance</span>
+          <h3 class="text-xl font-bold">"Sadaqah extinguishes sin as water extinguishes fire."</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            General Sadaqah funds are allocated dynamically to urgent unexpected distress: destitute burial expenses, emergency burn patient medicines, and sudden orphan crises.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2 shrink-0">
+          <button onclick="openContributionModal('Voluntary Sadaqah Charity Fund', 250)" class="px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-mono font-bold text-xs transition hover:scale-105 shadow flex items-center gap-1">
+            <i data-lucide="heart" class="w-3 h-3 text-rose-300"></i> ₹250
+          </button>
+          <button onclick="openContributionModal('Voluntary Sadaqah Charity Fund', 500)" class="px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-mono font-bold text-xs transition hover:scale-105 shadow flex items-center gap-1">
+            <i data-lucide="heart" class="w-3 h-3 text-rose-300"></i> ₹500
+          </button>
+          <button onclick="openContributionModal('Voluntary Sadaqah Charity Fund', 1000)" class="px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-mono font-bold text-xs transition hover:scale-105 shadow flex items-center gap-1">
+            <i data-lucide="heart" class="w-3 h-3 text-rose-300"></i> ₹1,000
+          </button>
+          <button onclick="openContributionModal('Voluntary Sadaqah Charity Fund', 500, true)" class="btn-primary text-xs px-5 py-2.5 rounded-xl font-bold shadow-lg transition hover:scale-105 flex items-center gap-1.5">
+            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Custom Amount
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         4. EDUCATION & RELIEF FUNDS
+         ----------------------------------------------------------------------- -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+      <!-- Education Fund -->
+      <section id="education-fund" class="scroll-mt-24 p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400 flex items-center justify-center font-bold">
+          <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Education & Scholarship Fund</h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Provides merit-cum-means financial aid for destitute boys and girls pursuing MBBS, Engineering, Chartered Accountancy, and Islamic Sharia degrees.
+        </p>
+        <div class="p-3 rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-purple-900 dark:text-purple-200 flex items-center justify-between">
+          <span>Sponsor 1 Student: <strong>₹1,500 / Month</strong></span>
+          <button onclick="openContributionModal('Education & Scholarship Fund (Sponsor 1 Student)', 1500)" class="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-600 text-white font-bold flex items-center gap-1.5 transition shadow hover:scale-105">
+            <span>Sponsor</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- Relief Fund -->
+      <section id="relief-fund" class="scroll-mt-24 p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400 flex items-center justify-center font-bold">
+          <i data-lucide="shield-alert" class="w-5 h-5"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Emergency Medical & Dialysis Relief</h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          Subsidizes 140+ kidney dialysis cycles per month for destitute chronic renal failure patients residing across our 8 wards without any government coverage.
+        </p>
+        <div class="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-900 dark:text-rose-200 flex items-center justify-between">
+          <span>Sponsor 1 Dialysis: <strong>₹1,200 / Session</strong></span>
+          <button onclick="openContributionModal('Emergency Medical & Dialysis Relief (Sponsor 1 Dialysis)', 1200)" class="px-4 py-2 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-bold flex items-center gap-1.5 transition shadow hover:scale-105">
+            <span>Sponsor</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 text-xs py-10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <h5 class="text-base font-bold text-white mb-2">Noorul Huda Mahall</h5>
+        <p class="text-slate-400 leading-relaxed">Contributions, Zakat Bait-ul-Mal & Endowments. Calicut, Kerala.</p>
+        <span class="text-emerald-400 font-mono text-[11px] mt-2 block">KL-KZK/1968/42</span>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Fund Portals</h6>
+        <ul class="space-y-1.5 text-slate-400">
+          <li><a href="#subscription" class="hover:text-white">Mahall Monthly Subscriptions</a></li>
+          <li><a href="#mosque-fund" class="hover:text-white">Mosque Operational Fund</a></li>
+          <li><a href="#sadaqah" class="hover:text-white">Voluntary Sadaqah Charity</a></li>
+          <li><a href="#education-fund" class="hover:text-white">Education & Scholarship Fund</a></li>
+          <li><a href="#relief-fund" class="hover:text-white">Medical & Dialysis Relief</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Emergency Hotlines</h6>
+        <ul class="space-y-1.5 text-slate-400">
+          <li>Emergency Desk: <strong class="text-white">+91 94470 12345</strong></li>
+          <li>Ambulance 24/7: <strong class="text-white">+91 98460 99999</strong></li>
+          <li>Office Secretary: <strong class="text-white">+91 495 2724800</strong></li>
+        </ul>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Audited Transparency</h6>
+        <p class="text-slate-400 leading-relaxed mb-3">All collections receive instant computer-generated digital receipts verified by chartered accountants.</p>
+        <span class="px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-mono">
+          80G Tax Exempted • Waqf Compliant
+        </span>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800 text-center text-slate-500 text-[11px]">
+      &copy; 2026 Noorul Huda Mahall Jama'ath. All Rights Reserved. Built for Hackathon Excellence.
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FLOATING MAHALL AI ASSISTANT CHAT WIDGET (ALL PAGES)
+       ========================================================================== -->
+  <div id="mahall-floating-chat-container" class="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-[80] font-sans">
+    <!-- Floating Trigger Button -->
+    <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+      id="ai-chat-floating-btn"
+      aria-label="Open Mahall AI Assistant"
+      title="Ask Mahall AI Assistant"
+      class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-800 via-emerald-700 to-teal-600 text-white shadow-2xl border-2 border-amber-400 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group relative">
+      <i data-lucide="bot" class="w-7 h-7 text-amber-300 group-hover:rotate-12 transition-transform"></i>
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-amber-500 text-[9px] font-black text-slate-950 items-center justify-center shadow">AI</span>
+      </span>
+    </button>
+
+    <!-- Interactive Chat Drawer -->
+    <div id="ai-chat-drawer"
+      class="absolute bottom-16 right-0 w-[340px] sm:w-[400px] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col hidden transition-all duration-300 z-[90]">
+      
+      <!-- Chat Header -->
+      <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center font-bold text-base shadow">
+            🌙
+          </div>
+          <div>
+            <h4 class="font-bold text-sm leading-tight flex items-center gap-1.5">
+              Mahall AI Assistant
+              <span class="text-[9px] bg-emerald-600/80 px-1.5 py-0.5 rounded-full font-medium text-emerald-100">Live</span>
+            </h4>
+            <p class="text-[11px] text-emerald-200">Full website guide & community assistant</p>
+          </div>
+        </div>
+        <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="p-2.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="MahallAI.handleChipClick('When is Jumu\'ah prayer and Khutbah?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🕌 Jumu'ah
+        </button>
+        <button onclick="MahallAI.handleChipClick('How can I get a Marriage NOC certificate?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🧾 Marriage NOC
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me about Noorul Huda Madrasa timings')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          📖 Madrasa
+        </button>
+        <button onclick="MahallAI.handleChipClick('Emergency ambulance number and blood donors')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🚑 Ambulance
+        </button>
+        <button onclick="MahallAI.handleChipClick('How to pay Mahall monthly subscription dues?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          💳 Pay ₹250
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me the history of Noorul Huda Mahall')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🏛️ History
+        </button>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="ai-chat-messages" class="p-4 h-72 sm:h-80 overflow-y-auto space-y-3 text-slate-800 dark:text-slate-200">
+        <div class="flex items-start gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 text-xs font-bold shadow">
+            🌙
+          </div>
+          <div class="chat-bubble-ai text-xs md:text-sm px-4 py-2.5 max-w-[88%] border border-slate-200/80 dark:border-slate-700 shadow-sm leading-relaxed">
+            Assalamu Alaikum! I am the <strong>Noorul Huda Mahall AI Assistant</strong>. Ask me anything about prayer times, marriage NOC, madrasa, ambulance, Zakat, or community services across our entire website!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-2">
+        <input id="ai-chat-input" onkeydown="if(event.key==='Enter') MahallAI.sendMessage()" type="text"
+          placeholder="Ask anything about our Mahall..."
+          class="flex-grow text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 transition" />
+        <button onclick="MahallAI.sendMessage()" class="btn-primary p-2.5 rounded-xl shadow hover:scale-105 transition" aria-label="Send Message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 1: UPI QR INSTANT PAYMENT MODAL
+       ========================================================================== -->
+  <div id="contribution-upi-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[99] hidden items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 flex items-center justify-center">
+            <i data-lucide="qr-code" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-tight">Pay via Instant UPI QR</h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Noorul Huda Mahall Digital Treasury</p>
+          </div>
+        </div>
+        <button onclick="closeContributionModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Purpose & Donor Card -->
+      <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 font-medium">Fund / Purpose:</span>
+          <span id="modal-contrib-purpose-badge" class="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] text-right truncate max-w-[200px]">General</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 font-medium">Contributor:</span>
+          <span id="modal-contrib-donor-display" class="font-bold text-slate-900 dark:text-white text-right">Ahmed Koya P. K. <span class="font-mono text-slate-400 font-normal">(W02-F005)</span></span>
+        </div>
+      </div>
+
+      <!-- Custom Amount Input (if custom amount chosen) -->
+      <div id="modal-custom-amount-section" class="hidden space-y-2">
+        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase">Specify Contribution Amount (₹)</label>
+        <div class="relative">
+          <span class="absolute left-3 top-2.5 text-slate-400 font-bold text-sm">₹</span>
+          <input type="number" id="modal-contrib-amount-input" oninput="onCustomAmountChange()" min="1" step="50" value="500"
+            class="w-full pl-8 pr-3 py-2.5 rounded-xl border border-emerald-500 bg-white dark:bg-slate-950 text-slate-900 dark:text-white font-mono font-bold text-base focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <!-- Preset quick chips -->
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          <button type="button" onclick="setPresetCustomAmount(250)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-mono font-semibold transition">₹250</button>
+          <button type="button" onclick="setPresetCustomAmount(500)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-mono font-semibold transition">₹500</button>
+          <button type="button" onclick="setPresetCustomAmount(1000)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-mono font-semibold transition">₹1,000</button>
+          <button type="button" onclick="setPresetCustomAmount(1500)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-mono font-semibold transition">₹1,500</button>
+          <button type="button" onclick="setPresetCustomAmount(2500)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-mono font-semibold transition">₹2,500</button>
+          <button type="button" onclick="setPresetCustomAmount(5000)" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-mono font-semibold transition">₹5,000</button>
+        </div>
+      </div>
+
+      <!-- Scannable UPI QR Card -->
+      <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950 text-white border border-emerald-500/40 shadow-xl text-center space-y-3">
+        <div class="text-[11px] font-semibold text-emerald-300 uppercase tracking-wider">
+          Scan with Any UPI App (GPay, PhonePe, Paytm, BHIM)
+        </div>
+
+        <!-- Visual Authentic QR code -->
+        <div class="relative w-44 h-44 sm:w-48 sm:h-48 mx-auto bg-white p-3 rounded-2xl border-2 border-emerald-400 shadow-2xl flex items-center justify-center">
+          <svg viewBox="0 0 200 200" class="w-full h-full text-slate-900" fill="currentColor">
+            <!-- Top-left finder pattern -->
+            <rect x="10" y="10" width="50" height="50" rx="6" fill="#064e3b" />
+            <rect x="20" y="20" width="30" height="30" rx="3" fill="#ffffff" />
+            <rect x="26" y="26" width="18" height="18" rx="2" fill="#047857" />
+            <!-- Top-right finder pattern -->
+            <rect x="140" y="10" width="50" height="50" rx="6" fill="#064e3b" />
+            <rect x="150" y="20" width="30" height="30" rx="3" fill="#ffffff" />
+            <rect x="156" y="26" width="18" height="18" rx="2" fill="#047857" />
+            <!-- Bottom-left finder pattern -->
+            <rect x="10" y="140" width="50" height="50" rx="6" fill="#064e3b" />
+            <rect x="20" y="150" width="30" height="30" rx="3" fill="#ffffff" />
+            <rect x="26" y="156" width="18" height="18" rx="2" fill="#047857" />
+            <!-- Data pattern modules -->
+            <rect x="70" y="14" width="8" height="8" fill="#1e293b" /><rect x="85" y="14" width="8" height="8" fill="#1e293b" /><rect x="100" y="14" width="8" height="8" fill="#1e293b" /><rect x="115" y="14" width="8" height="8" fill="#1e293b" />
+            <rect x="70" y="30" width="8" height="8" fill="#1e293b" /><rect x="100" y="30" width="8" height="8" fill="#1e293b" /><rect x="122" y="30" width="8" height="8" fill="#1e293b" />
+            <rect x="70" y="46" width="8" height="8" fill="#1e293b" /><rect x="85" y="46" width="8" height="8" fill="#1e293b" /><rect x="115" y="46" width="8" height="8" fill="#1e293b" />
+            <rect x="14" y="70" width="8" height="8" fill="#1e293b" /><rect x="30" y="70" width="8" height="8" fill="#1e293b" /><rect x="46" y="70" width="8" height="8" fill="#1e293b" /><rect x="70" y="70" width="8" height="8" fill="#1e293b" /><rect x="85" y="70" width="8" height="8" fill="#1e293b" /><rect x="115" y="70" width="8" height="8" fill="#1e293b" /><rect x="145" y="70" width="8" height="8" fill="#1e293b" /><rect x="160" y="70" width="8" height="8" fill="#1e293b" /><rect x="175" y="70" width="8" height="8" fill="#1e293b" />
+            <rect x="14" y="85" width="8" height="8" fill="#1e293b" /><rect x="38" y="85" width="8" height="8" fill="#1e293b" /><rect x="145" y="85" width="8" height="8" fill="#1e293b" /><rect x="175" y="85" width="8" height="8" fill="#1e293b" />
+            <rect x="14" y="100" width="8" height="8" fill="#1e293b" /><rect x="30" y="100" width="8" height="8" fill="#1e293b" /><rect x="46" y="100" width="8" height="8" fill="#1e293b" /><rect x="145" y="100" width="8" height="8" fill="#1e293b" /><rect x="160" y="100" width="8" height="8" fill="#1e293b" /><rect x="175" y="100" width="8" height="8" fill="#1e293b" />
+            <rect x="70" y="115" width="8" height="8" fill="#1e293b" /><rect x="100" y="115" width="8" height="8" fill="#1e293b" /><rect x="115" y="115" width="8" height="8" fill="#1e293b" /><rect x="145" y="115" width="8" height="8" fill="#1e293b" /><rect x="175" y="115" width="8" height="8" fill="#1e293b" />
+            <rect x="70" y="130" width="8" height="8" fill="#1e293b" /><rect x="85" y="130" width="8" height="8" fill="#1e293b" /><rect x="122" y="130" width="8" height="8" fill="#1e293b" /><rect x="145" y="130" width="8" height="8" fill="#1e293b" /><rect x="160" y="130" width="8" height="8" fill="#1e293b" />
+            <rect x="70" y="145" width="8" height="8" fill="#1e293b" /><rect x="100" y="145" width="8" height="8" fill="#1e293b" /><rect x="115" y="145" width="8" height="8" fill="#1e293b" /><rect x="145" y="145" width="8" height="8" fill="#1e293b" /><rect x="175" y="145" width="8" height="8" fill="#1e293b" />
+            <rect x="70" y="160" width="8" height="8" fill="#1e293b" /><rect x="85" y="160" width="8" height="8" fill="#1e293b" /><rect x="100" y="160" width="8" height="8" fill="#1e293b" /><rect x="122" y="160" width="8" height="8" fill="#1e293b" /><rect x="160" y="160" width="8" height="8" fill="#1e293b" />
+            <rect x="70" y="175" width="8" height="8" fill="#1e293b" /><rect x="100" y="175" width="8" height="8" fill="#1e293b" /><rect x="115" y="175" width="8" height="8" fill="#1e293b" /><rect x="145" y="175" width="8" height="8" fill="#1e293b" /><rect x="175" y="175" width="8" height="8" fill="#1e293b" />
+          </svg>
+          <!-- Center UPI Badge -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="w-10 h-10 rounded-full bg-white border-2 border-emerald-600 shadow-md flex items-center justify-center p-1">
+              <span class="text-[9px] font-black text-emerald-800 leading-none text-center">UPI<br><span class="text-[7px] text-amber-600 font-mono">PAY</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payable Amount Highlight -->
+        <div class="py-1">
+          <span class="text-xs text-slate-300">Payable Amount:</span>
+          <div id="modal-qr-amount-text" class="text-2xl font-black text-emerald-400 font-mono">₹250</div>
+        </div>
+
+        <!-- UPI ID & Copy Button -->
+        <div class="flex items-center justify-center gap-2 pt-1 text-xs">
+          <span class="font-mono bg-black/40 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-emerald-200 text-[11px]">
+            noorulhudamahall@sbi
+          </span>
+          <button type="button" id="copy-upi-btn" onclick="copyUpiId()" class="px-2.5 py-1.5 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-[11px] flex items-center gap-1 transition shadow">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+          </button>
+        </div>
+
+        <!-- Mobile Deep Link to UPI App -->
+        <div class="pt-1">
+          <a id="modal-open-upi-app-btn" href="upi://pay?pa=noorulhudamahall@sbi&pn=Noorul%20Huda%20Mahall%20Treasury&cu=INR" class="inline-flex items-center gap-1.5 text-xs text-amber-300 hover:text-amber-200 underline font-semibold">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Tap to open in Google Pay / PhonePe / Paytm
+          </a>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-between gap-3 pt-2">
+        <button type="button" onclick="closeContributionModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition">
+          Cancel
+        </button>
+        <button type="button" id="modal-confirm-pay-btn" onclick="confirmContributionPayment()" class="btn-primary text-xs px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition">
+          <i data-lucide="check-circle" class="w-4 h-4"></i> Confirm Payment & Generate Receipt
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: OFFICIAL DIGITAL CONTRIBUTION RECEIPT MODAL
+       ========================================================================== -->
+  <div id="contribution-receipt-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white text-slate-900 rounded-3xl p-6 sm:p-7 shadow-2xl border-4 border-emerald-600 space-y-4 max-h-[92vh] overflow-y-auto">
+      
+      <!-- Receipt Header -->
+      <div class="text-center pb-3 border-b-2 border-slate-100 space-y-1">
+        <p class="font-arabic text-sm text-emerald-800">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+        <div class="w-12 h-12 rounded-full bg-emerald-600 text-white mx-auto flex items-center justify-center font-bold text-xl shadow-md">
+          <i data-lucide="check" class="w-6 h-6"></i>
+        </div>
+        <h4 class="font-black text-lg text-emerald-950 tracking-tight">NOORUL HUDA MAHALL JAMA'ATH</h4>
+        <p class="text-[11px] text-slate-500 font-medium">Official Digital Treasury Contribution Receipt</p>
+        <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono text-[9px] font-bold">
+          80G TAX EXEMPTED • WAQF COMPLIANT
+        </span>
+      </div>
+
+      <!-- Receipt Particulars Table -->
+      <div class="space-y-2 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div class="flex justify-between">
+          <span class="text-slate-500">Receipt Number:</span>
+          <strong id="rcpt-num" class="font-mono text-emerald-800 font-bold">RCP-2026-0000</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Date & Time:</span>
+          <strong id="rcpt-date" class="font-mono text-slate-700">--</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Contributor:</span>
+          <strong id="rcpt-donor" class="text-slate-900">Ahmed Koya P. K.</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Family ID:</span>
+          <strong id="rcpt-family" class="font-mono text-slate-700">W02-F005</strong>
+        </div>
+        <div class="flex justify-between border-t border-slate-200 pt-1.5">
+          <span class="text-slate-500">Contribution Purpose:</span>
+          <strong id="rcpt-purpose" class="text-emerald-900 text-right truncate max-w-[200px]">--</strong>
+        </div>
+        <div class="flex justify-between py-2 border-t-2 border-b-2 border-emerald-600/30 text-sm">
+          <span class="font-bold text-slate-800">Amount Received:</span>
+          <strong id="rcpt-amount" class="text-emerald-700 font-mono font-black text-lg">₹0</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Payment Gateway:</span>
+          <span id="rcpt-mode" class="font-semibold text-slate-700">UPI (Scan & Pay)</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Transaction Status:</span>
+          <span class="font-bold text-emerald-600 flex items-center gap-1">✓ CONFIRMED & AUDITED</span>
+        </div>
+      </div>
+
+      <!-- Footer Seal -->
+      <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-[10px] text-slate-400">
+        <div>
+          <span class="block font-mono">Treasury Ref: NHM-UPI-TXN-VERIFIED</span>
+          <span class="text-emerald-700 font-medium">✓ Validated by Mahall Accounts Desk</span>
+        </div>
+        <div class="w-9 h-9 bg-slate-900 text-white rounded-lg p-1 flex items-center justify-center font-bold text-[8px] font-mono text-center shadow">
+          UPI<br>SEAL
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-between gap-2 pt-2">
+        <button type="button" onclick="window.print()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Receipt
+        </button>
+        <button type="button" onclick="closeReceiptModal()" class="btn-primary text-xs py-2.5 px-6 rounded-xl font-bold shadow-lg">
+          Done
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // State
+    let activeContribution = {
+      purpose: 'Monthly Mahall Subscription',
+      amount: 750,
+      months: 3,
+      familyId: 'W02-F005',
+      donorName: 'Ahmed Koya P. K.',
+      isCustom: false
+    };
+
+    function populateResidentFamilies() {
+      const select = document.getElementById('sub-resident-select');
+      if (!select) return;
+
+      let families = [];
+      if (typeof MahallDB !== 'undefined' && MahallDB.getFamilies) {
+        families = MahallDB.getFamilies();
+      }
+
+      if (!families || families.length === 0) {
+        families = [
+          { familyId: 'W02-F005', head: 'Ahmed Koya P. K.', ward: 'Ward 02' },
+          { familyId: 'W01-F001', head: 'Marhum Alavi Haji Family', ward: 'Ward 01' },
+          { familyId: 'W01-F002', head: 'C. K. Musthafa', ward: 'Ward 01' },
+          { familyId: 'W03-F012', head: 'Mohammed Kutty K.', ward: 'Ward 03' },
+          { familyId: 'W04-F019', head: 'Abdul Rasheed M.', ward: 'Ward 04' }
+        ];
+      }
+
+      const currentStoredFamily = (typeof AuthService !== 'undefined' && AuthService.getCurrentFamilyId) ? AuthService.getCurrentFamilyId() : 'W02-F005';
+
+      let html = '';
+      families.forEach(f => {
+        const isSelected = f.familyId.toUpperCase() === currentStoredFamily.toUpperCase() ? 'selected' : '';
+        html += `<option value="${f.familyId}" data-head="${f.head}" ${isSelected}>${f.familyId} (${f.head})</option>`;
+      });
+
+      html += `<option value="__custom__">✍️ Other / Enter Custom Name & ID...</option>`;
+      select.innerHTML = html;
+    }
+
+    function toggleCustomResidentInput() {
+      const selectWrap = document.getElementById('sub-resident-select-wrap');
+      const customWrap = document.getElementById('sub-custom-resident-wrap');
+      const toggleLabel = document.getElementById('toggle-resident-label');
+      const customInput = document.getElementById('sub-custom-resident-input');
+
+      if (!customWrap || !selectWrap) return;
+
+      const isCustomVisible = !customWrap.classList.contains('hidden');
+      if (isCustomVisible) {
+        customWrap.classList.add('hidden');
+        selectWrap.classList.remove('hidden');
+        if (toggleLabel) toggleLabel.innerText = 'Custom Name';
+      } else {
+        customWrap.classList.remove('hidden');
+        selectWrap.classList.add('hidden');
+        if (toggleLabel) toggleLabel.innerText = 'Select from List';
+        if (customInput) customInput.focus();
+      }
+    }
+
+    function onResidentSelectChange() {
+      const select = document.getElementById('sub-resident-select');
+      if (!select) return;
+
+      if (select.value === '__custom__') {
+        toggleCustomResidentInput();
+      }
+    }
+
+    function calculateSubTotal() {
+      const months = parseInt(document.getElementById('sub-months-select').value) || 1;
+      const total = months * 250;
+      document.getElementById('sub-total-display').innerText = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function openSubscriptionUpiModal() {
+      const months = parseInt(document.getElementById('sub-months-select').value) || 1;
+      const total = months * 250;
+      
+      let familyId = 'W02-F005';
+      let donorName = 'Ahmed Koya P. K.';
+
+      const customWrap = document.getElementById('sub-custom-resident-wrap');
+      const isCustomMode = customWrap && !customWrap.classList.contains('hidden');
+
+      if (isCustomMode) {
+        const customVal = (document.getElementById('sub-custom-resident-input')?.value || '').trim();
+        if (customVal) {
+          donorName = customVal;
+          familyId = 'RESIDENT-' + Math.floor(100 + Math.random() * 900);
+        } else {
+          donorName = 'Mahall Resident';
+          familyId = 'W02-RESIDENT';
+        }
+      } else {
+        const select = document.getElementById('sub-resident-select');
+        if (select) {
+          familyId = select.value;
+          const opt = select.options[select.selectedIndex];
+          donorName = opt ? opt.getAttribute('data-head') : (localStorage.getItem('nhm_user_name') || 'Ahmed Koya P. K.');
+        }
+      }
+
+      openContributionModal(
+        `Monthly Mahall Subscription (${months} Month${months > 1 ? 's' : ''})`,
+        total,
+        false,
+        familyId,
+        donorName,
+        months
+      );
+    }
+
+    function simulateDuesPayment() {
+      openSubscriptionUpiModal();
+    }
+
+    function openContributionModal(purpose, defaultAmount = 500, isCustom = false, familyId = null, donorName = null, months = null) {
+      const storedName = localStorage.getItem('nhm_user_name') || 'Ahmed Koya P. K.';
+      const storedFamily = (typeof AuthService !== 'undefined' && AuthService.getCurrentFamilyId) ? AuthService.getCurrentFamilyId() : 'W02-F005';
+
+      activeContribution = {
+        purpose: purpose || 'Voluntary Sadaqah Charity Fund',
+        amount: defaultAmount !== null ? defaultAmount : 500,
+        months: months,
+        familyId: familyId || storedFamily,
+        donorName: donorName || storedName,
+        isCustom: Boolean(isCustom)
+      };
+
+      // Populate modal
+      const badgeEl = document.getElementById('modal-contrib-purpose-badge');
+      if (badgeEl) badgeEl.innerText = activeContribution.purpose;
+
+      const donorEl = document.getElementById('modal-contrib-donor-display');
+      if (donorEl) {
+        donorEl.innerHTML = `${activeContribution.donorName} <span class="font-mono text-slate-400 font-normal">(${activeContribution.familyId})</span>`;
+      }
+
+      const customAmountSection = document.getElementById('modal-custom-amount-section');
+      const amountInput = document.getElementById('modal-contrib-amount-input');
+
+      if (customAmountSection && amountInput) {
+        if (activeContribution.isCustom) {
+          customAmountSection.classList.remove('hidden');
+          amountInput.value = activeContribution.amount;
+        } else {
+          customAmountSection.classList.add('hidden');
+          amountInput.value = activeContribution.amount;
+        }
+      }
+
+      updateModalAmountDisplay(activeContribution.amount);
+
+      const modal = document.getElementById('contribution-upi-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function setPresetCustomAmount(val) {
+      const input = document.getElementById('modal-contrib-amount-input');
+      if (input) {
+        input.value = val;
+        onCustomAmountChange();
+      }
+    }
+
+    function onCustomAmountChange() {
+      const val = parseFloat(document.getElementById('modal-contrib-amount-input').value) || 0;
+      activeContribution.amount = val;
+      updateModalAmountDisplay(val);
+    }
+
+    function updateModalAmountDisplay(val) {
+      const formatted = `₹${Number(val || 0).toLocaleString('en-IN')}`;
+      const badge = document.getElementById('modal-qr-amount-text');
+      if (badge) badge.innerText = formatted;
+
+      // Update deep-link UPI URI
+      const upiUrl = `upi://pay?pa=noorulhudamahall@sbi&pn=Noorul%20Huda%20Mahall%20Treasury&am=${val}&cu=INR&tn=${encodeURIComponent(activeContribution.purpose || 'Mahall Contribution')}`;
+      const upiLinkBtn = document.getElementById('modal-open-upi-app-btn');
+      if (upiLinkBtn) {
+        upiLinkBtn.href = upiUrl;
+      }
+    }
+
+    function copyUpiId() {
+      const upiId = "noorulhudamahall@sbi";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(upiId).then(() => {
+          showCopyTooltip();
+        }).catch(() => fallbackCopy(upiId));
+      } else {
+        fallbackCopy(upiId);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showCopyTooltip();
+    }
+
+    function showCopyTooltip() {
+      const btn = document.getElementById('copy-upi-btn');
+      if (!btn) return;
+      const original = btn.innerHTML;
+      btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Copied!`;
+      if (window.lucide) lucide.createIcons();
+      setTimeout(() => {
+        btn.innerHTML = original;
+        if (window.lucide) lucide.createIcons();
+      }, 2000);
+    }
+
+    function closeContributionModal() {
+      const modal = document.getElementById('contribution-upi-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function confirmContributionPayment() {
+      const amount = parseFloat(activeContribution.amount);
+      if (!amount || amount <= 0) {
+        if (window.app && window.app.showToast) window.app.showToast('Please enter a valid contribution amount.', 'error');
+        else alert('Please enter a valid contribution amount.');
+        return;
+      }
+
+      const donorName = (activeContribution.donorName || 'Ahmed Koya P. K.').trim();
+      const familyId = (activeContribution.familyId || 'W02-F005').trim();
+
+      const confirmBtn = document.getElementById('modal-confirm-pay-btn');
+      if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = `<span class="inline-block animate-spin mr-2">⏳</span> Verifying UPI Transaction...`;
+      }
+
+      setTimeout(() => {
+        try {
+          let paymentRecord = null;
+          if (typeof MahallDB !== 'undefined' && MahallDB.recordPayment) {
+            paymentRecord = MahallDB.recordPayment({
+              familyId: familyId,
+              amount: amount,
+              monthsCount: activeContribution.months || 1,
+              mode: 'UPI (QR Scan)',
+              purpose: activeContribution.purpose,
+              donorName: donorName
+            });
+          } else {
+            paymentRecord = {
+              receiptNo: `RCP-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+              amount: amount,
+              familyId: familyId,
+              familyHead: donorName,
+              purpose: activeContribution.purpose,
+              timestamp: new Date().toLocaleString()
+            };
+          }
+
+          closeContributionModal();
+
+          if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> Confirm Payment & Generate Receipt`;
+          }
+
+          showContributionReceipt(paymentRecord);
+
+          if (window.app && window.app.showToast) {
+            window.app.showToast(`Contribution of ₹${amount.toLocaleString('en-IN')} received! Official Receipt ${paymentRecord.receiptNo} generated.`, 'success');
+          }
+        } catch (e) {
+          console.error(e);
+          if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> Confirm Payment & Generate Receipt`;
+          }
+          alert('Error recording payment: ' + e.message);
+        }
+      }, 1000);
+    }
+
+    function showContributionReceipt(p) {
+      document.getElementById('rcpt-num').innerText = p.receiptNo || 'RCP-2026-LIVE';
+      document.getElementById('rcpt-date').innerText = p.timestamp || new Date().toLocaleString();
+      document.getElementById('rcpt-donor').innerText = p.familyHead || 'Ahmed Koya P. K.';
+      document.getElementById('rcpt-family').innerText = p.familyId || 'W02-F005';
+      document.getElementById('rcpt-purpose').innerText = p.purpose || p.months || 'Community Contribution';
+      document.getElementById('rcpt-amount').innerText = `₹${Number(p.amount).toLocaleString('en-IN')}`;
+      document.getElementById('rcpt-mode').innerText = p.mode || 'UPI (Scan & Pay)';
+
+      const receiptModal = document.getElementById('contribution-receipt-modal');
+      if (receiptModal) {
+        receiptModal.classList.remove('hidden');
+        receiptModal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeReceiptModal() {
+      const receiptModal = document.getElementById('contribution-receipt-modal');
+      if (receiptModal) {
+        receiptModal.classList.add('hidden');
+        receiptModal.classList.remove('flex');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateResidentFamilies();
+      if (window.lucide) lucide.createIcons();
+      window.app = new MahallApp();
+
+      const header = document.getElementById('main-header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      });
+    });
+  </script>
+  <!-- Notification Drawer Container -->
+  <div id="notification-drawer" class="hidden"></div>
+</body>
+</html>

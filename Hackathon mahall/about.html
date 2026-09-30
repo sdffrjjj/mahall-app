@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Explore Noorul Huda Mahall Jama'ath: Established in 1968 in Calicut. Mahall history, Central Juma Masjid architecture, Imam & Khateeb scholars, executive committee, vision & mission, and contact details." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col min-h-screen selection:bg-emerald-700 selection:text-white pb-16 md:pb-0">
+
+  <!-- ==========================================================================
+       TOP BAR: ROLE SWITCHER & UTILITY BAR
+       ========================================================================== -->
+  <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2 px-4 shadow-sm relative z-[70]">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Mahall Identity & Helpline -->
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs tracking-wide">
+          <i data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Noorul Huda Mahall Jama'ath</span>
+        </span>
+        <span class="hidden md:inline text-slate-600">•</span>
+        <span class="hidden md:flex items-center gap-1 text-slate-400 text-xs">
+          <i data-lucide="phone-call" class="w-3 h-3 text-emerald-400"></i>
+          <span>Office: +91 495 2724800</span>
+        </span>
+      </div>
+
+      <!-- Right: Utility Controls (Theme, Language, Help) -->
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher -->
+        <div class="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-0.5 text-[11px]">
+          <i data-lucide="languages" class="w-3.5 h-3.5 text-slate-400"></i>
+          <select id="lang-select" onchange="window.app.changeLanguage(this.value)" class="bg-transparent text-slate-200 focus:outline-none cursor-pointer">
+            <option value="en" class="bg-slate-900 text-white">English</option>
+            <option value="ml" class="bg-slate-900 text-white">മലയാളം</option>
+            <option value="ar" class="bg-slate-900 text-white">العربية</option>
+          </select>
+        </div>
+
+        <!-- Dark / Light Mode Toggle -->
+        <button id="theme-toggle-btn" onclick="window.toggleTheme ? window.toggleTheme(event) : (window.app && window.app.toggleTheme && window.app.toggleTheme())" title="Toggle Dark/Light Mode" class="p-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-amber-400 hover:border-amber-500/50 transition cursor-pointer">
+          <i id="theme-toggle-icon" data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+        </button>
+
+        <!-- AI Assistant Button -->
+        <button onclick="window.app ? window.app.toggleAIChat() : null" class="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition text-[11px] font-semibold">
+          <i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i>
+          <span>Ask Mahall AI</span>
+        </button>
+
+        <!-- Notification Bell -->
+        <button id="notif-bell-btn" onclick="window.toggleNotificationDrawer ? window.toggleNotificationDrawer(event) : (window.app && window.app.toggleNotificationDrawer && window.app.toggleNotificationDrawer(event))"
+          class="notif-trigger-btn relative p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer" title="Portal Notifications">
+          <i data-lucide="bell" class="w-4 h-4 text-emerald-400 pointer-events-none"></i>
+          <span id="notif-badge" class="notif-badge-el absolute -top-1 -right-1 bg-red-500 text-white font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] ring-2 ring-slate-900 pointer-events-none">0</span>
+        </button>
+
+        <!-- Auth Status Container (Firebase Multi-User) -->
+        <div id="top-resident-auth-status" class="auth-status-container flex items-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN NAVIGATION HEADER (10 CATEGORIES)
+       ========================================================================== -->
+  <header id="main-header" class="main-navbar-sticky">
+    <div id="navbar-capsule" class="navbar-capsule-container transition-all duration-300">
+      <div id="navbar-inner-bar" class="flex items-center justify-between h-16 md:h-18 gap-2 lg:gap-3 w-full transition-all duration-300">
+        
+        <!-- Left: Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2 shrink-0 group">
+          <img src="assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall Logo" class="brand-logo-img w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-emerald-600 shadow-sm object-cover shrink-0 group-hover:scale-105 transition" />
+          <div class="leading-tight shrink-0">
+            <span class="brand-title text-base md:text-lg font-black tracking-tight text-emerald-950 dark:text-emerald-400 font-heading whitespace-nowrap">
+              Noorul Huda
+            </span>
+            <span class="brand-sub text-[10px] text-slate-500 dark:text-slate-400 font-medium block whitespace-nowrap">
+              Mahall Jama'ath • Estd 1968
+            </span>
+          </div>
+        </a>
+
+        <!-- Center: 10 Categories Desktop Navigation -->
+        <nav class="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 text-xs font-semibold mx-auto">
+          
+          <!-- 1. HOME -->
+          <a href="index.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+            Home
+          </a>
+
+          <!-- 2. ABOUT MAHALL (Active Page) -->
+          <div class="relative group">
+            <a href="about.html" class="nav-link text-emerald-700 dark:text-emerald-400 font-bold border-b-2 border-emerald-600">
+              <span>About Mahall</span>
+              <svg class="w-3 h-3 text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[260px] space-y-1">
+              <a href="about.html#history" class="mega-item">
+                <i data-lucide="landmark" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Mahall History</span>
+              </a>
+              <a href="about.html#about-mosque" class="mega-item">
+                <i data-lucide="building-2" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">About Mosque</span>
+              </a>
+              <a href="about.html#imam-khateeb" class="mega-item">
+                <i data-lucide="user-check" class="mega-item-icon text-amber-500"></i>
+                <span class="mega-item-title text-xs">Imam & Khateeb</span>
+              </a>
+              <a href="about.html#committee" class="mega-item">
+                <i data-lucide="users" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Executive Committee</span>
+              </a>
+              <a href="about.html#vision-mission" class="mega-item">
+                <i data-lucide="target" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Vision & Mission</span>
+              </a>
+              <a href="map.html" class="mega-item bg-emerald-50/60 dark:bg-emerald-950/40 rounded-lg">
+                <i data-lucide="map" class="mega-item-icon text-emerald-600"></i>
+                <span class="mega-item-title text-xs font-bold text-emerald-700 dark:text-emerald-300">Mahall Map <span class="text-[9px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full ml-1">Single Page</span></span>
+              </a>
+              <a href="about.html#contact-us" class="mega-item">
+                <i data-lucide="phone" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Contact Us</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 3. PRAYER & MOSQUE -->
+          <div class="relative group">
+            <a href="prayer.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Prayer & Mosque</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="prayer.html#todays-times" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Today's Prayer Times</span></a>
+              <a href="prayer.html#jumua" class="mega-item"><i data-lucide="sun" class="mega-item-icon"></i><span class="mega-item-title text-xs">Jumu'ah Schedule</span></a>
+              <a href="prayer.html#adhan-iqamah" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">Adhan / Iqamah</span></a>
+              <a href="prayer.html#ramadan" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Timetable</span></a>
+              <a href="prayer.html#eid-prayer" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Prayer</span></a>
+              <a href="prayer.html#khutbah" class="mega-item"><i data-lucide="mic" class="mega-item-icon"></i><span class="mega-item-title text-xs">Khutbah Schedule</span></a>
+              <a href="prayer.html#mosque-info" class="mega-item"><i data-lucide="info" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Information</span></a>
+            </div>
+          </div>
+
+          <!-- 4. ANNOUNCEMENTS -->
+          <div class="relative group">
+            <a href="announcements.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Announcements</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="announcements.html#all-announcements" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">All Announcements</span></a>
+              <a href="announcements.html#mosque-notices" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Notices</span></a>
+              <a href="announcements.html#community-notices" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Notices</span></a>
+              <a href="announcements.html#emergency-notices" class="mega-item"><i data-lucide="alert-triangle" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Emergency Notices</span></a>
+              <a href="announcements.html#funeral-janazah" class="mega-item"><i data-lucide="flag" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Funeral / Janazah</span></a>
+            </div>
+          </div>
+
+          <!-- 5. EVENTS & PROGRAMS -->
+          <div class="relative group">
+            <a href="events.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Events & Programs</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="events.html#upcoming-events" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Upcoming Events</span></a>
+              <a href="events.html#calendar" class="mega-item"><i data-lucide="calendar-days" class="mega-item-icon"></i><span class="mega-item-title text-xs">Event Calendar</span></a>
+              <a href="events.html#islamic-programs" class="mega-item"><i data-lucide="book-open" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Programs</span></a>
+              <a href="events.html#quran-programs" class="mega-item"><i data-lucide="award" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Programs</span></a>
+              <a href="events.html#youth-programs" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Youth Programs</span></a>
+              <a href="events.html#children-programs" class="mega-item"><i data-lucide="smile" class="mega-item-icon"></i><span class="mega-item-title text-xs">Children's Programs</span></a>
+              <a href="events.html#past-events" class="mega-item"><i data-lucide="history" class="mega-item-icon"></i><span class="mega-item-title text-xs">Past Events</span></a>
+            </div>
+          </div>
+
+          <!-- 6. EDUCATION -->
+          <div class="relative group">
+            <a href="education.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Education</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="education.html#madrasa" class="mega-item"><i data-lucide="school" class="mega-item-icon"></i><span class="mega-item-title text-xs">Madrasa Academy</span></a>
+              <a href="education.html#quran-classes" class="mega-item"><i data-lucide="book" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Classes</span></a>
+              <a href="education.html#arabic-classes" class="mega-item"><i data-lucide="languages" class="mega-item-icon"></i><span class="mega-item-title text-xs">Arabic Classes</span></a>
+              <a href="education.html#islamic-studies" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Studies</span></a>
+              <a href="education.html#class-schedule" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Class Schedule</span></a>
+              <a href="education.html#teachers" class="mega-item"><i data-lucide="user-check" class="mega-item-icon"></i><span class="mega-item-title text-xs">Teachers Directory</span></a>
+              <a href="education.html#study-materials" class="mega-item"><i data-lucide="file-text" class="mega-item-icon"></i><span class="mega-item-title text-xs">Study Materials</span></a>
+            </div>
+          </div>
+
+          <!-- 7. COMMUNITY -->
+          <div class="relative group">
+            <a href="community.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Community</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="community.html#community-services" class="mega-item"><i data-lucide="heart-handshake" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Services</span></a>
+              <a href="community.html#volunteer" class="mega-item"><i data-lucide="helping-hand" class="mega-item-icon"></i><span class="mega-item-title text-xs">Volunteer Wing</span></a>
+              <a href="community.html#youth-wing" class="mega-item"><i data-lucide="shield" class="mega-item-icon"></i><span class="mega-item-title text-xs">Youth Wing (NHYM)</span></a>
+              <a href="community.html#womens-programs" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Women's Programs</span></a>
+              <a href="community.html#blood-donors" class="mega-item"><i data-lucide="droplet" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Blood Donors Directory</span></a>
+              <a href="community.html#jobs" class="mega-item"><i data-lucide="briefcase" class="mega-item-icon"></i><span class="mega-item-title text-xs">Job Opportunities</span></a>
+              <a href="community.html#community-support" class="mega-item"><i data-lucide="heart" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Community Support</span></a>
+            </div>
+          </div>
+
+          <!-- 8. GALLERY -->
+          <div class="relative group">
+            <a href="gallery.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Gallery</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[230px] space-y-1">
+              <a href="gallery.html#photos" class="mega-item"><i data-lucide="image" class="mega-item-icon"></i><span class="mega-item-title text-xs">Photos</span></a>
+              <a href="gallery.html#videos" class="mega-item"><i data-lucide="video" class="mega-item-icon"></i><span class="mega-item-title text-xs">Videos</span></a>
+              <a href="gallery.html#mosque-gallery" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Architecture</span></a>
+              <a href="gallery.html#programs-gallery" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Programs & Events</span></a>
+              <a href="gallery.html#ramadan-gallery" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Moments</span></a>
+              <a href="gallery.html#eid-gallery" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Celebrations</span></a>
+            </div>
+          </div>
+
+          <!-- 9. CONTRIBUTIONS -->
+          <div class="relative group">
+            <a href="contributions.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Contributions</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="contributions.html#subscription" class="mega-item"><i data-lucide="wallet" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Mahall Subscription</span></a>
+              <a href="contributions.html#mosque-fund" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Fund</span></a>
+              <a href="contributions.html#zakat" class="mega-item"><i data-lucide="coins" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Zakat Calculator</span></a>
+              <a href="contributions.html#sadaqah" class="mega-item"><i data-lucide="heart" class="mega-item-icon"></i><span class="mega-item-title text-xs">Sadaqah (Charity)</span></a>
+              <a href="contributions.html#education-fund" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Education Fund</span></a>
+              <a href="contributions.html#relief-fund" class="mega-item"><i data-lucide="shield-alert" class="mega-item-icon text-rose-500"></i><span class="mega-item-title text-xs">Emergency Relief Fund</span></a>
+            </div>
+          </div>
+
+          <!-- 10. MORE -->
+          <div class="relative group">
+            <a href="services.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>More</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown nav-dropdown-right w-[240px] space-y-1">
+              <a href="services.html#certificate-requests" class="mega-item"><i data-lucide="file-check" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Certificate Requests</span></a>
+              <a href="services.html#document-requests" class="mega-item"><i data-lucide="folder-clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Document Requests</span></a>
+              <a href="services.html#faq" class="mega-item"><i data-lucide="help-circle" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mahall FAQ</span></a>
+              <a href="services.html#downloads" class="mega-item"><i data-lucide="download" class="mega-item-icon"></i><span class="mega-item-title text-xs">Downloads Center</span></a>
+              <a href="services.html#contact-help" class="mega-item"><i data-lucide="life-buoy" class="mega-item-icon"></i><span class="mega-item-title text-xs">Contact / Help</span></a>
+            </div>
+          </div>
+
+        </nav>
+
+        <div class="navbar-search-wrapper flex items-center gap-2 shrink-0 pr-1 sm:pr-2">
+          <div class="relative hidden xl:flex items-center">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none"></i>
+            <input id="global-search-input" onkeyup="window.app.handleGlobalSearch(event)" type="text" placeholder="Search Mahall..." class="nav-search-input bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700/80 rounded-full pl-8 pr-3 py-1 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-600 transition-all shadow-inner" />
+          </div>
+
+          <button onclick="window.app.toggleMobileMenu()" aria-label="Toggle navigation menu" class="lg:hidden p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Collapsible Menu (Accordion of 10 categories) -->
+      <div id="mobile-collapsible-menu" class="lg:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 px-4 py-4 space-y-2 shadow-xl max-h-[75vh] overflow-y-auto">
+        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Mahall Portals</div>
+        <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <a href="index.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="home" class="w-4 h-4 text-emerald-600"></i> Home</a>
+          <a href="about.html" class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold flex items-center gap-2 border border-emerald-300 dark:border-emerald-700"><i data-lucide="info" class="w-4 h-4 text-emerald-600"></i> About Mahall</a>
+          <a href="prayer.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="compass" class="w-4 h-4 text-emerald-600"></i> Prayer & Mosque</a>
+          <a href="announcements.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="bell" class="w-4 h-4 text-emerald-600"></i> Announcements</a>
+          <a href="events.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4 text-emerald-600"></i> Events & Programs</a>
+          <a href="education.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4 text-emerald-600"></i> Education</a>
+          <a href="community.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="heart" class="w-4 h-4 text-emerald-600"></i> Community</a>
+          <a href="gallery.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="image" class="w-4 h-4 text-emerald-600"></i> Gallery</a>
+          <a href="contributions.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="wallet" class="w-4 h-4 text-amber-600"></i> Contributions</a>
+          <a href="services.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-emerald-600"></i> More Services</a>
+          <a href="map.html" class="col-span-2 p-2.5 rounded-xl bg-emerald-700 text-white text-center flex items-center justify-center gap-2 font-bold shadow-sm"><i data-lucide="map" class="w-4 h-4"></i> Interactive Mahall Map (Single Page) &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO BANNER: ABOUT NOORUL HUDA MAHALL
+       ========================================================================== -->
+  <div class="relative bg-gradient-to-r from-emerald-950 via-emerald-900 to-slate-950 text-white py-14 border-b border-emerald-800/40">
+    <div class="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] opacity-15"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="space-y-3 max-w-2xl text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-600/60 border border-emerald-400/40 text-emerald-200">
+            <i data-lucide="landmark" class="w-3.5 h-3.5 text-amber-400"></i> Estd 1968 • Calicut, Kerala
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black tracking-tight font-heading leading-tight">
+            About <span class="text-amber-400">Noorul Huda</span> Mahall
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            A premier spiritual and social sanctuary uniting 642 registered families with compassionate Islamic jurisprudence, visionary youth leadership, and transparent community governance.
+          </p>
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-2">
+            <a href="#history" class="btn-primary text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-lg">
+              <i data-lucide="history" class="w-3.5 h-3.5"></i> Read History
+            </a>
+            <a href="#committee" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+              <i data-lucide="users" class="w-3.5 h-3.5 text-amber-400"></i> Committee Members
+            </a>
+            <a href="map.html" class="bg-emerald-600/80 hover:bg-emerald-600 text-white text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+              <i data-lucide="map" class="w-3.5 h-3.5"></i> Explore Mahall Map &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Quick Stat Card -->
+        <div class="glass-panel p-6 rounded-3xl border border-white/10 bg-slate-900/60 text-center w-full md:w-80 shadow-2xl shrink-0">
+          <div class="text-xs text-amber-400 font-bold uppercase tracking-wider mb-2">At A Glance</div>
+          <div class="grid grid-cols-2 gap-3 text-left text-xs">
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-[10px] text-slate-400 block">Total Families</span>
+              <span class="text-lg font-black text-white">642</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-[10px] text-slate-400 block">Verified Population</span>
+              <span class="text-lg font-black text-emerald-400">2,840</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-[10px] text-slate-400 block">Electoral Wards</span>
+              <span class="text-lg font-black text-amber-400">8 Wards</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-[10px] text-slate-400 block">Affiliation</span>
+              <span class="text-xs font-bold text-slate-200">Kerala Islamic Council</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-white/10 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Registration:</span>
+            <strong class="font-mono text-emerald-300">KL-KZK/1968/42</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       PAGE CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+
+    <!-- -----------------------------------------------------------------------
+         1. MAHALL HISTORY (#history)
+         ----------------------------------------------------------------------- -->
+    <section id="history" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Foundations & Heritage</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Mahall History (1968 – 2026)
+          </h2>
+        </div>
+        <span class="text-xs font-mono px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          58 Years of Dedicated Service
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <!-- History Narrative -->
+        <div class="lg:col-span-2 space-y-4 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          <p>
+            In the monsoon of <strong>1968</strong>, forty devout families gathered under the visionary guidance of late <em>Haji K.V. Mohammed Koya</em> and <em>Marhum Sayyid Alavi Thangal</em> to establish the first thatched prayer hall on ancestral land donated along the coast of Calicut. The objective was clear: create an enduring institutional sanctuary where prayers, moral education, and social relief could flourish hand-in-hand.
+          </p>
+          <p>
+            Over six decades of unwavering community sacrifice, that humble prayer shed transformed into a sprawling four-acre educational and spiritual campus. By <strong>1982</strong>, the primary Madrasa was established, securing board affiliation with the Samastha Kerala Islam Matha Vidyabhyasa Board. In <strong>1996</strong>, the Central Juma Masjid was reconstructed in grand Kerala-Mughal architectural harmony, accommodating over 2,500 worshippers simultaneously.
+          </p>
+          <p>
+            Today, in <strong>2026</strong>, Noorul Huda Mahall Jama'ath stands as an exemplary smart digital Mahall in Kerala, combining digital household census, solar-powered infrastructure, computerized welfare trusts, and free 24/7 dialysis and ambulance desks.
+          </p>
+
+          <!-- Visual Milestones Timeline -->
+          <div class="mt-8 space-y-4 relative border-l-2 border-emerald-600/30 dark:border-emerald-500/30 ml-4 pl-6">
+            <div class="relative">
+              <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white dark:border-slate-900"></div>
+              <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">1968</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">The Founding Gathering</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400">First thatched roof prayer hall founded with 40 pioneer families on donated coastal land.</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white dark:border-slate-900"></div>
+              <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">1982</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Madrasa Academy Established</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400">Formal Samastha board affiliation granted, enrolling the first batch of 90 students.</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white dark:border-slate-900"></div>
+              <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">1996</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Central Juma Masjid Reconstructed</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400">Two-tier concrete prayer hall with twin minarets and 2,500 capacity inaugurated.</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white dark:border-slate-900"></div>
+              <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">2008</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Medical & Dialysis Welfare Foundation</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400">Launched free dialysis sponsorships and monthly destitute food ration kits.</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900"></div>
+              <span class="text-xs font-mono font-bold text-amber-500">2018</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Golden Jubilee Memorial Complex</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400">Inauguration of 800-seat Noorul Huda Memorial Community Auditorium and 40kW solar grid.</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900"></div>
+              <span class="text-xs font-mono font-bold text-emerald-500">2026</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Smart Digital Mahall System</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400">Launch of Digital Family Smart Cards, online certificate desk, and AI citizen helpdesk.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Archival Image & Heritage Card -->
+        <div class="space-y-4">
+          <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-lg">
+            <img src="assets/images/mosque_hero.jpg" alt="Historical Central Mosque" class="w-full h-56 object-cover object-center" />
+            <div class="p-4 bg-white dark:bg-slate-900">
+              <div class="text-xs font-bold text-slate-800 dark:text-slate-200">Central Masjid Complex</div>
+              <p class="text-[11px] text-slate-500 mt-0.5">Renovated structure featuring indigenous teakwood craft, marble mihrab, and natural cross-ventilation.</p>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-200 space-y-2">
+            <div class="font-bold flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300">
+              <i data-lucide="award" class="w-4 h-4"></i> State Recognition
+            </div>
+            <p>
+              Awarded "Model Mahall Jama'ath Award 2024" by Kerala State Waqf Board for exemplary financial auditing, community arbitration, and healthcare initiatives.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         2. ABOUT MOSQUE (#about-mosque)
+         ----------------------------------------------------------------------- -->
+    <section id="about-mosque" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Architectural Sanctity</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            About the Central Masjid
+          </h2>
+        </div>
+        <span class="text-xs font-mono px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold">
+          Capacity: 2,500 Worshippers
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Feature 1 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold">
+            <i data-lucide="sun" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white">40 kW Solar Grid</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            100% solar self-reliant power system feeding green energy to the grid, powering ventilation and air conditioning.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white">Dedicated Women's Hall</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Second floor dedicated prayer hall for 400 sisters with separate ablution chambers and private entrance.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center font-bold">
+            <i data-lucide="droplet" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white">Pure Water & Wudhu</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Modern 60-seat ablution facility with filtered underground natural spring water and recycled greywater garden grid.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-400 flex items-center justify-center font-bold">
+            <i data-lucide="accessibility" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white">Wheelchair Accessible</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Smooth entry ramps, dedicated seating spots for senior citizens, and specialized ablution chairs.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         3. IMAM & KHATEEB SCHOLARS (#imam-khateeb)
+         ----------------------------------------------------------------------- -->
+    <section id="imam-khateeb" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Spiritual Guidance</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Imam & Khateeb Directory
+          </h2>
+        </div>
+        <button onclick="window.app.showToast('Opening spiritual consultation calendar...', 'info')" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Book Appointment
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Chief Imam -->
+        <div class="glass-panel rounded-3xl p-6 border border-slate-200 dark:border-slate-800 text-center space-y-3 relative overflow-hidden">
+          <div class="absolute top-3 right-3 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white uppercase" id="about-imam-badge">
+            Chief Imam & Qazi
+          </div>
+          <div class="w-20 h-20 rounded-full mx-auto bg-gradient-to-tr from-emerald-700 to-teal-500 text-white flex items-center justify-center text-2xl font-bold shadow-md" id="about-imam-avatar">
+            AR
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white" id="about-imam-name">Usthad Abdul Rasheed Faizy</h3>
+            <p class="text-xs text-emerald-700 dark:text-emerald-400 font-medium" id="about-imam-designation">Head Khateeb & Chief Arbitrator</p>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed" id="about-imam-bio">
+            Graduate of Darul Huda Islamic University and Al-Azhar Cairo. Leading Friday sermons and spiritual arbitration for 16 years.
+          </p>
+          <div class="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 space-y-1">
+            <div>📞 Direct: <strong class="text-slate-700 dark:text-slate-300" id="about-imam-phone">+91 94472 11223</strong></div>
+            <div>⏰ Office Hours: <span id="about-imam-hours">Post-Asr to Maghrib</span></div>
+          </div>
+        </div>
+
+        <!-- 2nd Imam -->
+        <div class="glass-panel rounded-3xl p-6 border border-slate-200 dark:border-slate-800 text-center space-y-3 relative overflow-hidden">
+          <div class="absolute top-3 right-3 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-600 text-white uppercase">
+            2nd Imam
+          </div>
+          <div class="w-20 h-20 rounded-full mx-auto bg-gradient-to-tr from-amber-600 to-yellow-500 text-white flex items-center justify-center text-2xl font-bold shadow-md" id="about-second-imam-avatar">
+            SF
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white" id="about-second-imam-name">Hafiz Salmanul Farisi</h3>
+            <p class="text-xs text-amber-600 dark:text-amber-400 font-medium">Head of Qur'an Hifdh & Tajweed</p>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Certified in 10 Qira'at styles, leading daily congregational prayers, and overseeing adult Tajweed circles.
+          </p>
+          <div class="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 space-y-1">
+            <div>📞 Direct: <strong class="text-slate-700 dark:text-slate-300" id="about-second-imam-phone">+91 98461 44556</strong></div>
+            <div>⏰ Office Hours: Post-Fajr & Post-Isha</div>
+          </div>
+        </div>
+
+        <!-- Mu'azzin -->
+        <div class="glass-panel rounded-3xl p-6 border border-slate-200 dark:border-slate-800 text-center space-y-3 relative overflow-hidden">
+          <div class="absolute top-3 right-3 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-sky-600 text-white uppercase">
+            Mu'azzin
+          </div>
+          <div class="w-20 h-20 rounded-full mx-auto bg-gradient-to-tr from-sky-600 to-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-md" id="about-muazzin-avatar">
+            BK
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white" id="about-muazzin-name">Bilal Koya</h3>
+            <p class="text-xs text-sky-600 dark:text-sky-400 font-medium">Head of Adhan & Mosque Logistics</p>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Renowned melodic Adhan reciter serving Noorul Huda for 22 continuous years; in charge of prayer acoustics and Janazah squad.
+          </p>
+          <div class="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 space-y-1">
+            <div>📞 Direct: <strong class="text-slate-700 dark:text-slate-300">+91 97455 77889</strong></div>
+            <div>⏰ Available 24/7 on Mosque premises</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         4. EXECUTIVE COMMITTEE (#committee)
+         ----------------------------------------------------------------------- -->
+    <section id="committee" class="scroll-mt-24 space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Governance & Leadership</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Executive Committee (2024–2027)
+          </h2>
+        </div>
+        <div class="text-xs text-slate-500 dark:text-slate-400">
+          Elected under Kerala Waqf Regulations • 15 Members
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- President -->
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800/80 shadow-sm flex items-start gap-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center font-bold shrink-0">MK</div>
+          <div class="flex-grow min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">President</span>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">Haji M.K. Bava Sahib</h4>
+            <span class="text-[11px] text-slate-500 block truncate">Ward 1 • Al-Madina Villa</span>
+            <div class="mt-2 text-xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold">+91 94470 12001</div>
+          </div>
+        </div>
+
+        <!-- General Secretary -->
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800/80 shadow-sm flex items-start gap-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center font-bold shrink-0">PK</div>
+          <div class="flex-grow min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">General Secretary</span>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">P.K. Shamsudheen Master</h4>
+            <span class="text-[11px] text-slate-500 block truncate">Ward 3 • Baitul Noor</span>
+            <div class="mt-2 text-xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold">+91 94470 12002</div>
+          </div>
+        </div>
+
+        <!-- Treasurer -->
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800/80 shadow-sm flex items-start gap-3">
+          <div class="w-12 h-12 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold shrink-0">CT</div>
+          <div class="flex-grow min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600">Treasurer</span>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">C.T. Abdul Gafoor</h4>
+            <span class="text-[11px] text-slate-500 block truncate">Ward 2 • Rahmath Manzil</span>
+            <div class="mt-2 text-xs font-mono text-amber-600 dark:text-amber-400 font-semibold">+91 94470 12003</div>
+          </div>
+        </div>
+
+        <!-- Vice President 1 -->
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-start gap-3">
+          <div class="w-12 h-12 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold shrink-0">KA</div>
+          <div class="flex-grow min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vice President</span>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">K.A. Musthafa</h4>
+            <span class="text-[11px] text-slate-500 block truncate">Ward 4 • Firdous</span>
+            <div class="mt-2 text-xs font-mono text-slate-600 dark:text-slate-300">+91 94470 12004</div>
+          </div>
+        </div>
+
+        <!-- Vice President 2 -->
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-start gap-3">
+          <div class="w-12 h-12 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold shrink-0">VT</div>
+          <div class="flex-grow min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vice President</span>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">V.T. Kunjahmed</h4>
+            <span class="text-[11px] text-slate-500 block truncate">Ward 6 • Hilal Villa</span>
+            <div class="mt-2 text-xs font-mono text-slate-600 dark:text-slate-300">+91 94470 12005</div>
+          </div>
+        </div>
+
+        <!-- Joint Secretary -->
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-start gap-3">
+          <div class="w-12 h-12 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold shrink-0">NN</div>
+          <div class="flex-grow min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Joint Secretary</span>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">N.N. Nizar</h4>
+            <span class="text-[11px] text-slate-500 block truncate">Ward 5 • Subhan Villa</span>
+            <div class="mt-2 text-xs font-mono text-slate-600 dark:text-slate-300">+91 94470 12006</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         5. VISION & MISSION (#vision-mission)
+         ----------------------------------------------------------------------- -->
+    <section id="vision-mission" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Core Philosophy</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Vision & Mission Statement
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Vision -->
+        <div class="glass-panel p-8 rounded-3xl border border-emerald-300 dark:border-emerald-800/80 relative overflow-hidden space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg">
+            <i data-lucide="eye" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 dark:text-white font-heading">Our Vision</h3>
+          <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            "To be an exemplary Islamic Mahall community grounded in pure Sunnah principles, distinguished by social justice, poverty eradication, holistic academic excellence, and progressive digital transparency for future generations."
+          </p>
+          <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Faith • Unity • Compassion • Transparency
+          </div>
+        </div>
+
+        <!-- Mission Pillars -->
+        <div class="glass-panel p-8 rounded-3xl border border-amber-300 dark:border-amber-800/80 relative overflow-hidden space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center font-bold shadow-lg">
+            <i data-lucide="compass" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 dark:text-white font-heading">Our Mission Pillars</h3>
+          <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+              <span><strong>Spiritual Sanctity:</strong> Foster congregational prayers, genuine love for Prophet Muhammad ﷺ, and Quranic literacy across all age groups.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+              <span><strong>Social Safety Net:</strong> Zero destitute hunger policy through monthly food security kits, free dialysis, and emergency medical grants.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+              <span><strong>Youth Empowerment:</strong> Guide young scholars into higher civil services, technological innovation, and ethical leadership.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+              <span><strong>Amicable Sulhu:</strong> Preserve matrimonial and civil harmony through confidential, impartial Islamic arbitration before civil litigation.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         FEATURED BANNER: MAHALL MAP (SINGLE PAGE LINK)
+         ----------------------------------------------------------------------- -->
+    <section class="rounded-3xl p-8 bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white border border-emerald-500/30 shadow-2xl relative overflow-hidden">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+        <div class="space-y-2 max-w-xl text-center md:text-left">
+          <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
+            🗺️ Interactive Geospatial Portal
+          </span>
+          <h3 class="text-2xl sm:text-3xl font-black font-heading">Explore the Dedicated Mahall Map</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Navigate through our 6 geographic zones: Central Mosque, territorial boundaries (4.2 sq km), Wards 1 to 8, Islamic Academy, Qabarstan cemetery, and Community Auditorium on a dedicated single page.
+          </p>
+        </div>
+        <a href="map.html" class="btn-primary px-6 py-3 rounded-2xl text-sm font-bold flex items-center gap-2 shadow-xl whitespace-nowrap">
+          <i data-lucide="map" class="w-5 h-5"></i> Open Mahall Map Single Page &rarr;
+        </a>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         6. CONTACT US (#contact-us)
+         ----------------------------------------------------------------------- -->
+    <section id="contact-us" class="scroll-mt-24 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Get In Touch</span>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white font-heading">
+            Contact & Office Visiting Hours
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Office Info Cards -->
+        <div class="space-y-4">
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1 text-xs">
+            <div class="text-slate-400 font-semibold uppercase text-[10px]">Physical Address</div>
+            <div class="text-sm font-bold text-slate-900 dark:text-white">Noorul Huda Mahall Jama'ath Office</div>
+            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+              Main Road, Beach Ward, Calicut, Kerala – 673001, India.<br/>
+              GPS: 11.2588° N, 75.7804° E
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2 text-xs">
+            <div class="text-slate-400 font-semibold uppercase text-[10px]">Office Visiting Hours</div>
+            <div class="space-y-1">
+              <div class="flex justify-between"><span>Mon – Thu:</span> <strong>08:30 AM – 01:00 PM, 04:30 PM – 08:30 PM</strong></div>
+              <div class="flex justify-between"><span>Friday:</span> <strong>08:30 AM – 11:30 AM, 04:30 PM – 08:30 PM</strong></div>
+              <div class="flex justify-between"><span>Saturday – Sun:</span> <strong>09:00 AM – 01:00 PM, 05:00 PM – 08:00 PM</strong></div>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs space-y-2">
+            <div class="text-emerald-800 dark:text-emerald-300 font-bold">Key Telephone Hotlines</div>
+            <div class="space-y-1">
+              <div>Office Secretary: <strong class="text-slate-900 dark:text-white font-mono">+91 495 2724800</strong></div>
+              <div>Emergency Relatives Desk: <strong class="text-slate-900 dark:text-white font-mono">+91 94470 12345</strong></div>
+              <div>24/7 ICU Ambulance: <strong class="text-red-600 font-mono font-bold">+91 98460 99999</strong></div>
+              <div>Official Email: <strong class="text-slate-900 dark:text-white font-mono">office@noorulhudamahall.org</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Inquiry Form -->
+        <div class="lg:col-span-2 glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Send an Official Inquiry or Feedback</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Your message is routed directly to the Executive Secretary console. For urgent bereavement or medical matters, use the hotlines above.
+          </p>
+
+          <form onsubmit="event.preventDefault(); submitInquiryForm();" class="space-y-4 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name *</label>
+                <input id="inq-name" required type="text" placeholder="Your Name" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600" />
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Mobile / WhatsApp Number *</label>
+                <input id="inq-phone" required type="tel" placeholder="+91 98765 43210" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Inquiry Category</label>
+                <select id="inq-category" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                  <option value="general">General Mahall Inquiry</option>
+                  <option value="membership">Family Membership / Ward Transfer</option>
+                  <option value="madrasa">Madrasa Admission & Syllabus</option>
+                  <option value="welfare">Medical / Dialysis Aid Assistance</option>
+                  <option value="feedback">Constructive Feedback / Suggestion</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Ward Number (if resident)</label>
+                <input id="inq-ward" type="text" placeholder="e.g. Ward 2 or Non-Resident" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Message *</label>
+              <textarea id="inq-msg" required rows="4" placeholder="Write your inquiry or message here..." class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600"></textarea>
+            </div>
+
+            <!-- LIVE PREVIEW CARD -->
+            <div class="pt-2 border-t border-slate-200 dark:border-slate-800">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <i data-lucide="eye" class="w-3.5 h-3.5"></i> LIVE PREVIEW AS SEEN ON PUBLIC PORTAL:
+                </span>
+                <span class="text-[9px] text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700 font-medium">Executive Secretary Inbox</span>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-emerald-500/40 text-white shadow-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 font-bold text-[9px] border border-emerald-500/30 font-mono tracking-wide" id="preview-inq-ref">INQ-2026-PREVIEW</span>
+                    <span class="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-300 font-semibold text-[9px] border border-blue-500/30" id="preview-inq-category">General Mahall Inquiry</span>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[9px] flex items-center gap-1 border border-emerald-500/40">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Priority Routed
+                  </span>
+                </div>
+                <div class="font-bold text-sm text-slate-100 flex items-center justify-between">
+                  <span id="preview-inq-name">Your Full Name</span>
+                  <span class="text-[10px] font-mono text-emerald-400" id="preview-inq-phone">+91 98765 43210</span>
+                </div>
+                <div class="text-[11px] text-slate-400">
+                  <p class="line-clamp-2 italic text-slate-300 text-[11px]" id="preview-inq-msg">"Write your inquiry or message here..."</p>
+                </div>
+                <div class="text-[10px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-800">
+                  <span id="preview-inq-ward">Ward: Resident</span>
+                  <span>Direct Mahall Dispatch</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary w-full py-3 rounded-xl text-xs font-bold shadow-lg flex items-center justify-center gap-2">
+              <i data-lucide="send" class="w-4 h-4"></i> Submit Inquiry to Mahall Office
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       FLOATING MAHALL AI ASSISTANT CHAT WIDGET (ALL PAGES)
+       ========================================================================== -->
+  <div id="mahall-floating-chat-container" class="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-[80] font-sans">
+    <!-- Floating Trigger Button -->
+    <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+      id="ai-chat-floating-btn"
+      aria-label="Open Mahall AI Assistant"
+      title="Ask Mahall AI Assistant"
+      class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-800 via-emerald-700 to-teal-600 text-white shadow-2xl border-2 border-amber-400 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group relative">
+      <i data-lucide="bot" class="w-7 h-7 text-amber-300 group-hover:rotate-12 transition-transform"></i>
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-amber-500 text-[9px] font-black text-slate-950 items-center justify-center shadow">AI</span>
+      </span>
+    </button>
+
+    <!-- Interactive Chat Drawer -->
+    <div id="ai-chat-drawer"
+      class="absolute bottom-16 right-0 w-[340px] sm:w-[400px] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col hidden transition-all duration-300 z-[90]">
+      
+      <!-- Chat Header -->
+      <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center font-bold text-base shadow">
+            🌙
+          </div>
+          <div>
+            <h4 class="font-bold text-sm leading-tight flex items-center gap-1.5">
+              Mahall AI Assistant
+              <span class="text-[9px] bg-emerald-600/80 px-1.5 py-0.5 rounded-full font-medium text-emerald-100">Live</span>
+            </h4>
+            <p class="text-[11px] text-emerald-200">Full website guide & community assistant</p>
+          </div>
+        </div>
+        <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="p-2.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="MahallAI.handleChipClick('When is Jumu\'ah prayer and Khutbah?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🕌 Jumu'ah
+        </button>
+        <button onclick="MahallAI.handleChipClick('How can I get a Marriage NOC certificate?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🧾 Marriage NOC
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me about Noorul Huda Madrasa timings')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          📖 Madrasa
+        </button>
+        <button onclick="MahallAI.handleChipClick('Emergency ambulance number and blood donors')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🚑 Ambulance
+        </button>
+        <button onclick="MahallAI.handleChipClick('How to pay Mahall monthly subscription dues?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          💳 Pay ₹250
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me the history of Noorul Huda Mahall')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🏛️ History
+        </button>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="ai-chat-messages" class="p-4 h-72 sm:h-80 overflow-y-auto space-y-3 text-slate-800 dark:text-slate-200">
+        <div class="flex items-start gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 text-xs font-bold shadow">
+            🌙
+          </div>
+          <div class="chat-bubble-ai text-xs md:text-sm px-4 py-2.5 max-w-[88%] border border-slate-200/80 dark:border-slate-700 shadow-sm leading-relaxed">
+            Assalamu Alaikum! I am the <strong>Noorul Huda Mahall AI Assistant</strong>. Ask me anything about prayer times, marriage NOC, madrasa, ambulance, Zakat, or community services across our entire website!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-2">
+        <input id="ai-chat-input" onkeydown="if(event.key==='Enter') MahallAI.sendMessage()" type="text"
+          placeholder="Ask anything about our Mahall..."
+          class="flex-grow text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 transition" />
+        <button onclick="MahallAI.sendMessage()" class="btn-primary p-2.5 rounded-xl shadow hover:scale-105 transition" aria-label="Send Message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-full px-4 pointer-events-none"></div>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 text-xs py-10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <h5 class="text-base font-bold text-white mb-2">Noorul Huda Mahall</h5>
+        <p class="text-slate-400 leading-relaxed">Central Juma Masjid & Community Welfare Society. Registered under Kerala Islamic Council.</p>
+        <span class="text-emerald-400 font-mono text-[11px] mt-2 block">KL-KZK/1968/42</span>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">About Portals</h6>
+        <ul class="space-y-1.5 text-slate-400">
+          <li><a href="about.html#history" class="hover:text-white">Mahall History (1968–2026)</a></li>
+          <li><a href="about.html#about-mosque" class="hover:text-white">Central Mosque Architecture</a></li>
+          <li><a href="about.html#imam-khateeb" class="hover:text-white">Imam & Khateeb Scholars</a></li>
+          <li><a href="about.html#committee" class="hover:text-white">Executive Committee (2024–2027)</a></li>
+          <li><a href="map.html" class="hover:text-white font-bold text-emerald-400">Interactive Mahall Map &rarr;</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Emergency Hotlines</h6>
+        <ul class="space-y-1.5 text-slate-400">
+          <li>Emergency Desk: <strong class="text-white">+91 94470 12345</strong></li>
+          <li>Ambulance 24/7: <strong class="text-white">+91 98460 99999</strong></li>
+          <li>Office Secretary: <strong class="text-white">+91 495 2724800</strong></li>
+        </ul>
+      </div>
+
+      <div>
+        <h6 class="font-bold text-white uppercase text-[11px] mb-3">Community Portals</h6>
+        <p class="text-slate-400 leading-relaxed mb-3">Use the top role switcher to preview features as a Public Visitor, Resident, or Executive Secretary.</p>
+        <span class="px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-mono">
+          PWA Ready • Zero Flutter
+        </span>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800 text-center text-slate-500 text-[11px]">
+      &copy; 2026 Noorul Huda Mahall Jama'ath. All Rights Reserved. Built for Hackathon Excellence.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function submitInquiryForm() {
+      const name = document.getElementById('inq-name').value.trim();
+      const phone = document.getElementById('inq-phone').value.trim();
+      const category = document.getElementById('inq-category').value;
+      const ward = document.getElementById('inq-ward').value.trim() || 'General Resident';
+      const message = document.getElementById('inq-msg').value.trim();
+
+      if (!name || !phone || !message) {
+        if (window.app) window.app.showToast('Please fill out all required fields marked with *', 'warning');
+        return;
+      }
+
+      let newInq = null;
+      if (typeof MahallDB !== 'undefined' && MahallDB.addInquiry) {
+        newInq = MahallDB.addInquiry({
+          name: name,
+          phone: phone,
+          category: category,
+          ward: ward,
+          message: message
+        });
+      }
+
+      const refId = newInq ? newInq.id : `INQ-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      if (window.app) {
+        window.app.showToast(`Thank you, ${name}! Your inquiry has been routed to the Secretary console with ref: ${refId}.`, 'success');
+        document.getElementById('inq-name').value = '';
+        document.getElementById('inq-phone').value = '';
+        document.getElementById('inq-ward').value = '';
+        document.getElementById('inq-msg').value = '';
+      }
+    }
+
+    function syncImamProfiles() {
+      if (typeof MahallDB === 'undefined') return;
+      const imam = MahallDB.getImamDetails ? MahallDB.getImamDetails() : {};
+      
+      const imamNameEl = document.getElementById('about-imam-name');
+      if (imamNameEl && imam.name) imamNameEl.textContent = imam.name;
+
+      const imamDesigEl = document.getElementById('about-imam-designation');
+      if (imamDesigEl && (imam.designation || imam.sanad)) {
+        imamDesigEl.textContent = `${imam.designation || 'Head Khateeb & Chief Arbitrator'} • ${imam.sanad || ''}`.replace(/ • $/, '');
+      }
+
+      const imamBadgeEl = document.getElementById('about-imam-badge');
+      if (imamBadgeEl && imam.designation) imamBadgeEl.textContent = imam.designation;
+
+      const imamBioEl = document.getElementById('about-imam-bio');
+      if (imamBioEl && imam.bio) imamBioEl.textContent = imam.bio;
+
+      const imamPhoneEl = document.getElementById('about-imam-phone');
+      if (imamPhoneEl && imam.phone) imamPhoneEl.textContent = imam.phone;
+
+      const imamHoursEl = document.getElementById('about-imam-hours');
+      if (imamHoursEl && imam.officeHours) imamHoursEl.textContent = imam.officeHours;
+
+      const secondNameEl = document.getElementById('about-second-imam-name');
+      if (secondNameEl && imam.secondImam) secondNameEl.textContent = imam.secondImam;
+
+      const secondPhoneEl = document.getElementById('about-second-imam-phone');
+      if (secondPhoneEl && imam.secondImamPhone) secondPhoneEl.textContent = imam.secondImamPhone;
+
+      const muazzinNameEl = document.getElementById('about-muazzin-name');
+      if (muazzinNameEl && imam.muazzin) muazzinNameEl.textContent = imam.muazzin;
+
+      const avatarEl = document.getElementById('about-imam-avatar');
+      if (avatarEl && imam.name) {
+        const parts = imam.name.split(' ').filter(p => !['Usthad', 'Maulana', 'Moulavi'].includes(p));
+        avatarEl.textContent = parts.slice(0, 2).map(p => p[0]).join('').toUpperCase() || 'AR';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      window.app = new MahallApp();
+
+      // Sync official scholar profiles from MahallDB
+      syncImamProfiles();
+
+      // Reactive listener for admin updates across tabs
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'mahall_imam_details' || e.key === 'mahall_khatib_details') {
+          syncImamProfiles();
+        }
+      });
+      window.addEventListener('mahalldb_updated', () => {
+        syncImamProfiles();
+      });
+
+      // Live Preview for Inquiry Form
+      function updateAboutInquiryPreview() {
+        const name = (document.getElementById('inq-name') ? document.getElementById('inq-name').value.trim() : '') || 'Your Full Name';
+        const phone = (document.getElementById('inq-phone') ? document.getElementById('inq-phone').value.trim() : '') || '+91 98765 43210';
+        const catSelect = document.getElementById('inq-category');
+        const catText = catSelect ? catSelect.options[catSelect.selectedIndex].text : 'General Mahall Inquiry';
+        const ward = (document.getElementById('inq-ward') ? document.getElementById('inq-ward').value.trim() : '') || 'Resident';
+        const msg = (document.getElementById('inq-msg') ? document.getElementById('inq-msg').value.trim() : '') || 'Write your inquiry or message here...';
+
+        const elName = document.getElementById('preview-inq-name');
+        const elPhone = document.getElementById('preview-inq-phone');
+        const elCat = document.getElementById('preview-inq-category');
+        const elWard = document.getElementById('preview-inq-ward');
+        const elMsg = document.getElementById('preview-inq-msg');
+
+        if (elName) elName.textContent = name;
+        if (elPhone) elPhone.textContent = phone;
+        if (elCat) elCat.textContent = catText.split('/')[0].trim();
+        if (elWard) elWard.textContent = `Ward: ${ward}`;
+        if (elMsg) elMsg.textContent = `"${msg}"`;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      updateAboutInquiryPreview();
+      ['inq-name', 'inq-phone', 'inq-category', 'inq-ward', 'inq-msg'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', updateAboutInquiryPreview);
+          el.addEventListener('change', updateAboutInquiryPreview);
+        }
+      });
+
+      // Scrolled navbar capsule morph
+      const header = document.getElementById('main-header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      });
+    });
+  </script>
+  <!-- Notification Drawer Container -->
+  <div id="notification-drawer" class="hidden"></div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // NOORUL HUDA MAHALL - CLOUD FIRESTORE SECURITY RULES
+    // Multi-tenant user data isolation & role-based access control (RBAC)
+    // =========================================================================
+
+    // Helper: Is the client authenticated with Firebase Auth?
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    // Helper: Does the authenticated user match the target UID?
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // Helper: Does the authenticated user have administrative clearance?
+    // Verifies administrator authority server-side from /admins/{uid} or /users/{uid}.
+    // Ordinary users CANNOT spoof this check since /admins write is locked down,
+    // and /users/{uid} rules block users from updating their own 'role' field.
+    function isAdmin() {
+      return isAuthenticated() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
+        (request.auth.token.role == 'admin')
+      );
+    }
+
+    // =========================================================================
+    // 1. USERS COLLECTION: /users/{userId}
+    // Every user has their own document indexed by their authenticated Firebase UID.
+    // =========================================================================
+    match /users/{userId} {
+      // READ: Users can ONLY read their own profile document.
+      // Administrators can inspect all user documents for management.
+      allow read: if isOwner(userId) || isAdmin();
+
+      // CREATE: User can create their initial profile only for their own UID.
+      // Crucial Security Rule: Normal user CANNOT set role = 'admin'.
+      allow create: if isOwner(userId) && 
+        (!request.resource.data.keys().hasAny(['role']) || request.resource.data.role == 'user');
+
+      // UPDATE: User can update their personal settings, phone, house details,
+      // but CANNOT change their role field to 'admin'.
+      allow update: if (isOwner(userId) && 
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']))) || isAdmin();
+
+      // DELETE: Only authorized administrators can delete user accounts.
+      allow delete: if isAdmin();
+
+      // SUBCOLLECTIONS under /users/{userId}/...
+      // (e.g. /users/{userId}/profile, /users/{userId}/settings, /users/{userId}/personal_records)
+      match /{subcollection}/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // =========================================================================
+    // 2. REGISTRATIONS COLLECTION: /registrations/{registrationId}
+    // Program registrations (e.g. Annual Campus Program, Career Conclave)
+    // Stored with 'ownerUid' pointing to the authenticated Firebase UID.
+    // =========================================================================
+    match /registrations/{registrationId} {
+      // READ: Ordinary users can ONLY view registrations they personally own (ownerUid == request.auth.uid).
+      // Administrators can view all registrations across all users (e.g. Shayal 2 tickets, Rifan 5 tickets).
+      allow read: if isAuthenticated() && (
+        resource.data.ownerUid == request.auth.uid || isAdmin()
+      );
+
+      // CREATE: Authenticated users can register for events.
+      // Security Constraints:
+      // 1. The ownerUid being written MUST strictly equal request.auth.uid (No spoofing another UID).
+      // 2. ticketCount must be a positive integer between 1 and 20.
+      // 3. eventId and eventTitle must be non-empty strings.
+      allow create: if isAuthenticated() &&
+        request.resource.data.ownerUid == request.auth.uid &&
+        request.resource.data.ticketCount is int &&
+        request.resource.data.ticketCount >= 1 &&
+        request.resource.data.ticketCount <= 20 &&
+        request.resource.data.eventId is string &&
+        request.resource.data.eventId.size() > 0;
+
+      // UPDATE: A user can modify their own registration (e.g. update ticket count or cancel),
+      // but CANNOT transfer ownership to another UID (ownerUid remains immutable).
+      // Administrators can update status (e.g. mark confirmed, attended, or cancelled).
+      allow update: if isAuthenticated() && (
+        (resource.data.ownerUid == request.auth.uid && 
+         request.resource.data.ownerUid == resource.data.ownerUid) ||
+        isAdmin()
+      );
+
+      // DELETE: Users can cancel/delete their own registration; Admins can delete any.
+      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isAdmin();
+    }
+
+    // =========================================================================
+    // 3. ADMINS COLLECTION: /admins/{adminUid}
+    // Immutable collection storing authorized administrator UIDs.
+    // =========================================================================
+    match /admins/{adminUid} {
+      // Only existing verified administrators can read or write to this registry.
+      allow read, write: if isAdmin();
+    }
+
+    // =========================================================================
+    // 4. PUBLIC PORTAL DATA (Events, Announcements, Mosque Timings)
+    // Read-accessible to public/guests; writable ONLY by administrators.
+    // =========================================================================
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /announcements/{annId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /prayer_times/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

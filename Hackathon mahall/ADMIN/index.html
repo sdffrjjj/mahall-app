@@ -1,0 +1,2889 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executive Administration Portal | Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Dedicated administrative command center for Noorul Huda Mahall Jama'ath." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="../assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="../assets/images/mahall_logo.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              300: '#6ee7b7',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309'
+            },
+            slate: {
+              850: '#151f32',
+              900: '#0f172a',
+              950: '#090d16'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Immediate Administrative Security Guard -->
+  <script>
+    (function () {
+      try {
+        const savedSession = localStorage.getItem('mahall_auth_session');
+        const role = localStorage.getItem('nhm_role');
+        if (savedSession) {
+          const parsed = JSON.parse(savedSession);
+          if (parsed.isAuthenticated && parsed.role && parsed.role !== 'admin') {
+            window.location.replace('../unauthorized.html');
+          }
+        } else if (role && role !== 'admin' && role !== 'public') {
+          window.location.replace('../unauthorized.html');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Lucide Icons & Chart.js -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="../css/styles.css" />
+
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .font-arabic {
+      font-family: 'Amiri', serif;
+    }
+    .font-malayalam {
+      font-family: 'Noto Sans Malayalam', sans-serif;
+    }
+    .font-heading {
+      font-family: 'Outfit', sans-serif;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #047857;
+    }
+    /* Fixed Sidebar Navigation Scrollbar */
+    #admin-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    #admin-sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #admin-sidebar::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    #admin-sidebar::-webkit-scrollbar-thumb:hover {
+      background: #059669;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .edu-subpane {
+      display: none;
+    }
+    .edu-subpane.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-modal-content, #print-modal-content * {
+        visibility: visible;
+      }
+      #print-modal-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-600 selection:text-white antialiased">
+
+  <!-- ==========================================================================
+       LOGIN OVERLAY SCREEN (AUTHENTICATION GATEKEEPER)
+       ========================================================================== -->
+  <div id="admin-login-screen" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-xl flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-slate-900 border border-emerald-900/50 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+      <!-- Decorative Backdrop Glow -->
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="text-center relative z-10 mb-6">
+        <div class="inline-flex p-3 bg-emerald-950/80 border border-emerald-700/40 rounded-2xl mb-3 shadow-inner">
+          <img src="../assets/images/mahall_logo.jpg" alt="Noorul Huda Logo" class="w-16 h-16 rounded-xl object-cover ring-2 ring-emerald-500/50" />
+        </div>
+        <h1 class="text-xl font-heading font-bold text-white tracking-wide">NOORUL HUDA MAHALL</h1>
+        <p class="text-xs text-emerald-400 font-semibold uppercase tracking-widest mt-1">Executive Administration Portal</p>
+        <p class="text-xs text-slate-400 mt-2">Restricted Access: Authorized Committee Members & Office Staff Only</p>
+      </div>
+
+      <form id="login-form" onsubmit="AdminApp.handleLogin(event)" class="space-y-4 relative z-10">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Executive Passkey / Admin Secret</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i data-lucide="key-round" class="w-4 h-4"></i>
+            </span>
+            <input type="password" id="admin-passkey-input" placeholder="Enter passkey (e.g. admin2026)" required
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none transition" />
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1.5 flex items-center justify-between">
+            <span>Executive Passkey: <code class="text-emerald-400 font-mono bg-emerald-950/60 px-1 py-0.5 rounded">admin2026</code></span>
+            <span class="text-amber-400/80">Secured 256-bit AES</span>
+          </p>
+        </div>
+
+        <div id="login-error-msg" class="hidden p-3 bg-rose-950/80 border border-rose-800 rounded-xl text-rose-300 text-xs flex items-center gap-2">
+          <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+          <span>Invalid passkey. Please verify with Mahall General Secretary office.</span>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-semibold rounded-xl shadow-lg shadow-emerald-900/40 hover:shadow-emerald-700/50 transition flex items-center justify-center gap-2 text-sm">
+          <i data-lucide="lock" class="w-4 h-4"></i>
+          <span>Authenticate & Open Portal</span>
+        </button>
+
+        <div class="pt-2 text-center border-t border-slate-800">
+          <a href="../index.html" class="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-emerald-400 transition">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>Return to Public Website</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       TOP EXECUTIVE NAVIGATION & STATUS BAR
+       ========================================================================== -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-md">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
+      <!-- Left: Logo & Portal Title -->
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <button id="sidebar-toggle-btn" onclick="AdminApp.toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 shrink-0" aria-label="Toggle Navigation Menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group min-w-0">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-900/50 border border-emerald-500/40 p-0.5 flex items-center justify-center overflow-hidden shrink-0">
+            <img src="../assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall" class="w-full h-full object-cover rounded-lg" />
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="font-heading font-bold text-white tracking-wide text-sm sm:text-base whitespace-nowrap">NOORUL HUDA MAHALL</span>
+              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/60 hidden sm:inline-block shrink-0">ADMIN</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Center: Live English & Arabic Timings Only -->
+      <div class="hidden lg:flex items-center gap-3 text-xs bg-slate-950/80 border border-slate-800 px-3.5 py-1.5 rounded-xl shadow-inner">
+        <!-- English Timing -->
+        <div class="flex items-center gap-2 text-slate-200" title="English Gregorian Timing">
+          <div class="w-6 h-6 rounded-lg bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800/60">EN</span>
+            <span id="live-gregorian-date" class="font-mono text-xs font-semibold text-slate-200 whitespace-nowrap">Loading English Timing...</span>
+          </div>
+        </div>
+
+        <span class="text-slate-700 font-light select-none">|</span>
+
+        <!-- Arabic Timing -->
+        <div class="flex items-center gap-2 text-amber-200" title="التوقيت والتقويم الهجري">
+          <div class="w-6 h-6 rounded-lg bg-amber-950/80 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+            <i data-lucide="moon" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="flex items-center gap-1.5 font-arabic">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-950 px-1.5 py-0.5 rounded border border-amber-800/60 font-sans">AR</span>
+            <span id="live-hijri-date" class="text-xs font-semibold tracking-wide text-amber-300 whitespace-nowrap">جارٍ التحميل...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Quick Links, Public Website Trigger, Admin Avatar & Logout -->
+      <div class="flex items-center gap-3">
+        <!-- Live Firebase Status Indicator Button -->
+        <button onclick="AdminApp.switchTab('firebase')" id="top-firebase-indicator"
+          class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800/90 hover:bg-slate-700 border border-slate-700 hover:border-amber-500/50 text-xs font-semibold text-slate-200 hover:text-white rounded-xl transition shadow-sm"
+          title="Firebase Cloud Database & Sync Configuration">
+          <span id="top-firebase-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span id="top-firebase-text">Firebase: Local</span>
+        </button>
+
+        <!-- View Public Site Button -->
+        <a href="../index.html" target="_blank"
+          class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 text-xs font-semibold text-slate-200 hover:text-white rounded-xl transition shadow-sm">
+          <i data-lucide="external-link" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span class="hidden sm:inline">View Public Website</span>
+        </a>
+
+        <!-- Secretary Avatar Badge -->
+        <div class="flex items-center gap-2 pl-2 border-l border-slate-800">
+          <div class="w-8 h-8 rounded-full bg-emerald-700 border border-emerald-500/60 flex items-center justify-center font-bold text-white text-xs">
+            GS
+          </div>
+          <div class="hidden md:block text-left">
+            <p class="text-xs font-semibold text-white leading-tight">P. K. Abdurahman</p>
+            <p class="text-[10px] text-emerald-400 leading-tight">General Secretary</p>
+          </div>
+          <button onclick="AdminApp.handleLogout()" title="Log out from executive portal"
+            class="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition ml-1">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN WORKSPACE (SIDEBAR + CONTENT PANELS)
+       ========================================================================== -->
+  <div class="flex-1 flex max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 gap-6 relative">
+
+    <!-- SIDEBAR NAVIGATION (FIXED / STICKY ON SCREEN) -->
+    <aside id="admin-sidebar"
+      class="fixed inset-y-0 left-0 z-30 w-72 bg-slate-900 border-r border-slate-800 p-4 transform -translate-x-full lg:translate-x-0 lg:sticky lg:top-20 lg:w-64 lg:h-[calc(100vh-5.5rem)] lg:p-0 lg:bg-transparent lg:border-none transition-transform duration-300 ease-in-out shrink-0 overflow-y-auto pr-1">
+      <div class="flex lg:hidden items-center justify-between pb-4 mb-4 border-b border-slate-800">
+        <span class="font-heading font-bold text-white">Navigation</span>
+        <button onclick="AdminApp.toggleSidebar()" class="p-1.5 text-slate-400 hover:text-white rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <nav class="space-y-1">
+        <button onclick="AdminApp.switchTab('dashboard')" id="nav-btn-dashboard"
+          class="sidebar-nav-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-left text-white bg-emerald-900/60 border border-emerald-700/50">
+          <div class="flex items-center gap-3">
+            <i data-lucide="layout-dashboard" class="w-4 h-4 text-emerald-400"></i>
+            <span>Overview & Dashboard</span>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('prayer')" id="nav-btn-prayer"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+            <span>Prayer Times & Scholars</span>
+          </div>
+        </button>
+
+        <button onclick="AdminApp.switchTab('announcements')" id="nav-btn-announcements"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="megaphone" class="w-4 h-4 text-rose-400"></i>
+            <span>Announcements & Alerts</span>
+          </div>
+          <span id="badge-ann-count" class="px-1.5 py-0.5 text-[10px] rounded-md bg-rose-950 text-rose-300 border border-rose-800">4</span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('events')" id="nav-btn-events"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="calendar-days" class="w-4 h-4 text-sky-400"></i>
+            <span>Events & Calendar</span>
+          </div>
+        </button>
+
+        <button onclick="AdminApp.switchTab('registrations')" id="nav-btn-registrations"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="ticket" class="w-4 h-4 text-amber-400"></i>
+            <span>Program Registrations</span>
+          </div>
+          <span id="badge-registrations-count" class="px-1.5 py-0.5 text-[10px] rounded-md bg-amber-950 text-amber-300 border border-amber-800 font-mono">0</span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('users')" id="nav-btn-users"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+            <span>Family Authenticators</span>
+          </div>
+          <span id="badge-users-count" class="px-1.5 py-0.5 text-[10px] rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono">0</span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('census')" id="nav-btn-census"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
+            <span>Census & Families</span>
+          </div>
+          <span id="badge-families-count" class="px-1.5 py-0.5 text-[10px] rounded-md bg-slate-800 text-slate-300">3</span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('certificates')" id="nav-btn-certificates"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="file-check-2" class="w-4 h-4 text-amber-400"></i>
+            <span>Certificates & Verification</span>
+          </div>
+          <span id="badge-pending-certs" class="px-1.5 py-0.5 text-[10px] rounded-md bg-amber-950 text-amber-300 border border-amber-800">1</span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('madrasa')" id="nav-btn-madrasa"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-400"></i>
+            <span>Education & Madrasa</span>
+          </div>
+          <span id="badge-edu-nav-pending" class="px-1.5 py-0.5 text-[10px] rounded-md bg-amber-950 text-amber-300 border border-amber-800">0</span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('finance')" id="nav-btn-finance"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i>
+            <span>Baitulmal & Dues Desk</span>
+          </div>
+        </button>
+
+        <button onclick="AdminApp.switchTab('sulhu')" id="nav-btn-sulhu"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="scale" class="w-4 h-4 text-purple-400"></i>
+            <span>Sulhu Mediation Desk</span>
+          </div>
+        </button>
+
+        <button onclick="AdminApp.switchTab('community')" id="nav-btn-community"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="heart-handshake" class="w-4 h-4 text-rose-400"></i>
+            <span>Donors & Bookings</span>
+          </div>
+        </button>
+
+        <button onclick="AdminApp.switchTab('gallery')" id="nav-btn-gallery"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="image" class="w-4 h-4 text-teal-400"></i>
+            <span>Photo Gallery</span>
+          </div>
+        </button>
+
+        <button onclick="AdminApp.switchTab('inquiries')" id="nav-btn-inquiries"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i>
+            <span>Messages & Inquiries</span>
+          </div>
+          <span id="badge-inquiries-count" class="px-1.5 py-0.5 text-[10px] rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800">1</span>
+        </button>
+
+        <button onclick="AdminApp.switchTab('settings')" id="nav-btn-settings"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="settings" class="w-4 h-4 text-slate-400"></i>
+            <span>Mahall Settings & Brand</span>
+          </div>
+        </button>
+
+        <button onclick="AdminApp.switchTab('firebase')" id="nav-btn-firebase"
+          class="sidebar-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition text-left text-slate-300 hover:text-white hover:bg-slate-900/80">
+          <div class="flex items-center gap-3">
+            <i data-lucide="database-zap" class="w-4 h-4 text-amber-400"></i>
+            <span>Firebase Cloud DB</span>
+          </div>
+          <span id="badge-firebase-status" class="px-1.5 py-0.5 text-[10px] rounded-md bg-amber-950 text-amber-300 border border-amber-800 font-mono">Local</span>
+        </button>
+      </nav>
+
+      <!-- System Quick Status Card -->
+      <div class="mt-6 p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-semibold text-slate-300">Database Engine</span>
+          <span class="text-[10px] text-emerald-400 font-mono">v3.8 (Reactive)</span>
+        </div>
+        <p class="text-[11px] leading-relaxed">Changes saved here are instantly synchronized across the public website via reactive local events.</p>
+        <button onclick="AdminApp.exportDB()" class="w-full py-1.5 px-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-[11px] font-medium flex items-center justify-center gap-1.5 transition">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Backup JSON Dump</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT WORKSPACE -->
+    <main class="flex-1 min-w-0">
+
+      <!-- ====================================================================
+           TAB 1: EXECUTIVE OVERVIEW & DASHBOARD
+           ==================================================================== -->
+      <section id="tab-dashboard" class="tab-content active space-y-6">
+        <!-- Welcome Hero Banner -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 border border-emerald-800/40 p-6 sm:p-8 shadow-xl">
+          <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-emerald-600/10 rounded-full blur-2xl"></div>
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/60 border border-emerald-700/60 text-emerald-300 text-xs font-semibold mb-3">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                <span>Executive Command Center</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white">Assalamu Alaikum, Secretary Office</h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                Welcome to the unified administrative portal for Noorul Huda Mahall Jama'ath. Manage prayer times, announcements, census registers, certificates, and community services from one central dashboard.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <button onclick="AdminApp.openAnnouncementModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Broadcast Notice</span>
+              </button>
+              <button onclick="AdminApp.openAddFamilyModal()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                <span>Register Family</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Statistic Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-emerald-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Registered Families</span>
+              <div class="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/50">
+                <i data-lucide="home" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span id="kpi-families-count" class="text-2xl sm:text-3xl font-bold font-heading text-white">0</span>
+              <span class="text-xs text-emerald-400">Ward 1 to 5</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Verified Mahall Census Records</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-amber-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pending Certificates</span>
+              <div class="p-2 rounded-xl bg-amber-950 text-amber-400 border border-amber-800/50">
+                <i data-lucide="file-text" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span id="kpi-pending-certs" class="text-2xl sm:text-3xl font-bold font-heading text-amber-400">0</span>
+              <span class="text-xs text-amber-400/80">Awaiting Sign</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">NOC & Residence applications</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-emerald-500/50 transition cursor-pointer" onclick="AdminApp.switchTab('inquiries')">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">User Messages</span>
+              <div class="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/50">
+                <i data-lucide="message-square" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span id="kpi-inquiries-count" class="text-2xl sm:text-3xl font-bold font-heading text-emerald-400">0</span>
+              <span class="text-xs text-emerald-300">Live Inquiries</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Public Inquiries & Submissions</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-rose-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Bulletins</span>
+              <div class="p-2 rounded-xl bg-rose-950 text-rose-400 border border-rose-800/50">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span id="kpi-announcements-count" class="text-2xl sm:text-3xl font-bold font-heading text-white">0</span>
+              <span class="text-xs text-rose-400">Live on Public Site</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Janazah & Community Circulars</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-sky-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Blood Donors Ready</span>
+              <div class="p-2 rounded-xl bg-sky-950 text-sky-400 border border-sky-800/50">
+                <i data-lucide="droplet" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span id="kpi-donors-count" class="text-2xl sm:text-3xl font-bold font-heading text-white">0</span>
+              <span class="text-xs text-sky-400">Emergency Relief</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Verified Mahall Youth Wing</p>
+          </div>
+        </div>
+
+        <!-- Quick Modules Split: Today's Prayer Timetable + Live Audit Logs -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Left 2 Cols: Live Prayer Sync Preview -->
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+              <div>
+                <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                  <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
+                  <span>Live Prayer Schedule & Public Mosque Display</span>
+                </h3>
+                <p class="text-xs text-slate-400">Timetable broadcasted directly on public prayer cards and mosque LED displays</p>
+              </div>
+              <button onclick="AdminApp.switchTab('prayer')" class="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
+                <span>Manage All Prayers</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3" id="dash-prayers-grid">
+              <!-- Rendered via Javascript -->
+            </div>
+
+            <div class="mt-4 p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-2 text-slate-300">
+                <i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                <span>Jum'ah Khutbah: <strong class="text-white" id="dash-jumua-khutbah">12:45 PM</strong> | Khatib: <strong class="text-emerald-400" id="dash-jumua-khatib">Usthad Maulana Abdul Rasheed Faizy</strong></span>
+              </div>
+              <button onclick="AdminApp.switchTab('prayer')" class="px-3 py-1.5 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 rounded-lg text-[11px] font-semibold transition shrink-0">
+                Edit Khatib & Imam
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Col: Real-time Audit Trail -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="history" class="w-4 h-4 text-amber-400"></i>
+                <span>Recent System Activities</span>
+              </h3>
+              <span class="text-[10px] text-slate-500 font-mono">Live Audit</span>
+            </div>
+
+            <div class="flex-1 space-y-3 overflow-y-auto max-h-[300px] pr-1" id="dash-activity-logs">
+              <!-- Activity log entries populated dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Inquiries & Citizen Messages Overview Strip -->
+        <div class="bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-900/40 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-3">
+            <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 shrink-0">
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+            </span>
+            <div>
+              <span class="font-bold text-white">Public Submissions & Inquiries Desk</span>
+              <p class="text-[11px] text-slate-400 mt-0.5">Citizen messages submitted via the public contact forms arrive directly into the Secretary inbox.</p>
+            </div>
+          </div>
+          <button onclick="AdminApp.switchTab('inquiries')" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition shrink-0 shadow-sm">
+            <span>Open Inquiries Console</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 2: PRAYER TIMES & SCHOLARLY LEADERSHIP (AUTOMATED TIMINGS & IMAM / KHATIB DESK)
+           ==================================================================== -->
+      <section id="tab-prayer" class="tab-content space-y-6">
+        <!-- Section Header with Auto-Calculation Badge & Save Button -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="clock" class="w-5 h-5 text-emerald-400"></i>
+                <span>Mosque Prayer Timetable & Scholar Leadership Desk</span>
+              </h2>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                ⚡ Auto-Calculated
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">Daily prayer times and Ramadan schedules are computed automatically via astronomical solar calculations for Calicut (11.2588° N, 75.7804° E). Edit Imam Usthad and Friday Jum'ah Khatheeb details below.</p>
+          </div>
+          <button onclick="AdminApp.saveImamAndKhatib()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition shrink-0">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span>Save Leadership Profiles</span>
+          </button>
+        </div>
+
+        <!-- 1. LIVE AUTOMATED PRAYER TIMETABLE (READ-ONLY TELEMETRY) -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">
+                <i data-lucide="compass" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h3 class="text-sm font-heading font-bold text-white">Live Automated Congregational Timetable</h3>
+                <p class="text-[11px] text-slate-400">Auto-updated based on Kerala Sunni Shafi'i Juma'ath Calculation • No manual entry needed</p>
+              </div>
+            </div>
+            <div class="text-[11px] text-emerald-400 font-mono bg-emerald-950/60 border border-emerald-800/60 px-3 py-1 rounded-lg">
+              <span id="auto-prayer-calc-stamp">Syncing Real-Time Solar Model...</span>
+            </div>
+          </div>
+
+          <!-- 6 Daily Prayer Cards (Auto Computed) -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <!-- Fajr -->
+            <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3.5 text-center relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-400">Fajr</span>
+                <span class="text-[10px] text-indigo-400/80 font-arabic">الفجر</span>
+              </div>
+              <div class="text-base font-black font-mono text-white" id="auto-card-fajr-adhan">--:-- --</div>
+              <div class="mt-1 text-[11px] text-emerald-400 font-mono font-bold">
+                Iqamah: <span id="auto-card-fajr-iqamah">--:-- --</span>
+              </div>
+            </div>
+
+            <!-- Sunrise -->
+            <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3.5 text-center relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Sunrise</span>
+                <span class="text-[10px] text-amber-400/80 font-arabic">الشروق</span>
+              </div>
+              <div class="text-base font-black font-mono text-white" id="auto-card-sunrise">--:-- --</div>
+              <div class="mt-1 text-[11px] text-amber-400 font-mono">
+                Ishraq: <span id="auto-card-ishraq">--:-- --</span>
+              </div>
+            </div>
+
+            <!-- Dhuhr -->
+            <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3.5 text-center relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Dhuhr</span>
+                <span class="text-[10px] text-emerald-400/80 font-arabic">الظهر</span>
+              </div>
+              <div class="text-base font-black font-mono text-white" id="auto-card-dhuhr-adhan">--:-- --</div>
+              <div class="mt-1 text-[11px] text-emerald-400 font-mono font-bold">
+                Iqamah: <span id="auto-card-dhuhr-iqamah">--:-- --</span>
+              </div>
+            </div>
+
+            <!-- Asr -->
+            <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3.5 text-center relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-orange-400">Asr</span>
+                <span class="text-[10px] text-orange-400/80 font-arabic">العصر</span>
+              </div>
+              <div class="text-base font-black font-mono text-white" id="auto-card-asr-adhan">--:-- --</div>
+              <div class="mt-1 text-[11px] text-emerald-400 font-mono font-bold">
+                Iqamah: <span id="auto-card-asr-iqamah">--:-- --</span>
+              </div>
+            </div>
+
+            <!-- Maghrib -->
+            <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3.5 text-center relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-rose-400">Maghrib</span>
+                <span class="text-[10px] text-rose-400/80 font-arabic">المغرب</span>
+              </div>
+              <div class="text-base font-black font-mono text-white" id="auto-card-maghrib-adhan">--:-- --</div>
+              <div class="mt-1 text-[11px] text-emerald-400 font-mono font-bold">
+                Iqamah: <span id="auto-card-maghrib-iqamah">--:-- --</span>
+              </div>
+            </div>
+
+            <!-- Isha -->
+            <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3.5 text-center relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-purple-400">Isha</span>
+                <span class="text-[10px] text-purple-400/80 font-arabic">العشاء</span>
+              </div>
+              <div class="text-base font-black font-mono text-white" id="auto-card-isha-adhan">--:-- --</div>
+              <div class="mt-1 text-[11px] text-emerald-400 font-mono font-bold">
+                Iqamah: <span id="auto-card-isha-iqamah">--:-- --</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ramadan Automated Timings Strip (Read-Only) -->
+          <div class="p-3.5 rounded-xl bg-gradient-to-r from-amber-950/30 via-slate-950/60 to-emerald-950/30 border border-amber-900/30 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5">
+              <span class="p-2 rounded-xl bg-amber-500/20 text-amber-400 shrink-0">
+                <i data-lucide="moon" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <span class="font-bold text-amber-300">Ramadan & Fasting Automated Engine:</span>
+                <span class="text-slate-400 ml-1">Suhoor cutoff (Imsak) stops 10 mins before astronomical Fajr. Iftar coincides with Sunset (Maghrib).</span>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 text-xs font-mono">
+              <div class="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                <span class="text-slate-400 text-[10px] uppercase block">Suhoor Cutoff (Imsak)</span>
+                <span class="text-amber-300 font-bold" id="auto-card-suhoor">--:-- --</span>
+              </div>
+              <div class="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                <span class="text-slate-400 text-[10px] uppercase block">Daily Iftar (Maghrib)</span>
+                <span class="text-emerald-400 font-bold" id="auto-card-iftar">--:-- --</span>
+              </div>
+              <div class="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                <span class="text-slate-400 text-[10px] uppercase block">Taraweeh (20 Raka'ahs)</span>
+                <span class="text-purple-300 font-bold" id="auto-card-taraweeh">--:-- --</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. EDITABLE SCHOLAR & LEADERSHIP FORMS: IMAM USTHAD & FRIDAY KHATHEEB -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- CARD A: CHIEF IMAM USTHAD PROFILE (EDITABLE) -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-2.5">
+                <span class="p-2 rounded-xl bg-emerald-500/20 text-emerald-400">
+                  <i data-lucide="user-check" class="w-5 h-5"></i>
+                </span>
+                <div>
+                  <h3 class="text-base font-heading font-bold text-white">Chief Imam Usthad & Scholars</h3>
+                  <p class="text-[11px] text-slate-400">Configure Chief Imam Usthad, assistant Imams, and official consultation timings</p>
+                </div>
+              </div>
+              <span class="text-xs text-emerald-400 font-arabic">الإمام الراتب</span>
+            </div>
+
+            <div class="space-y-4 text-xs">
+              <div>
+                <label class="block text-slate-300 font-semibold mb-1">Chief Imam Usthad Full Name *</label>
+                <input type="text" id="imam-fullname" placeholder="e.g. Usthad Maulana Abdul Rasheed Faizy" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white font-medium focus:border-emerald-500 focus:outline-none" />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-slate-400 mb-1">Official Designation</label>
+                  <input type="text" id="imam-designation" placeholder="e.g. Chief Imam & Qazi" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Sanad / Academic Degree</label>
+                  <input type="text" id="imam-sanad" placeholder="e.g. Jamia Nooriya Al-Arabiyya & Al-Azhar" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-slate-400 mb-1">Direct Contact / WhatsApp</label>
+                  <input type="text" id="imam-phone" placeholder="e.g. +91 94472 11223" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Office Consultation Hours</label>
+                  <input type="text" id="imam-hours" placeholder="e.g. Post-Asr to Maghrib (Daily)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-800/80">
+                <div>
+                  <label class="block text-slate-400 mb-1">Second Imam / Hafiz</label>
+                  <input type="text" id="second-imam" placeholder="e.g. Hafiz Salmanul Farisi" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Chief Mu'azzin</label>
+                  <input type="text" id="chief-muazzin" placeholder="e.g. Bilal Koya" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-slate-400 mb-1">Imam Bio / Profile Overview</label>
+                <textarea id="imam-bio" rows="2" placeholder="Brief scholar biography displayed on public about & directory pages..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white text-xs focus:border-emerald-500 focus:outline-none resize-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD B: FRIDAY JUM'AH KHATHEEB & SERMON MANAGEMENT (EDITABLE) -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-2.5">
+                <span class="p-2 rounded-xl bg-amber-500/20 text-amber-400">
+                  <i data-lucide="mic" class="w-5 h-5"></i>
+                </span>
+                <div>
+                  <h3 class="text-base font-heading font-bold text-white">Friday Jum'ah Khateeb & Sermon Desk</h3>
+                  <p class="text-[11px] text-slate-400">Designate weekly Khateeb, sermon subject, and congregation advisories</p>
+                </div>
+              </div>
+              <span class="text-xs text-amber-400 font-arabic">خطيب الجمعة</span>
+            </div>
+
+            <div class="space-y-4 text-xs">
+              <div>
+                <label class="block text-slate-300 font-semibold mb-1">Designated Khatib / Scholar Usthad *</label>
+                <input type="text" id="khatib-name" placeholder="e.g. Usthad Maulana Abdul Rasheed Faizy" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white font-medium focus:border-emerald-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-slate-400 mb-1">Khutbah Sermon Topic (English)</label>
+                <input type="text" id="khutbah-topic" placeholder="e.g. Compassion in Community Living & Mutual Respect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-slate-400 mb-1">Khutbah Topic (Malayalam / മലയാളം)</label>
+                <input type="text" id="khutbah-topic-ml" placeholder="e.g. സാമൂഹിക ജീവിതത്തിലെ കാരുണ്യവും പരസ്പര ബഹുമാനവും" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-slate-400 mb-1">Khutbah Language</label>
+                  <input type="text" id="khutbah-lang" placeholder="e.g. Malayalam & Arabic" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Khutbah Time</label>
+                  <input type="text" id="khutbah-time" placeholder="12:45 PM" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Salah (Prayer) Time</label>
+                  <input type="text" id="khutbah-salah-time" placeholder="01:15 PM" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-mono font-bold focus:border-emerald-500 focus:outline-none" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-slate-400 mb-1">Jum'ah Congregation Special Notes / Volunteer Advisory</label>
+                <textarea id="khutbah-notes" rows="2" placeholder="e.g. Volunteers requested at 11:30 AM for parking assistance. Live audio streaming enabled on Mahall FM." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white text-xs focus:border-emerald-500 focus:outline-none resize-none"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky Save Floating Bar / Bottom Action -->
+        <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-900 border border-slate-800">
+          <div class="flex items-center gap-2 text-xs text-slate-400">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+            <span>All modifications to Imam Usthad & Friday Khatheeb instantly synchronize across the public portal.</span>
+          </div>
+          <button onclick="AdminApp.saveImamAndKhatib()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span>Save Leadership Profiles</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 3: ANNOUNCEMENTS & EMERGENCY BROADCAST STUDIO
+           ==================================================================== -->
+      <section id="tab-announcements" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="megaphone" class="w-5 h-5 text-rose-400"></i>
+                <span>Announcements & Emergency Broadcast Studio</span>
+              </h2>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">Publish Mosque notices & circulars, Janazah alerts, emergency blood broadcasts, and general circulars to the public website.</p>
+          </div>
+        </div>
+
+        <!-- Section 0: High Priority Alerts - Emergency & Disaster Notices Studio (User Highlighted Section) -->
+        <div class="bg-slate-900 border border-rose-900/60 rounded-2xl p-6 space-y-4 shadow-sm relative overflow-hidden">
+          <div class="absolute -top-24 -right-24 w-52 h-52 bg-rose-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded-md border border-amber-800/60 font-mono">HIGH PRIORITY ALERTS</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                  </span>
+                  Active Alert System
+                </span>
+                <span id="badge-emergency-notices-count" class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-950 text-rose-300 border border-rose-800">1 Active Alert</span>
+              </div>
+              <h3 class="text-base font-heading font-bold text-white mt-1.5 flex items-center gap-2">
+                <i data-lucide="shield-alert" class="w-5 h-5 text-rose-400"></i>
+                <span>Emergency & Disaster Notices</span>
+              </h3>
+              <p class="text-xs text-slate-400">Add, edit, and publish critical advisories directly into the top "High Priority Alerts: Emergency & Disaster Notices" banner on the public announcements page.</p>
+            </div>
+            <button onclick="AdminApp.openEmergencyNoticeModal()" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition shadow-md shadow-rose-900/30 shrink-0">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>+ Add New Notice in This Section</span>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                <tr>
+                  <th class="p-3.5">Advisory Tag & Status</th>
+                  <th class="p-3.5">Warning Headline & Details</th>
+                  <th class="p-3.5">Emergency Rescue Control & Helpline</th>
+                  <th class="p-3.5">Severity</th>
+                  <th class="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="emergency-notices-table-body" class="divide-y divide-slate-800/80">
+                <!-- Injected dynamically via AdminApp.renderEmergencyNoticesTable() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 1: Mosque Notices & Circulars (Congregational Directives) -->
+        <div class="bg-slate-900 border border-emerald-900/50 rounded-2xl p-6 space-y-4 shadow-sm relative overflow-hidden">
+          <div class="absolute -top-20 -right-20 w-44 h-44 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded-md border border-emerald-800/60 font-mono">CONGREGATIONAL DIRECTIVES</span>
+                <span id="badge-mosque-notices-count" class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">2 Active</span>
+              </div>
+              <h3 class="text-base font-heading font-bold text-white mt-1 flex items-center gap-2">
+                <i data-lucide="sun" class="w-4 h-4 text-emerald-400"></i>
+                <span>Mosque Notices & Circulars (Public Section)</span>
+              </h3>
+              <p class="text-xs text-slate-400">Live directives displayed in the "Mosque Notices & Circulars" section on public announcements page.</p>
+            </div>
+            <button onclick="AdminApp.openMosqueNoticeModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-emerald-900/30 transition shrink-0">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>+ Add New Notice in This Section</span>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                <tr>
+                  <th class="p-3.5">Notice Ref & Issued By</th>
+                  <th class="p-3.5">Title & Directives</th>
+                  <th class="p-3.5">Icon & Category</th>
+                  <th class="p-3.5">Action Button / Badge</th>
+                  <th class="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="mosque-notices-table-body" class="divide-y divide-slate-800/80">
+                <!-- Injected dynamically via AdminApp.renderMosqueNoticesTable() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 2: Public Alerts & Emergency Bulletins -->
+        <div class="space-y-4 pt-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-rose-400 bg-rose-950 px-2 py-0.5 rounded-md border border-rose-800/60 font-mono">PUBLIC BULLETINS</span>
+                <span class="text-xs text-slate-400 font-medium">Live Website Bulletins & Janazah Announcements</span>
+              </div>
+              <h3 class="text-base font-heading font-bold text-white mt-1 flex items-center gap-2">
+                <i data-lucide="bell" class="w-4 h-4 text-rose-400"></i>
+                <span>Emergency Bulletins & Janazah Notices</span>
+              </h3>
+            </div>
+            <button onclick="AdminApp.openAnnouncementModal()" class="px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-rose-900/40 transition shrink-0">
+              <i data-lucide="radio" class="w-4 h-4 text-rose-200"></i>
+              <span>Broadcast Public Alert</span>
+            </button>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-3.5 rounded-2xl text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-slate-400 font-semibold">Filter:</span>
+              <button onclick="AdminApp.filterAnnouncements('all')" class="ann-filter-btn px-3 py-1.5 rounded-xl bg-emerald-900 text-emerald-200 border border-emerald-700 font-medium">All</button>
+              <button onclick="AdminApp.filterAnnouncements('JANAZAH')" class="ann-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white font-medium">Janazah</button>
+              <button onclick="AdminApp.filterAnnouncements('EMERGENCY')" class="ann-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white font-medium">Emergency</button>
+              <button onclick="AdminApp.filterAnnouncements('GENERAL')" class="ann-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white font-medium">General Body</button>
+              <button onclick="AdminApp.filterAnnouncements('EDUCATION')" class="ann-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white font-medium">Madrasa</button>
+            </div>
+            <div class="text-slate-400 font-medium">
+              <span id="ann-total-count" class="text-emerald-400 font-bold">4</span> notices currently active
+            </div>
+          </div>
+        </div>
+
+        <!-- Announcements Table / Cards -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/60 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-4">Category & Priority</th>
+                  <th class="p-4">Title & Details</th>
+                  <th class="p-4">Date / Time</th>
+                  <th class="p-4">Action Mode</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="announcements-table-body" class="divide-y divide-slate-800/80">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 4: EVENTS & COMMUNITY CALENDAR
+           ==================================================================== -->
+      <section id="tab-events" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="calendar-days" class="w-5 h-5 text-sky-400"></i>
+              <span>Events & Community Calendar Manager</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Manage public lectures, youth conferences, Quran fests, and workshops displayed on the events page.</p>
+          </div>
+          <button onclick="AdminApp.openAddEventModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+            <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+            <span>Add Community Event</span>
+          </button>
+        </div>
+
+        <!-- Events Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="events-cards-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB: PROGRAM REGISTRATIONS & TICKET OPERATIONS (CLOUD FIRESTORE)
+           ==================================================================== -->
+      <section id="tab-registrations" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[11px] font-bold uppercase tracking-wider mb-1">
+              <i data-lucide="ticket" class="w-3.5 h-3.5"></i> Cloud Firestore Registry
+            </div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <span>Program Registrations & Ticket Operations</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Multi-tenant ticket reservations with server-enforced UID data isolation (Shayal, Rifan, and all community attendees).</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="AdminApp.exportRegistrationsCSV()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
+              <span>Export CSV</span>
+            </button>
+            <button onclick="AdminApp.printRegistrations()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="printer" class="w-4 h-4 text-sky-400"></i>
+              <span>Print Passes</span>
+            </button>
+            <button onclick="AdminApp.renderRegistrations()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition shadow">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              <span>Refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Summary Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-emerald-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Bookings</span>
+              <div class="p-1.5 rounded-lg bg-emerald-950 text-emerald-400 border border-emerald-800/50">
+                <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-regs-total" class="text-2xl font-bold font-heading text-white">0</span>
+              <span class="text-[11px] text-emerald-400">Bookings</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Unique reservation entries</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-amber-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Tickets Issued</span>
+              <div class="p-1.5 rounded-lg bg-amber-950 text-amber-400 border border-amber-800/50">
+                <i data-lucide="ticket" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-regs-tickets" class="text-2xl font-bold font-heading text-amber-400">0</span>
+              <span class="text-[11px] text-amber-400/80">Tickets</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Cumulative ticket count</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-cyan-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Registered Users</span>
+              <div class="p-1.5 rounded-lg bg-cyan-950 text-cyan-400 border border-cyan-800/50">
+                <i data-lucide="users" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-regs-users" class="text-2xl font-bold font-heading text-cyan-400">0</span>
+              <span class="text-[11px] text-cyan-400/80">Members</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Authenticated user profiles</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-indigo-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Active Programs</span>
+              <div class="p-1.5 rounded-lg bg-indigo-950 text-indigo-400 border border-indigo-800/50">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-regs-events" class="text-2xl font-bold font-heading text-indigo-300">2</span>
+              <span class="text-[11px] text-indigo-400">Programs</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">With ticket booking desks</p>
+          </div>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs">
+          <div class="sm:col-span-2 relative">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
+            <input type="text" id="regs-search-input" oninput="AdminApp.filterRegistrations()" placeholder="Search by Attendee Name, UID, Username, or Ticket Code..."
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none" />
+          </div>
+          <div>
+            <select id="regs-event-filter" onchange="AdminApp.filterRegistrations()"
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:border-amber-500 focus:outline-none">
+              <option value="all">All Programs & Events</option>
+              <option value="annual-campus-program">Annual Campus Program 2026</option>
+              <option value="evt-3">NHYM Civil Services & AI Conclave</option>
+            </select>
+          </div>
+          <div>
+            <select id="regs-sort-select" onchange="AdminApp.filterRegistrations()"
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:border-amber-500 focus:outline-none">
+              <option value="newest">Sort: Date (Newest)</option>
+              <option value="tickets-desc">Sort: Tickets (High to Low)</option>
+              <option value="tickets-asc">Sort: Tickets (Low to High)</option>
+              <option value="name">Sort: Attendee Name (A-Z)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Master Registrations Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800 text-[10px]">
+                <tr>
+                  <th class="p-4">Attendee & Contact</th>
+                  <th class="p-4">Authenticated Firebase UID</th>
+                  <th class="p-4">Program & Event</th>
+                  <th class="p-4">Ticket Quantity</th>
+                  <th class="p-4">Ticket Pass # & Date</th>
+                  <th class="p-4">Status</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="registrations-table-body" class="divide-y divide-slate-800/80">
+                <!-- Dynamically rendered via AdminApp.renderRegistrationsTable() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB: AUTHENTICATED USERS DIRECTORY (CLOUD FIRESTORE)
+           ==================================================================== -->
+      <section id="tab-users" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold uppercase tracking-wider mb-1">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Family Authenticator Directory
+            </div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <span>Registered Family Member Authenticators</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Master roster of registered Mahall families and household members with active credentials and portal access.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="AdminApp.renderUsers()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="refresh-cw" class="w-4 h-4 text-cyan-400"></i>
+              <span>Refresh Authenticators</span>
+            </button>
+            <button onclick="AdminApp.openRegisterFamilyUserModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <span>Register / Sign Up New Family</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search & Ward Filter Toolbar -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs">
+          <div class="sm:col-span-2 relative">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
+            <input type="text" id="users-search-input" oninput="AdminApp.filterUsers()" placeholder="Search by Family ID, Head Name, House Name, Username, or Mobile..."
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <select id="users-ward-select" onchange="AdminApp.filterUsers()"
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:border-emerald-500 focus:outline-none">
+              <option value="all">All Wards (Ward 1 - 5)</option>
+              <option value="Ward 01">Ward 01 (East Bazar)</option>
+              <option value="Ward 02">Ward 02 (Masjid Central)</option>
+              <option value="Ward 03">Ward 03 (River View)</option>
+              <option value="Ward 04">Ward 04 (Hill Valley)</option>
+              <option value="Ward 05">Ward 05 (Town West)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800 text-[10px]">
+                <tr>
+                  <th class="p-4">Family ID / UID</th>
+                  <th class="p-4">Family Head / Member</th>
+                  <th class="p-4">House & Residence</th>
+                  <th class="p-4">User ID / Username</th>
+                  <th class="p-4">Contact Phone</th>
+                  <th class="p-4">Assigned Role</th>
+                  <th class="p-4">Login Security PIN</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body" class="divide-y divide-slate-800/80">
+                <!-- Dynamically rendered via AdminApp.renderUsers() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 5: CENSUS & FAMILY DIRECTORY
+           ==================================================================== -->
+      <section id="tab-census" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="users" class="w-5 h-5 text-emerald-400"></i>
+              <span>Census & Family Master Registry</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Full database of registered Mahall households across Ward 1 through Ward 5 with family tree rosters.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="AdminApp.exportCensusCSV()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
+              <span>Export CSV</span>
+            </button>
+            <button onclick="AdminApp.openAddFamilyModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <span>Register New Family</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search & Ward Filter Toolbar -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs">
+          <div class="sm:col-span-2 relative">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
+            <input type="text" id="census-search-input" oninput="AdminApp.filterCensus()" placeholder="Search by Family ID, Head Name, House Name, or Mobile..."
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <select id="census-ward-select" onchange="AdminApp.filterCensus()"
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:border-emerald-500 focus:outline-none">
+              <option value="all">All Wards (Ward 1 - 5)</option>
+              <option value="Ward 01">Ward 01 (East Bazar)</option>
+              <option value="Ward 02">Ward 02 (Masjid Central)</option>
+              <option value="Ward 03">Ward 03 (River View)</option>
+              <option value="Ward 04">Ward 04 (Hill Valley)</option>
+              <option value="Ward 05">Ward 05 (Town West)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Census Register Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/60 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-4">Family & User ID</th>
+                  <th class="p-4">Head of Family</th>
+                  <th class="p-4">Residence & Ward</th>
+                  <th class="p-4">Contact Phone</th>
+                  <th class="p-4">Members</th>
+                  <th class="p-4">Chanda Status</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="census-table-body" class="divide-y divide-slate-800/80">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 6: CERTIFICATES & VERIFICATION DESK
+           ==================================================================== -->
+      <section id="tab-certificates" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="file-check-2" class="w-5 h-5 text-amber-400"></i>
+              <span>Official Certificates & Verification Desk</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Review Marriage NOC, Membership proofs, and Character certificates with digital cryptographic seals.</p>
+          </div>
+          <button onclick="AdminApp.openManualCertModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            <span>Issue Direct Certificate</span>
+          </button>
+        </div>
+
+        <!-- Filter Sub-Tabs & Bulk Clear Controls -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3 text-xs">
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="AdminApp.filterCertificates('all')" class="cert-tab-btn px-3 py-1.5 rounded-xl bg-slate-800 text-white font-semibold transition">All Applications</button>
+            <button onclick="AdminApp.filterCertificates('PENDING')" class="cert-tab-btn px-3 py-1.5 rounded-xl text-amber-300 hover:bg-slate-800 font-semibold flex items-center gap-1.5 transition">
+              <span>Pending Approvals</span>
+              <span id="tab-pending-cert-badge" class="px-1.5 py-0.2 rounded-full bg-amber-950 text-amber-300 border border-amber-800 text-[10px]">1</span>
+            </button>
+            <button onclick="AdminApp.filterCertificates('APPROVED')" class="cert-tab-btn px-3 py-1.5 rounded-xl text-emerald-300 hover:bg-slate-800 font-semibold transition">Approved & Sealed</button>
+            <button onclick="AdminApp.filterCertificates('REJECTED')" class="cert-tab-btn px-3 py-1.5 rounded-xl text-rose-300 hover:bg-slate-800 font-semibold transition">Rejected</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-delete-selected-certs" onclick="AdminApp.deleteSelectedCertificates()" class="hidden px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-semibold flex items-center gap-1.5 transition shadow">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span id="label-delete-selected-certs">Delete Selected (0)</span>
+            </button>
+            <button onclick="AdminApp.clearProcessedCertificates()" class="px-3 py-1.5 bg-slate-800 hover:bg-rose-950 text-slate-300 hover:text-rose-300 border border-slate-700 hover:border-rose-800 rounded-xl font-semibold flex items-center gap-1.5 transition" title="Clear all approved and rejected certificate records at once">
+              <i data-lucide="trash" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>Clear Approved & Rejected</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Certificates Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/60 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-4 w-10 text-center">
+                    <input type="checkbox" id="cert-select-all-header" onchange="AdminApp.toggleSelectAllCertificates(this.checked)" class="w-4 h-4 rounded bg-slate-900 border-slate-700 text-emerald-600 focus:ring-emerald-500 cursor-pointer" title="Select / Deselect All Records" />
+                  </th>
+                  <th class="p-4">Certificate ID</th>
+                  <th class="p-4">Applicant & Family</th>
+                  <th class="p-4">Certificate Type</th>
+                  <th class="p-4">Purpose / Destination</th>
+                  <th class="p-4">Status & Hash</th>
+                  <th class="p-4 text-right">Approval Actions</th>
+                </tr>
+              </thead>
+              <tbody id="certificates-table-body" class="divide-y divide-slate-800/80">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 7: MADRASA & EDUCATION MANAGEMENT DESK
+           ==================================================================== -->
+      <section id="tab-madrasa" class="tab-content space-y-6">
+        <!-- Hero Header & Quick Action Launcher -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 border border-emerald-800/40 p-6 sm:p-8 shadow-xl">
+          <div class="absolute -right-10 -bottom-10 w-52 h-52 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/60 border border-emerald-700/60 text-emerald-300 text-xs font-semibold mb-3">
+                <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
+                <span>Noorul Huda Academy Administrative Console • Samastha Board Reg #642</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white">Madrasa & Education Management Desk</h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                Integrated academic command center: Manage student admissions, enrollment master rosters, faculty Usthad rosters, courses & Halqas, scholarships, and study materials with live reactive synchronization.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <button onclick="AdminApp.openNewAdmissionModal()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/40 transition">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                <span>Direct Admission Form</span>
+              </button>
+              <button onclick="AdminApp.openEnrollStudentModal()" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Enroll Student</span>
+              </button>
+              <button onclick="AdminApp.openAddFacultyModal()" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
+                <i data-lucide="user-check" class="w-4 h-4"></i>
+                <span>Add Usthad</span>
+              </button>
+              <button onclick="AdminApp.openAddCourseModal()" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                <span>Add Course</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistical KPI Tiles (5-Card Grid) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-emerald-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Enrolled Students</span>
+              <div class="p-1.5 rounded-lg bg-emerald-950 text-emerald-400 border border-emerald-800/50">
+                <i data-lucide="users" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-edu-students" class="text-2xl font-bold font-heading text-white">0</span>
+              <span class="text-[11px] text-emerald-400">Active</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Classes 1–10 & Tahfeez</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-amber-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Pending Admissions</span>
+              <div class="p-1.5 rounded-lg bg-amber-950 text-amber-400 border border-amber-800/50">
+                <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-edu-pending" class="text-2xl font-bold font-heading text-amber-400">0</span>
+              <span class="text-[11px] text-amber-400/80">Queue</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Awaiting Secretarial Sign</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-indigo-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Usthad & Faculty</span>
+              <div class="p-1.5 rounded-lg bg-indigo-950 text-indigo-400 border border-indigo-800/50">
+                <i data-lucide="user-check" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-edu-faculty" class="text-2xl font-bold font-heading text-white">0</span>
+              <span class="text-[11px] text-indigo-400">Mudarriseen</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Board Certified Sanad</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-teal-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Active Courses</span>
+              <div class="p-1.5 rounded-lg bg-teal-950 text-teal-400 border border-teal-800/50">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-edu-courses" class="text-2xl font-bold font-heading text-white">0</span>
+              <span class="text-[11px] text-teal-400">Curricula</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Dheeniyath, Hifdh & Arabic</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-rose-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Scholarships</span>
+              <div class="p-1.5 rounded-lg bg-rose-950 text-rose-400 border border-rose-800/50">
+                <i data-lucide="award" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="kpi-edu-scholarships" class="text-2xl font-bold font-heading text-white">0</span>
+              <span class="text-[11px] text-rose-400">Beneficiaries</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Orphan & Fee Waivers</p>
+          </div>
+        </div>
+
+        <!-- Sub-Navigation Pill Bar -->
+        <div class="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3 text-xs font-semibold">
+          <button onclick="AdminApp.switchEduSubtab('admissions')" id="edu-subnav-btn-admissions"
+            class="edu-subnav-btn active px-3.5 py-2 rounded-xl bg-indigo-900/80 text-white border border-indigo-600/70 flex items-center gap-2 transition shadow-md">
+            <i data-lucide="clipboard-check" class="w-4 h-4 text-emerald-400"></i>
+            <span>Admissions & Approvals</span>
+            <span id="edu-tab-badge-pending-adm" class="px-1.5 py-0.2 rounded-full bg-amber-950 text-amber-300 border border-amber-800 text-[10px]">0</span>
+          </button>
+
+          <button onclick="AdminApp.switchEduSubtab('students')" id="edu-subnav-btn-students"
+            class="edu-subnav-btn px-3.5 py-2 rounded-xl bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800 flex items-center gap-2 transition">
+            <i data-lucide="users" class="w-4 h-4 text-sky-400"></i>
+            <span>Enrolled Students Roster</span>
+            <span id="edu-tab-badge-students" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 text-[10px]">0</span>
+          </button>
+
+          <button onclick="AdminApp.switchEduSubtab('faculty')" id="edu-subnav-btn-faculty"
+            class="edu-subnav-btn px-3.5 py-2 rounded-xl bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800 flex items-center gap-2 transition">
+            <i data-lucide="user-check" class="w-4 h-4 text-indigo-400"></i>
+            <span>Usthad & Faculty Roster</span>
+            <span id="edu-tab-badge-faculty" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 text-[10px]">0</span>
+          </button>
+
+          <button onclick="AdminApp.switchEduSubtab('courses')" id="edu-subnav-btn-courses"
+            class="edu-subnav-btn px-3.5 py-2 rounded-xl bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800 flex items-center gap-2 transition">
+            <i data-lucide="book-open" class="w-4 h-4 text-teal-400"></i>
+            <span>Academic Courses & Halqas</span>
+            <span id="edu-tab-badge-courses" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 text-[10px]">0</span>
+          </button>
+
+          <button onclick="AdminApp.switchEduSubtab('scholarships')" id="edu-subnav-btn-scholarships"
+            class="edu-subnav-btn px-3.5 py-2 rounded-xl bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800 flex items-center gap-2 transition">
+            <i data-lucide="award" class="w-4 h-4 text-rose-400"></i>
+            <span>Scholarships & Aid Desk</span>
+            <span id="edu-tab-badge-scholarships" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 text-[10px]">0</span>
+          </button>
+
+          <button onclick="AdminApp.switchEduSubtab('materials')" id="edu-subnav-btn-materials"
+            class="edu-subnav-btn px-3.5 py-2 rounded-xl bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800 flex items-center gap-2 transition">
+            <i data-lucide="file-text" class="w-4 h-4 text-amber-400"></i>
+            <span>Study Materials & Circulars</span>
+            <span id="edu-tab-badge-materials" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 text-[10px]">0</span>
+          </button>
+        </div>
+
+        <!-- SUBPANE 1: ADMISSIONS APPROVAL DESK -->
+        <div id="edu-pane-admissions" class="edu-subpane active space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-slate-400 font-semibold mr-1">Status Filter:</span>
+              <button onclick="AdminApp.filterAdmissions('all')" class="adm-filter-btn px-3 py-1.5 rounded-lg bg-emerald-900 text-emerald-200 border border-emerald-700 font-medium">All Applications</button>
+              <button onclick="AdminApp.filterAdmissions('PENDING')" class="adm-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-amber-300 hover:bg-slate-700 font-medium">Pending Approvals</button>
+              <button onclick="AdminApp.filterAdmissions('APPROVED')" class="adm-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-emerald-300 hover:bg-slate-700 font-medium">Approved & Enrolled</button>
+              <button onclick="AdminApp.filterAdmissions('REJECTED')" class="adm-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-rose-300 hover:bg-slate-700 font-medium">Rejected</button>
+            </div>
+            <button onclick="AdminApp.openNewAdmissionModal()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold flex items-center gap-1.5 shadow transition shrink-0">
+              <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+              <span>Direct Admission Form</span>
+            </button>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-950/70 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                  <tr>
+                    <th class="p-4">App ID</th>
+                    <th class="p-4">Student & Details</th>
+                    <th class="p-4">Desired Course</th>
+                    <th class="p-4">Parent & Contact</th>
+                    <th class="p-4">Family ID</th>
+                    <th class="p-4">Status & Roll</th>
+                    <th class="p-4 text-right">Approval Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admissions-table-body" class="divide-y divide-slate-800/80">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBPANE 2: ENROLLED STUDENTS MASTER ROSTER -->
+        <div id="edu-pane-students" class="edu-subpane space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs">
+            <div class="sm:col-span-2 relative">
+              <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
+              <input type="text" id="students-search-input" oninput="AdminApp.filterStudents()" placeholder="Search by student name or roll number (e.g. NHM-101)..."
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none" />
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="students-class-filter" onchange="AdminApp.filterStudents()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white">
+                <option value="all">All Classes / Grades</option>
+                <option value="Class 1">Class 1</option>
+                <option value="Class 2">Class 2</option>
+                <option value="Class 3">Class 3</option>
+                <option value="Class 4">Class 4</option>
+                <option value="Class 5">Class 5</option>
+                <option value="Class 6">Class 6</option>
+                <option value="Class 7">Class 7</option>
+                <option value="Class 8">Class 8</option>
+                <option value="Class 9">Class 9</option>
+                <option value="Class 10">Class 10 (SSLC Final)</option>
+                <option value="Hifdh">Tahfeez-ul-Quran</option>
+                <option value="Arabic">Spoken Arabic</option>
+              </select>
+              <button onclick="AdminApp.openEnrollStudentModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold flex items-center gap-1.5 shrink-0 shadow transition">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Enroll Student</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-950/70 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                  <tr>
+                    <th class="p-4">Roll Number</th>
+                    <th class="p-4">Student Full Name</th>
+                    <th class="p-4">Class / Standard</th>
+                    <th class="p-4">Attendance</th>
+                    <th class="p-4">Hifdh Memorization</th>
+                    <th class="p-4">Tajweed Grade</th>
+                    <th class="p-4">Rank / Honors</th>
+                    <th class="p-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="students-table-body" class="divide-y divide-slate-800/80">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBPANE 3: USTHAD & FACULTY ROSTER -->
+        <div id="edu-pane-faculty" class="edu-subpane space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div>
+              <h3 class="text-base font-heading font-bold text-white">Certified Mudarriseen & Faculty Roster</h3>
+              <p class="text-xs text-slate-400">Samastha Kerala Islam Matha Vidyabhyasa Board Certified Usthad Directory.</p>
+            </div>
+            <button onclick="AdminApp.openAddFacultyModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow transition">
+              <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+              <span>Add New Usthad</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="faculty-cards-container">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- SUBPANE 4: ACADEMIC COURSES & HALQAS -->
+        <div id="edu-pane-courses" class="edu-subpane space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div>
+              <h3 class="text-base font-heading font-bold text-white">Academic Courses & Halqa Programs</h3>
+              <p class="text-xs text-slate-400">Curricula taught across morning, evening, and weekend batches.</p>
+            </div>
+            <button onclick="AdminApp.openAddCourseModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow transition">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Add New Course</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="courses-cards-container">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- SUBPANE 5: SCHOLARSHIPS & WELFARE AID -->
+        <div id="edu-pane-scholarships" class="edu-subpane space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div>
+              <h3 class="text-base font-heading font-bold text-white">Madrasa Scholarships & Welfare Subsidies</h3>
+              <p class="text-xs text-slate-400">Orphan welfare, destitute kit distributions, and fee-waiver endorsements.</p>
+            </div>
+            <button onclick="AdminApp.openNewScholarshipModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow transition">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+              <span>Log Scholarship Request</span>
+            </button>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-950/70 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                  <tr>
+                    <th class="p-4">Aid ID</th>
+                    <th class="p-4">Student Name</th>
+                    <th class="p-4">Class</th>
+                    <th class="p-4">Family ID</th>
+                    <th class="p-4">Subsidy Type</th>
+                    <th class="p-4">Amount</th>
+                    <th class="p-4">Status & Date</th>
+                    <th class="p-4 text-right">Approval Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="scholarships-table-body" class="divide-y divide-slate-800/80">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBPANE 6: STUDY MATERIALS & CIRCULARS -->
+        <div id="edu-pane-materials" class="edu-subpane space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div>
+              <h3 class="text-base font-heading font-bold text-white">Study Materials, Syllabus & Circulars</h3>
+              <p class="text-xs text-slate-400">Official syllabus downloads, exam schedules, and tajweed workbooks.</p>
+            </div>
+            <button onclick="AdminApp.openAddMaterialModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow transition">
+              <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+              <span>Publish Material</span>
+            </button>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-950/70 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                  <tr>
+                    <th class="p-4">Document Title</th>
+                    <th class="p-4">Target Class</th>
+                    <th class="p-4">Category</th>
+                    <th class="p-4">File Name / Link</th>
+                    <th class="p-4">Publish Date</th>
+                    <th class="p-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="materials-table-body" class="divide-y divide-slate-800/80">
+                  <!-- Dynamically rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 8: BAITULMAL & FINANCIAL DUES LEDGER
+           ==================================================================== -->
+      <section id="tab-finance" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="wallet" class="w-5 h-5 text-emerald-400"></i>
+              <span>Baitulmal & Chanda Treasury Desk</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Real-time ledger of monthly subscriptions, healthcare & dialysis sponsorships, ration kit donations, and welfare collections.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="AdminApp.openRecordPaymentModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+              <i data-lucide="receipt" class="w-4 h-4"></i>
+              <span>Record Subscription Payment</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Treasury KPI Statistic Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-emerald-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Treasury Inflow</span>
+              <div class="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/50">
+                <i data-lucide="coins" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span id="treasury-kpi-total" class="text-xl sm:text-2xl font-bold font-heading text-emerald-400 font-mono">₹0</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">All verified payments & sponsorships</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-rose-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Dialysis Care Fund</span>
+              <div class="p-2 rounded-xl bg-rose-950 text-rose-400 border border-rose-800/50">
+                <i data-lucide="heart" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span id="treasury-kpi-dialysis" class="text-xl sm:text-2xl font-bold font-heading text-rose-400 font-mono">₹0</span>
+            </div>
+            <p id="treasury-kpi-dialysis-sub" class="text-[11px] text-slate-500 mt-1">Patient dialysis sessions sponsored</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-amber-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Ration Kit Sponsoring</span>
+              <div class="p-2 rounded-xl bg-amber-950 text-amber-400 border border-amber-800/50">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span id="treasury-kpi-ration" class="text-xl sm:text-2xl font-bold font-heading text-amber-400 font-mono">₹0</span>
+            </div>
+            <p id="treasury-kpi-ration-sub" class="text-[11px] text-slate-500 mt-1">Destitute family kits funded</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm hover:border-sky-600/50 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Monthly Chanda & Dues</span>
+              <div class="p-2 rounded-xl bg-sky-950 text-sky-400 border border-sky-800/50">
+                <i data-lucide="wallet" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2.5 flex items-baseline gap-2">
+              <span id="treasury-kpi-chanda" class="text-xl sm:text-2xl font-bold font-heading text-sky-400 font-mono">₹0</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Family membership subscriptions</p>
+          </div>
+        </div>
+
+        <!-- Filter Sub-Tabs & Live Search Toolbar -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-slate-400 font-semibold mr-1">Filter Stream:</span>
+            <button onclick="AdminApp.filterFinance('all')" class="finance-filter-btn px-3 py-1.5 rounded-lg bg-emerald-900 text-emerald-200 border border-emerald-700 font-medium transition">All Transactions</button>
+            <button onclick="AdminApp.filterFinance('DIALYSIS')" class="finance-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-rose-300 hover:bg-slate-700 font-medium transition">Dialysis Sponsorships</button>
+            <button onclick="AdminApp.filterFinance('RATION')" class="finance-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-amber-300 hover:bg-slate-700 font-medium transition">Ration Kit Sponsoring</button>
+            <button onclick="AdminApp.filterFinance('CHANDA')" class="finance-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-sky-300 hover:bg-slate-700 font-medium transition">Monthly Chanda Dues</button>
+            <button onclick="AdminApp.filterFinance('WELFARE')" class="finance-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-teal-300 hover:bg-slate-700 font-medium transition">Welfare & Zakat</button>
+          </div>
+
+          <div class="relative w-full lg:w-72">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
+            <input type="text" id="finance-search-input" oninput="AdminApp.handleFinanceSearch()" placeholder="Search receipt, donor, or mobile..."
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+
+        <!-- Payments Ledger Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/60 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-4">Receipt & Txn ID</th>
+                  <th class="p-4">Sponsor / Contributor</th>
+                  <th class="p-4">Sponsorship Category & Purpose</th>
+                  <th class="p-4">Amount (₹)</th>
+                  <th class="p-4">Payment Channel</th>
+                  <th class="p-4">Date & Time</th>
+                  <th class="p-4 text-right">Receipt Voucher</th>
+                </tr>
+              </thead>
+              <tbody id="payments-table-body" class="divide-y divide-slate-800/80">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 9: SULHU MEDIATION DESK
+           ==================================================================== -->
+      <section id="tab-sulhu" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="scale" class="w-5 h-5 text-purple-400"></i>
+              <span>Sulhu Mediation & Family Reconciliation Board</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Confidential dispute settlement register under Chief Qazi and Mahall Executive Guidance Board.</p>
+          </div>
+          <button onclick="AdminApp.openNewSulhuModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Log Mediation Case</span>
+          </button>
+        </div>
+
+        <!-- Sulhu Cases Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/60 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-4">Petition ID</th>
+                  <th class="p-4">Petitioner & Family</th>
+                  <th class="p-4">Category & Subject</th>
+                  <th class="p-4">Assigned Mediator</th>
+                  <th class="p-4">Hearing Date</th>
+                  <th class="p-4">Status & Minutes</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="sulhu-table-body" class="divide-y divide-slate-800/80">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 10: COMMUNITY & WELFARE (DONORS / AUDITORIUM)
+           ==================================================================== -->
+      <section id="tab-community" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="heart-handshake" class="w-5 h-5 text-rose-400"></i>
+              <span>Community Welfare, Blood Donors & Auditorium Bookings</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Manage emergency blood donor helpline lists and community auditorium hall reservations.</p>
+          </div>
+        </div>
+
+        <!-- Sub Tabs -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Blood Donors Management -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="droplet" class="w-4 h-4 text-rose-400"></i>
+                <span>Blood Donors Registry</span>
+              </h3>
+              <button onclick="AdminApp.openAddDonorModal()" class="px-3 py-1.5 bg-rose-950 hover:bg-rose-900 text-rose-300 border border-rose-800 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>Add Donor</span>
+              </button>
+            </div>
+            <div class="space-y-2 max-h-[400px] overflow-y-auto pr-1" id="donors-list-container">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <!-- Auditorium Bookings Management -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="calendar" class="w-4 h-4 text-sky-400"></i>
+                <span>Auditorium Reservations</span>
+              </h3>
+              <button onclick="AdminApp.openAddBookingModal()" class="px-3 py-1.5 bg-sky-950 hover:bg-sky-900 text-sky-300 border border-sky-800 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>New Booking</span>
+              </button>
+            </div>
+            <div class="space-y-2 max-h-[420px] overflow-y-auto overflow-x-hidden pr-1" id="bookings-list-container">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW SPACE: Volunteer Corp Enlistment & Approval Requests -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div>
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="helping-hand" class="w-4 h-4 text-amber-400"></i>
+                <span>Volunteer Corp Approval & Enlistment Desk</span>
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Review and approve volunteer squad applications submitted from the main community portal.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="volunteer-pending-badge" class="px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-800 text-amber-300 text-xs font-bold font-mono">
+                0 Pending
+              </span>
+            </div>
+          </div>
+          <div class="space-y-3 max-h-[480px] overflow-y-auto pr-1" id="volunteer-requests-container">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- NEW: Blood Donor Registration Approvals Desk -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div>
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="droplet" class="w-4 h-4 text-rose-400"></i>
+                <span>Pending Blood Donor Registration Approvals</span>
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Approve voluntary donor submissions. Approved donors are instantly verified and displayed in the main portal's directory.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="donor-requests-pending-badge" class="px-2.5 py-1 rounded-full bg-rose-950/80 border border-rose-800 text-rose-300 text-xs font-bold font-mono">
+                0 Pending
+              </span>
+            </div>
+          </div>
+          <div class="space-y-3 max-h-[440px] overflow-y-auto pr-1" id="donor-requests-container">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- NEW: Career & Job Opportunities Applications Desk -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div>
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="briefcase" class="w-4 h-4 text-amber-400"></i>
+                <span>Mahall Employment Exchange & Job Applications Desk</span>
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Review job applications from Mahall residents. Approving will forward candidate profile to employer sponsors and dispatch approval message to main portal.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="job-apps-pending-badge" class="px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-800 text-amber-300 text-xs font-bold font-mono">
+                0 Pending
+              </span>
+            </div>
+          </div>
+          <div class="space-y-3 max-h-[440px] overflow-y-auto pr-1" id="job-apps-container">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- NEW: Medical Relief & Dialysis Assistance Grants Desk -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div>
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="heart" class="w-4 h-4 text-emerald-400"></i>
+                <span>Medical Relief & Dialysis Assistance Applications</span>
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Review patient applications for dialysis subsidies and free chronic medicine aid. Approved applications dispatch official approval alerts to the main portal.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="medical-aid-pending-badge" class="px-2.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-300 text-xs font-bold font-mono">
+                0 Pending
+              </span>
+            </div>
+          </div>
+          <div class="space-y-3 max-h-[440px] overflow-y-auto pr-1" id="medical-aid-container">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 11: PHOTO GALLERY
+           ==================================================================== -->
+      <section id="tab-gallery" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="image" class="w-5 h-5 text-teal-400"></i>
+              <span>Photo Gallery & Media Manager</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Manage public photos of Friday Majlis, Madrasa milestones, Centenary renovations, and community gatherings.</p>
+          </div>
+          <button onclick="AdminApp.openAddGalleryModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-emerald-900/30 transition">
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            <span>Add Photo</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-cards-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 12: MAHALL SETTINGS, IDENTITY & BRANDING
+           ==================================================================== -->
+      <section id="tab-settings" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="settings" class="w-5 h-5 text-slate-400"></i>
+              <span>Mahall Identity, News Marquee & Global Settings</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Customize website identity details, emergency ticker, daily Hadith reflection, and manage system backups.</p>
+          </div>
+        </div>
+
+        <!-- Settings Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Breaking News Marquee Ticker -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="radio" class="w-4 h-4 text-rose-400"></i>
+                <span>Breaking News Marquee Ticker</span>
+              </h3>
+              <span class="text-xs text-rose-400 font-semibold">Public Header Bar</span>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block text-slate-400 mb-1">Headline Text</label>
+                <textarea id="settings-ticker-text" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-emerald-500 focus:outline-none"></textarea>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-slate-400 mb-1">Priority</label>
+                  <select id="settings-ticker-priority" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white">
+                    <option value="CRITICAL">Critical (Red Glow)</option>
+                    <option value="HIGH">High (Amber)</option>
+                    <option value="NORMAL">Normal (Emerald)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Ticker Status</label>
+                  <select id="settings-ticker-enabled" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white">
+                    <option value="true">Active & Visible</option>
+                    <option value="false">Hidden / Disabled</option>
+                  </select>
+                </div>
+              </div>
+              <button onclick="AdminApp.saveTickerSettings()" class="w-full py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl font-semibold transition">
+                Update Breaking Ticker
+              </button>
+            </div>
+          </div>
+
+          <!-- Daily Hadith of the Day -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="book-open" class="w-4 h-4 text-amber-400"></i>
+                <span>Daily Spiritual Reflection / Hadith</span>
+              </h3>
+              <span class="text-xs text-amber-400 font-arabic">حديث اليوم</span>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block text-slate-400 mb-1">Arabic Text</label>
+                <input type="text" id="settings-hadith-ar" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-300 font-arabic text-sm text-right focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">English Translation</label>
+                <input type="text" id="settings-hadith-en" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Malayalam Translation</label>
+                <input type="text" id="settings-hadith-ml" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-malayalam focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Reference / Source</label>
+                <input type="text" id="settings-hadith-src" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-300 focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <button onclick="AdminApp.saveHadithSettings()" class="w-full py-2 bg-amber-700 hover:bg-amber-600 text-white rounded-xl font-semibold transition">
+                Update Daily Hadith
+              </button>
+            </div>
+          </div>
+
+          <!-- Mahall Identity & Contacts -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="building" class="w-4 h-4 text-emerald-400"></i>
+                <span>Official Mahall Identity & Registration</span>
+              </h3>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-slate-400 mb-1">Mahall Name (EN)</label>
+                  <input type="text" id="settings-profile-name" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white" />
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Registration No</label>
+                  <input type="text" id="settings-profile-reg" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono" />
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-slate-400 mb-1">Office Mobile</label>
+                  <input type="text" id="settings-profile-phone" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white" />
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Emergency Helpline</label>
+                  <input type="text" id="settings-profile-emergency" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white" />
+                </div>
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Physical Address</label>
+                <input type="text" id="settings-profile-address" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white" />
+              </div>
+              <button onclick="AdminApp.saveProfileSettings()" class="w-full py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl font-semibold transition">
+                Save Official Identity
+              </button>
+            </div>
+          </div>
+
+          <!-- Database Backup & Factory Reset -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="database" class="w-4 h-4 text-sky-400"></i>
+                <span>Database Backup & Restoration</span>
+              </h3>
+            </div>
+            <div class="space-y-3 text-xs text-slate-400">
+              <p>Download a complete JSON database dump of all families, dues ledgers, announcements, certificates, and settings for safe record-keeping.</p>
+              <div class="flex items-center gap-3">
+                <button onclick="AdminApp.exportDB()" class="flex-1 py-2.5 px-3 bg-sky-950 hover:bg-sky-900 text-sky-200 border border-sky-800 rounded-xl font-semibold flex items-center justify-center gap-2 transition">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                  <span>Export JSON Dump</span>
+                </button>
+                <label class="flex-1 py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl font-semibold flex items-center justify-center gap-2 cursor-pointer transition">
+                  <i data-lucide="upload" class="w-4 h-4"></i>
+                  <span>Restore JSON</span>
+                  <input type="file" id="db-import-file" onchange="AdminApp.importDB(event)" accept=".json" class="hidden" />
+                </label>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <span class="text-rose-400 font-semibold block">Factory Default Reset</span>
+                    <span class="text-[11px] text-slate-500">Restore factory sample seed data</span>
+                  </div>
+                  <button onclick="AdminApp.resetDB()" class="py-1.5 px-3 bg-rose-950 hover:bg-rose-900 text-rose-300 border border-rose-800 rounded-xl font-semibold transition text-xs">
+                    Reset DB
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Firebase Cloud Database Quick Integration Card -->
+          <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/20 border border-amber-500/30 rounded-2xl p-6 space-y-4 lg:col-span-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <i data-lucide="database-zap" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                    <span>Google Firebase Cloud Database Integration</span>
+                    <span id="settings-fb-badge" class="px-2 py-0.5 rounded-md text-[10px] font-mono bg-amber-950 text-amber-300 border border-amber-800">Local Mode</span>
+                  </h3>
+                  <p class="text-xs text-slate-400">Connect API credentials to activate live Google Cloud Firestore & multi-device sync.</p>
+                </div>
+              </div>
+              <button onclick="AdminApp.switchTab('firebase')"
+                class="py-2.5 px-4 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-950 font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-amber-950/40">
+                <i data-lucide="sliders" class="w-4 h-4"></i>
+                <span>Configure Firebase API Credentials</span>
+              </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300 pt-1">
+              <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                <span class="text-[10px] font-semibold text-slate-500 uppercase block">Active Project</span>
+                <span id="settings-fb-project" class="font-mono text-emerald-400 font-semibold truncate block mt-0.5">noorul-huda-mahall</span>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                <span class="text-[10px] font-semibold text-slate-500 uppercase block">Database Engine</span>
+                <span id="settings-fb-engine" class="font-semibold text-white truncate block mt-0.5">Local Dual-Engine</span>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                <span class="text-[10px] font-semibold text-slate-500 uppercase block">SDK Driver</span>
+                <span class="font-semibold text-sky-400 truncate block mt-0.5">Google Firebase JS v10.8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB: FIREBASE CLOUD DATABASE & LIVE API CONFIGURATION HUB
+           ==================================================================== -->
+      <section id="tab-firebase" class="tab-content space-y-6">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="database-zap" class="w-5 h-5 text-amber-400"></i>
+                <span>Firebase Cloud Database & API Configuration</span>
+              </h2>
+              <span id="firebase-hero-status-pill" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-amber-950 text-amber-300 border border-amber-800 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span>Local Resilient Mode</span>
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">Connect your official Google Firebase project to enable live Cloud Firestore multi-device synchronization, secure authentication, and cloud database persistence.</p>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <a href="https://console.firebase.google.com" target="_blank" rel="noopener noreferrer"
+              class="py-2 px-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
+              <i data-lucide="external-link" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Firebase Console</span>
+            </a>
+            <button onclick="AdminApp.testFirebaseConnection()"
+              class="py-2 px-3.5 bg-amber-950/80 hover:bg-amber-900 text-amber-200 border border-amber-800 hover:border-amber-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
+              <i data-lucide="activity" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Test Connection</span>
+            </button>
+            <button onclick="AdminApp.saveFirebaseConfig()"
+              class="py-2 px-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-semibold rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-900/40 hover:shadow-emerald-700/50 transition">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              <span>Save & Connect DB</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Connection State & Metrics Banner -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Database Engine Mode</span>
+            <div class="flex items-center gap-2">
+              <span id="fb-card-engine-mode" class="text-sm font-bold text-white">Local Dual-Engine</span>
+              <span id="fb-card-engine-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+            </div>
+            <p id="fb-card-engine-sub" class="text-[11px] text-slate-500 truncate">UID-isolated local persistence</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Active Project ID</span>
+            <div class="flex items-center gap-2">
+              <span id="fb-card-project-id" class="text-sm font-bold text-emerald-400 font-mono truncate">noorul-huda-mahall</span>
+            </div>
+            <p id="fb-card-project-sub" class="text-[11px] text-slate-500 truncate">Google Cloud Firestore</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Connection Health</span>
+            <div class="flex items-center gap-2">
+              <span id="fb-card-health-text" class="text-sm font-bold text-slate-300">Ready to test</span>
+              <i id="fb-card-health-icon" data-lucide="wifi" class="w-4 h-4 text-slate-400"></i>
+            </div>
+            <p id="fb-card-health-sub" class="text-[11px] text-slate-500">Latency: <span id="fb-card-latency">--</span></p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Official SDK Status</span>
+            <div class="flex items-center gap-2">
+              <span id="fb-card-sdk-status" class="text-sm font-bold text-sky-400 font-mono">v10.8.0 (Ready)</span>
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-sky-400"></i>
+            </div>
+            <p class="text-[11px] text-slate-500">Firebase Compat Engine</p>
+          </div>
+        </div>
+
+        <!-- Live Automatic Background Sync Banner -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-slate-900 to-slate-900 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-lg">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+              <i data-lucide="zap" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <span class="font-bold text-white flex items-center gap-2">
+                <span>Automatic Real-Time Cloud Persistence Active</span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-700/60">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>LIVE AUTO-SYNC
+                </span>
+              </span>
+              <p class="text-[11px] text-slate-300 mt-1">
+                Every record you save (prayers, breaking ticker, daily Hadith, announcements, events, census & families, payments) is <strong>automatically and immediately updated directly to Firebase Firestore in the background</strong> without needing to click any manual sync buttons!
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="auto-sync-status-badge" class="px-3 py-1.5 rounded-xl bg-emerald-900/60 border border-emerald-700/60 text-emerald-300 font-mono text-[11px] font-semibold flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              <span>Zero-Click Background Sync</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Quick Setup Assistant (Auto-Extract Snippet) -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/20 border border-amber-500/30 rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-heading font-bold text-white">Quick Paste: Auto-Detect Firebase Credentials</h3>
+                <p class="text-[11px] text-slate-400">Paste your config snippet directly from Firebase Console & click Auto-Fill to populate all fields below instantly.</p>
+              </div>
+            </div>
+            <button type="button" onclick="AdminApp.parseFirebaseSnippet()"
+              class="py-2 px-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition shadow-md shadow-amber-500/20 shrink-0">
+              <i data-lucide="wand-2" class="w-3.5 h-3.5"></i>
+              <span>Parse & Auto-Fill</span>
+            </button>
+          </div>
+          <div class="mt-4">
+            <textarea id="firebase-paste-area" rows="3"
+              placeholder='Paste JavaScript config snippet or JSON here, e.g.:&#10;const firebaseConfig = { apiKey: "AIzaSy...", authDomain: "...", projectId: "...", ... };'
+              class="w-full bg-slate-950/80 border border-slate-800 focus:border-amber-500/80 rounded-xl p-3 text-xs font-mono text-amber-200 placeholder-slate-600 focus:outline-none transition"></textarea>
+          </div>
+        </div>
+
+        <!-- Credentials Input Form -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div>
+              <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="key" class="w-4 h-4 text-emerald-400"></i>
+                <span>Firebase Project Credentials</span>
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Enter your project keys or review parsed parameters.</p>
+            </div>
+            <button type="button" onclick="AdminApp.fillDemoFirebaseKeys()"
+              class="text-xs text-slate-400 hover:text-amber-400 transition underline decoration-dotted">
+              Load Example Template
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <!-- API Key -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="fb-input-api-key" class="font-semibold text-slate-300 flex items-center gap-1.5">
+                  <span>Firebase API Key (apiKey)</span>
+                  <span class="text-rose-400">*</span>
+                </label>
+                <button type="button" onclick="AdminApp.toggleApiKeyVisibility()" class="text-[10px] text-slate-400 hover:text-white flex items-center gap-1">
+                  <i id="fb-eye-icon" data-lucide="eye" class="w-3 h-3"></i>
+                  <span id="fb-eye-text">Show</span>
+                </button>
+              </div>
+              <input type="password" id="fb-input-api-key" placeholder="AIzaSy..."
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Google Web API Key from Firebase Console Project Settings.</p>
+            </div>
+
+            <!-- Project ID -->
+            <div>
+              <label for="fb-input-project-id" class="font-semibold text-slate-300 block mb-1.5">
+                <span>Firebase Project ID (projectId)</span>
+                <span class="text-rose-400">*</span>
+              </label>
+              <input type="text" id="fb-input-project-id" placeholder="my-mahall-app"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Unique project identifier (e.g. noorul-huda-mahall).</p>
+            </div>
+
+            <!-- Auth Domain -->
+            <div>
+              <label for="fb-input-auth-domain" class="font-semibold text-slate-300 block mb-1.5">
+                <span>Auth Domain (authDomain)</span>
+              </label>
+              <input type="text" id="fb-input-auth-domain" placeholder="my-mahall-app.firebaseapp.com"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Authorized domain for Firebase Auth logins.</p>
+            </div>
+
+            <!-- Storage Bucket -->
+            <div>
+              <label for="fb-input-storage-bucket" class="font-semibold text-slate-300 block mb-1.5">
+                <span>Storage Bucket (storageBucket)</span>
+              </label>
+              <input type="text" id="fb-input-storage-bucket" placeholder="my-mahall-app.appspot.com"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Google Cloud Storage bucket for documents & receipts.</p>
+            </div>
+
+            <!-- Messaging Sender ID -->
+            <div>
+              <label for="fb-input-sender-id" class="font-semibold text-slate-300 block mb-1.5">
+                <span>Messaging Sender ID (messagingSenderId)</span>
+              </label>
+              <input type="text" id="fb-input-sender-id" placeholder="109876543210"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Numeric sender ID for Cloud Messaging alerts.</p>
+            </div>
+
+            <!-- Web App ID -->
+            <div>
+              <label for="fb-input-app-id" class="font-semibold text-slate-300 block mb-1.5">
+                <span>Firebase App ID (appId)</span>
+              </label>
+              <input type="text" id="fb-input-app-id" placeholder="1:109876543210:web:abcdef1234567890"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Registered Web Application ID.</p>
+            </div>
+
+            <!-- Measurement ID (Optional) -->
+            <div>
+              <label for="fb-input-measurement-id" class="font-semibold text-slate-300 block mb-1.5">
+                <span>Measurement ID (optional)</span>
+              </label>
+              <input type="text" id="fb-input-measurement-id" placeholder="G-ABC123XYZ"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Google Analytics measurement stream ID.</p>
+            </div>
+
+            <!-- Database URL (Optional) -->
+            <div>
+              <label for="fb-input-db-url" class="font-semibold text-slate-300 block mb-1.5">
+                <span>Realtime Database URL (optional)</span>
+              </label>
+              <input type="text" id="fb-input-db-url" placeholder="https://my-mahall-app.firebaseio.com"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:border-emerald-500 focus:outline-none transition" />
+              <p class="text-[10px] text-slate-500 mt-1">Realtime Database instance URL if utilized.</p>
+            </div>
+          </div>
+
+          <!-- Action Buttons Bar -->
+          <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button type="button" onclick="AdminApp.resetFirebaseConfig()"
+                class="py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition w-full sm:w-auto">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span>Reset to Local Dual-Engine</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button type="button" onclick="AdminApp.testFirebaseConnection()" id="btn-test-fb-conn"
+                class="py-2.5 px-4 bg-amber-950 hover:bg-amber-900 text-amber-200 border border-amber-800 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition w-full sm:w-auto">
+                <i data-lucide="activity" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Test Live Connection</span>
+              </button>
+
+              <button type="button" onclick="AdminApp.saveFirebaseConfig()" id="btn-save-fb-conn"
+                class="py-2.5 px-5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/40 hover:shadow-emerald-700/50 transition w-full sm:w-auto">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Save & Connect Database</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Terminal / Logs Console -->
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="font-mono text-xs font-semibold text-slate-300">Firebase Live Diagnostic Terminal</span>
+            </div>
+            <button onclick="AdminApp.clearFirebaseLogs()" class="text-[10px] text-slate-500 hover:text-slate-300 transition font-mono">
+              Clear Logs
+            </button>
+          </div>
+          <div id="firebase-terminal-logs" class="font-mono text-[11px] leading-relaxed text-slate-400 space-y-1 max-h-40 overflow-y-auto pr-2">
+            <div><span class="text-emerald-400">[SYSTEM]</span> Firebase Dual-Engine ready. Awaiting command or connection test...</div>
+          </div>
+        </div>
+
+        <!-- Cloud Data Migration & Sync Operations -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1: Push Local to Cloud Firestore -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-heading font-bold text-white">Push Local Data to Cloud Firestore</h3>
+                  <p class="text-[11px] text-slate-400">Upload all residents, registrations, dues & notices to Firestore.</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Transfers local data collections (<code class="text-emerald-300">families</code>, <code class="text-emerald-300">registrations</code>, <code class="text-emerald-300">announcements</code>, <code class="text-emerald-300">events</code>, <code class="text-emerald-300">prayer_times</code>, <code class="text-emerald-300">users</code>) into your active Firebase project documents.
+            </p>
+            <div id="sync-push-status" class="hidden text-xs font-mono p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 space-y-1">
+              <div class="flex items-center justify-between">
+                <span id="sync-push-msg">Synchronizing...</span>
+                <span id="sync-push-pct">0%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div id="sync-push-bar" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+              </div>
+            </div>
+            <button onclick="AdminApp.syncDataToFirestore()" id="btn-sync-to-firestore"
+              class="w-full py-2.5 px-4 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-md">
+              <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+              <span>Upload Local Records to Firestore</span>
+            </button>
+          </div>
+
+          <!-- Card 2: Pull Firestore to Local Cache -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
+                  <i data-lucide="cloud-download" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-heading font-bold text-white">Pull Firestore into Local Cache</h3>
+                  <p class="text-[11px] text-slate-400">Cache remote cloud records locally for blazing fast offline speed.</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Retrieves live cloud records from your Firestore database and populates the client-side repository for instant loading, offline resilience, and search.
+            </p>
+            <div id="sync-pull-status" class="hidden text-xs font-mono p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 space-y-1">
+              <div class="flex items-center justify-between">
+                <span id="sync-pull-msg">Pulling...</span>
+                <span id="sync-pull-pct">0%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div id="sync-pull-bar" class="bg-sky-500 h-full w-0 transition-all duration-300"></div>
+              </div>
+            </div>
+            <button onclick="AdminApp.pullDataFromFirestore()" id="btn-pull-from-firestore"
+              class="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition">
+              <i data-lucide="download-cloud" class="w-4 h-4"></i>
+              <span>Download Cloud Records to Local</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step-by-Step Setup Guide & Rules Reference -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <h3 class="text-sm font-heading font-bold text-white flex items-center gap-2">
+              <i data-lucide="help-circle" class="w-4 h-4 text-amber-400"></i>
+              <span>Google Firebase Step-by-Step Setup Instructions</span>
+            </h3>
+            <button onclick="AdminApp.copyFirestoreRules()" class="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy firestore.rules</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+            <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+              <div class="flex items-center gap-2 text-amber-400 font-semibold">
+                <span class="w-5 h-5 rounded-full bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-[10px]">1</span>
+                <span>Create Firebase Project</span>
+              </div>
+              <p class="text-[11px] text-slate-400 leading-relaxed">
+                Visit <a href="https://console.firebase.google.com" target="_blank" class="text-amber-400 underline">Firebase Console</a>, click "Add project", name it (e.g. <code>noorul-huda-mahall</code>), and enable Cloud Firestore in your preferred region.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+              <div class="flex items-center gap-2 text-emerald-400 font-semibold">
+                <span class="w-5 h-5 rounded-full bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center text-[10px]">2</span>
+                <span>Register Web Application</span>
+              </div>
+              <p class="text-[11px] text-slate-400 leading-relaxed">
+                In Project Settings -> General -> "Your apps", click the Web icon (<code>&lt;/&gt;</code>). Copy the generated <code class="text-emerald-300">firebaseConfig</code> snippet and paste it into the Auto-Detect box above.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+              <div class="flex items-center gap-2 text-sky-400 font-semibold">
+                <span class="w-5 h-5 rounded-full bg-sky-400/10 border border-sky-400/30 flex items-center justify-center text-[10px]">3</span>
+                <span>Enable Authentication & Rules</span>
+              </div>
+              <p class="text-[11px] text-slate-400 leading-relaxed">
+                In Firebase Console -> Build -> Authentication, enable "Email/Password". In Cloud Firestore -> Rules, paste the security rules provided in this repository for multi-tenant isolation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 11: USER MESSAGES, INQUIRIES & PUBLIC SUBMISSIONS CONSOLE
+           ==================================================================== -->
+      <section id="tab-inquiries" class="tab-content space-y-6">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+                <i data-lucide="message-square" class="w-5 h-5 text-emerald-400"></i>
+                <span>User Inquiries & Public Feedback Console</span>
+              </h2>
+              <span id="inquiries-counter-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                0 Active
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">Real-time repository of user contact inquiries, feedback, and religious consultations submitted via the public website.</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button onclick="AdminApp.exportInquiriesCSV()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>Export Inquiries</span>
+            </button>
+            <button onclick="AdminApp.openNewInquiryModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-emerald-900/30 transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <span>Log Manual Inquiry</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Submissions</span>
+            <div class="text-2xl font-bold font-heading text-white mt-1" id="inquiries-stat-total">0</div>
+            <span class="text-[10px] text-slate-500">Contact forms & feedback</span>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+            <span class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">New & Unread</span>
+            <div class="text-2xl font-bold font-heading text-emerald-400 mt-1" id="inquiries-stat-new">0</div>
+            <span class="text-[10px] text-emerald-400/70">Needs review & reply</span>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+            <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">Under Review</span>
+            <div class="text-2xl font-bold font-heading text-amber-400 mt-1" id="inquiries-stat-review">0</div>
+            <span class="text-[10px] text-amber-400/70">Assigned to desk</span>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+            <span class="text-[11px] font-semibold text-sky-400 uppercase tracking-wider">Resolved</span>
+            <div class="text-2xl font-bold font-heading text-sky-400 mt-1" id="inquiries-stat-resolved">0</div>
+            <span class="text-[10px] text-sky-400/70">Response dispatched</span>
+          </div>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800/80 p-3.5 rounded-2xl">
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative min-w-[220px]">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="inquiries-search-input" oninput="AdminApp.filterInquiries()" placeholder="Search by name, phone, ref, or text..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" />
+            </div>
+            <select id="inquiries-category-filter" onchange="AdminApp.filterInquiries()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-emerald-500">
+              <option value="ALL">All Categories</option>
+              <option value="general">General Mahall Inquiry</option>
+              <option value="membership">Family Membership / Ward Transfer</option>
+              <option value="madrasa">Madrasa Admission & Syllabus</option>
+              <option value="welfare">Medical / Dialysis Aid Assistance</option>
+              <option value="feedback">Feedback / Suggestion</option>
+            </select>
+            <select id="inquiries-status-filter" onchange="AdminApp.filterInquiries()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-emerald-500">
+              <option value="ALL">All Statuses</option>
+              <option value="NEW">New (Unread)</option>
+              <option value="READ">Read / In-Review</option>
+              <option value="RESOLVED">Resolved</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Real-time Sync Active</span>
+          </div>
+        </div>
+
+        <!-- Inquiries Table / Cards Container -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                <tr>
+                  <th class="p-3.5">Ref ID & Date</th>
+                  <th class="p-3.5">User / Contact Details</th>
+                  <th class="p-3.5">Category & Ward</th>
+                  <th class="p-3.5">Message Content</th>
+                  <th class="p-3.5">Status</th>
+                  <th class="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inquiries-table-body" class="divide-y divide-slate-800/80">
+                <!-- Rendered dynamically via AdminApp.renderInquiries() -->
+              </tbody>
+            </table>
+          </div>
+          <div id="inquiries-empty-state" class="hidden p-8 text-center space-y-2">
+            <i data-lucide="inbox" class="w-10 h-10 text-slate-600 mx-auto"></i>
+            <p class="text-sm font-semibold text-slate-300">No user submissions found</p>
+            <p class="text-xs text-slate-500">Public messages submitted via the About & Contact forms will appear here in real time.</p>
+          </div>
+        </div>
+
+        <!-- Section 2: Spiritual & Religious Consultations Desk -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+                <i data-lucide="user-check" class="w-5 h-5"></i>
+              </span>
+              <div>
+                <h3 class="text-base font-heading font-bold text-white">Religious Consultations & Scholar Bookings</h3>
+                <p class="text-xs text-slate-400">User appointment requests submitted for Chief Imam Usthad & Scholars</p>
+              </div>
+            </div>
+            <span class="text-xs font-arabic text-amber-400">حجوزات الاستشارات الدينية</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                <tr>
+                  <th class="p-3">Reference</th>
+                  <th class="p-3">Applicant Name</th>
+                  <th class="p-3">Phone</th>
+                  <th class="p-3">Scholar</th>
+                  <th class="p-3">Category</th>
+                  <th class="p-3">Slot / Mode</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="consultations-table-body" class="divide-y divide-slate-800/80">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL DIALOGS CONTAINER (ANNOUNCEMENTS, FAMILIES, CERTS, PAYMENTS, PRINT)
+       ========================================================================== -->
+  <div id="modal-container" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <!-- Active modal content will be injected dynamically into #modal-content -->
+    <div id="modal-content" class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative my-8">
+      <!-- Injected via AdminApp.openModal -->
+    </div>
+  </div>
+
+  <!-- Hidden Print Container for Official Documents & Receipts -->
+  <div id="print-modal-content" class="hidden"></div>
+
+  <!-- ==========================================================================
+       TOAST NOTIFICATION ENGINE
+       ========================================================================== -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- ==========================================================================
+       SCRIPTS: DATA REPOSITORY & ADMIN PORTAL ENGINE
+       ========================================================================== -->
+  <!-- Official Google Firebase SDK Compatibility (v10.8.0) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/db.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="admin.js"></script>
+
+</body>
+
+</html>

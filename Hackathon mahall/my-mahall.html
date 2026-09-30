@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Mahall Resident Portal | Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Personalized resident dashboard for Ahmed Koya: Digital Smart Family ID, family members directory, certificate request wizard, dues payment, receipts, and confidential Sulhu." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Chart.js CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* 3D Flip Card Effect for Smart Family ID */
+    .flip-card {
+      background-color: transparent;
+      perspective: 1000px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      text-align: left;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-card.is-flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 24px;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col min-h-screen selection:bg-emerald-700 selection:text-white pb-16 md:pb-0">
+
+  <!-- ==========================================================================
+       TOP BAR: ROLE SWITCHER
+       ========================================================================== -->
+  <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2 px-4 shadow-sm relative z-[70]">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Mahall Identity & Helpline -->
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs tracking-wide">
+          <i data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Noorul Huda Mahall Jama'ath</span>
+        </span>
+        <span class="hidden md:inline text-slate-600">•</span>
+        <span class="hidden md:flex items-center gap-1 text-slate-400 text-xs">
+          <i data-lucide="phone-call" class="w-3 h-3 text-emerald-400"></i>
+          <span>Office: +91 495 2724800</span>
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-200 border border-slate-700 transition">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span id="current-lang-text" class="font-medium">English</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+          </button>
+          <div class="absolute right-0 mt-1.5 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl hidden group-hover:block z-[90] overflow-hidden py-1">
+            <button onclick="window.app.applyLanguage('en')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>English</span>
+              <span class="text-[10px] text-slate-400 font-mono">EN</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ml')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>മലയാളം (Malayalam)</span>
+              <span class="text-[10px] text-emerald-600 font-bold">ML</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ar')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium font-arabic flex items-center justify-between">
+              <span>العربية (Arabic)</span>
+              <span class="text-[10px] text-amber-600 font-bold">AR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button id="theme-toggle-btn" onclick="window.toggleTheme ? window.toggleTheme(event) : (window.app && window.app.toggleTheme && window.app.toggleTheme())" title="Toggle Theme" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer">
+          <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4 text-amber-400"></i>
+        </button>
+
+        <!-- Notification Bell -->
+        <button id="notif-bell-btn" onclick="window.toggleNotificationDrawer ? window.toggleNotificationDrawer(event) : (window.app && window.app.toggleNotificationDrawer && window.app.toggleNotificationDrawer(event))"
+          class="notif-trigger-btn relative p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer" title="Portal Notifications">
+          <i data-lucide="bell" class="w-4 h-4 text-emerald-400 pointer-events-none"></i>
+          <span id="notif-badge" class="notif-badge-el absolute -top-1 -right-1 bg-red-500 text-white font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] ring-2 ring-slate-900 pointer-events-none">0</span>
+        </button>
+
+        <!-- Active Resident Session Status & Lock Button in Top Bar -->
+        <div id="top-resident-auth-status" class="auth-status-container flex items-center gap-2 pl-2 border-l border-slate-700"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN BRAND HEADER & FLOATING CAPSULE NAVBAR
+       ========================================================================== -->
+  <header id="main-header" class="main-navbar-sticky sticky top-0 z-50 transition-all duration-300">
+    <div id="navbar-capsule" class="navbar-capsule-container transition-all duration-300">
+      <div id="navbar-inner-bar" class="flex items-center justify-between h-16 md:h-18 gap-2 lg:gap-4 w-full transition-all duration-300">
+        
+        <!-- Left: Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 shrink-0 group">
+          <img src="assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall Logo" class="brand-logo-img w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-emerald-600 shadow-sm object-cover shrink-0 group-hover:scale-105 transition" />
+          <div class="leading-tight shrink-0">
+            <span class="brand-title text-base md:text-lg font-black tracking-tight text-emerald-950 dark:text-emerald-400 font-heading whitespace-nowrap">
+              Noorul Huda
+            </span>
+            <span class="brand-sub text-[10px] text-slate-500 dark:text-slate-400 font-medium block whitespace-nowrap">
+              Mahall Jama'ath • Estd 1968
+            </span>
+          </div>
+        </a>
+
+        <!-- Center: Mega Menu Navigation -->
+        <nav class="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1.5 text-sm font-medium mx-auto">
+
+            <!-- 1. PRAYER & MOSQUE -->
+            <div class="relative group">
+              <a href="prayer.html" class="nav-link text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
+                <span>Prayer & Mosque</span>
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+              
+              <div class="mega-dropdown w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Prayer Schedules</div>
+                  <div class="space-y-1">
+                    <a href="prayer.html#daily-timetable" class="mega-item">
+                      <i data-lucide="clock" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Daily Prayer Timetable</span>
+                    </a>
+                    <a href="prayer.html#jumua" class="mega-item">
+                      <i data-lucide="sun" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Friday Jumu'ah Schedule</span>
+                    </a>
+                    <a href="prayer.html#adhan-offset" class="mega-item">
+                      <i data-lucide="bell" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Adhan & Iqamah Offset</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Mosque & Leadership</div>
+                  <div class="space-y-1">
+                    <a href="prayer.html#ramadan" class="mega-item">
+                      <i data-lucide="moon" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Ramadan Timetable</span>
+                    </a>
+                    <a href="prayer.html#scholars" class="mega-item">
+                      <i data-lucide="user-check" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Chief Imam & Scholars</span>
+                    </a>
+                    <a href="prayer.html#adhan-preview" class="mega-item">
+                      <i data-lucide="volume-2" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Audio Adhan Preview</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Special Services</div>
+                  <div class="space-y-1">
+                    <a href="prayer.html#janazah-desk" class="mega-item">
+                      <i data-lucide="flag" class="mega-item-icon text-red-500"></i>
+                      <span class="mega-item-title">Janazah Desk</span>
+                    </a>
+                    <a href="prayer.html#eid" class="mega-item">
+                      <i data-lucide="sparkles" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Eid Celebrations</span>
+                    </a>
+                    <a href="prayer.html#facilities" class="mega-item">
+                      <i data-lucide="map-pin" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Central Masjid Facilities</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">📍 Auto-calculated for Calicut, Kerala (11.25°N, 75.78°E)</span>
+                  <a href="prayer.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    Open Full Prayer Timetable &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. COMMUNITY & AID -->
+            <div class="relative group">
+              <a href="community.html" class="nav-link text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
+                <span>Community & Aid</span>
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+
+              <div class="mega-dropdown w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Emergency & Medical</div>
+                  <div class="space-y-1">
+                    <a href="community.html#blood-donors" class="mega-item">
+                      <i data-lucide="droplet" class="mega-item-icon text-red-500"></i>
+                      <span class="mega-item-title">Blood Donor Directory</span>
+                    </a>
+                    <a href="community.html#ambulance" class="mega-item">
+                      <i data-lucide="truck" class="mega-item-icon text-red-600"></i>
+                      <span class="mega-item-title">24/7 Ambulance Desk</span>
+                    </a>
+                    <a href="community.html#emergency" class="mega-item">
+                      <i data-lucide="phone-call" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Emergency Helpdesk</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Welfare Initiatives</div>
+                  <div class="space-y-1">
+                    <a href="community.html#medical-fund" class="mega-item">
+                      <i data-lucide="heart" class="mega-item-icon text-emerald-600"></i>
+                      <span class="mega-item-title">Medical & Dialysis Fund</span>
+                    </a>
+                    <a href="community.html#ration-kits" class="mega-item">
+                      <i data-lucide="shopping-bag" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Monthly Ration Kits</span>
+                    </a>
+                    <a href="community.html#education-aid" class="mega-item">
+                      <i data-lucide="graduation-cap" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Higher Education Aid</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Campus Facilities</div>
+                  <div class="space-y-1">
+                    <a href="community.html#campus-map" class="mega-item">
+                      <i data-lucide="map" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Interactive Campus Map</span>
+                    </a>
+                    <a href="community.html#auditorium" class="mega-item">
+                      <i data-lucide="home" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Community Auditorium</span>
+                    </a>
+                    <a href="community.html#qabarstan" class="mega-item">
+                      <i data-lucide="cross" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Mahall Qabarstan</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">❤️ Powered by community Zakat and Sadaqah endowments</span>
+                  <a href="community.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    View Community Support Directory &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. MADRASA & YOUTH -->
+            <div class="relative group">
+              <a href="madrasa.html" class="nav-link text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
+                <span>Madrasa & Youth</span>
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+
+              <div class="mega-dropdown mega-dropdown-center w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Madrasa & Dars</div>
+                  <div class="space-y-1">
+                    <a href="madrasa.html#madrasa-overview" class="mega-item">
+                      <i data-lucide="book-open" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Noorul Huda Madrasa</span>
+                    </a>
+                    <a href="madrasa.html#syllabus" class="mega-item">
+                      <i data-lucide="file-text" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Syllabus & Downloads</span>
+                    </a>
+                    <a href="madrasa.html#student-tracker" class="mega-item">
+                      <i data-lucide="award" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Student Tracker Demo</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Programs & Circles</div>
+                  <div class="space-y-1">
+                    <a href="madrasa.html#programs-calendar" class="mega-item">
+                      <i data-lucide="calendar" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Programs Calendar</span>
+                    </a>
+                    <a href="madrasa.html#quran-circles" class="mega-item">
+                      <i data-lucide="book-marked" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Quran Study Circles</span>
+                    </a>
+                    <a href="madrasa.html#recitation-fest" class="mega-item">
+                      <i data-lucide="mic" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Children's Recitation Fest</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Youth Movement (NHYM)</div>
+                  <div class="space-y-1">
+                    <a href="madrasa.html#career" class="mega-item">
+                      <i data-lucide="compass" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Career & Civil Service</span>
+                    </a>
+                    <a href="madrasa.html#sports" class="mega-item">
+                      <i data-lucide="users" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Sports & Volunteering</span>
+                    </a>
+                    <a href="madrasa.html#parenting" class="mega-item">
+                      <i data-lucide="smile" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Family Parenting Wing</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">🎓 Educating 480 registered children with ethical values</span>
+                  <a href="madrasa.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    Visit Madrasa Education Portal &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+
+
+            <!-- 5. "MY MAHALL" (ACTIVE PAGE) -->
+            <div class="relative group">
+              <a href="my-mahall.html" class="nav-link flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-950 border border-emerald-300 dark:border-emerald-700 rounded-lg px-2.5 py-1.5 shadow-sm">
+                <i data-lucide="home" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>My Mahall</span>
+                <svg class="w-3.5 h-3.5 text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+
+              <div class="mega-dropdown mega-dropdown-right w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Resident Identity</div>
+                  <div class="space-y-1">
+                    <a href="my-mahall.html#dashboard" class="mega-item">
+                      <i data-lucide="layout-dashboard" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Resident Dashboard</span>
+                    </a>
+                    <a href="my-mahall.html#family-id" class="mega-item">
+                      <i data-lucide="credit-card" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Smart Digital Family ID</span>
+                    </a>
+                    <a href="my-mahall.html#members" class="mega-item">
+                      <i data-lucide="users" class="mega-item-icon"></i>
+                      <span class="mega-item-title">5 Registered Members</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Services & Requests</div>
+                  <div class="space-y-1">
+                    <a href="my-mahall.html#request-cert" class="mega-item">
+                      <i data-lucide="file-plus" class="mega-item-icon text-emerald-600"></i>
+                      <span class="mega-item-title">Request Certificate</span>
+                    </a>
+                    <a href="my-mahall.html#download-certs" class="mega-item">
+                      <i data-lucide="printer" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Download Certificates</span>
+                    </a>
+                    <a href="my-mahall.html#app-status" class="mega-item">
+                      <i data-lucide="clock" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Application Status</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Contributions & Dues</div>
+                  <div class="space-y-1">
+                    <a href="my-mahall.html#pay-dues" class="mega-item">
+                      <i data-lucide="wallet" class="mega-item-icon text-amber-600"></i>
+                      <span class="mega-item-title">Pay Subscription</span>
+                    </a>
+                    <a href="my-mahall.html#receipts" class="mega-item">
+                      <i data-lucide="receipt" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Digital Receipts</span>
+                    </a>
+                    <a href="my-mahall.html#confidential-sulhu" class="mega-item">
+                      <i data-lucide="shield-alert" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Confidential Sulhu</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">🏠 Personalized space for Mahall residents</span>
+                  <a href="my-mahall.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    Go to My Mahall Resident Portal &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </nav>
+
+          <!-- Right Section -->
+          <div class="navbar-search-wrapper flex items-center gap-2 shrink-0 pr-1 sm:pr-2">
+            <div class="relative hidden sm:flex items-center">
+              <div class="relative flex items-center">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none"></i>
+                <input id="global-search-input" onkeyup="window.app.handleGlobalSearch(event)" type="text" placeholder="Search Mahall..." class="nav-search-input bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700/80 rounded-full pl-8 pr-8 py-1 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 transition-all shadow-inner" />
+                <div class="absolute right-2 flex items-center gap-1">
+                  <button onclick="window.app.toggleAIChat()" title="Ask Mahall AI Assistant" class="p-1 rounded-full text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile Hamburger -->
+            <button onclick="window.app.toggleMobileMenu()" aria-label="Toggle navigation menu" class="lg:hidden p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+      </div>
+
+      <!-- Mobile Collapsible Menu -->
+      <div id="mobile-collapsible-menu" class="lg:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 px-4 py-4 space-y-2 shadow-xl">
+        <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <a href="index.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="home" class="w-4 h-4 text-emerald-600"></i> Home
+          </a>
+          <a href="prayer.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="compass" class="w-4 h-4 text-emerald-600"></i> Prayer & Mosque
+          </a>
+          <a href="community.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="heart" class="w-4 h-4 text-emerald-600"></i> Community & Aid
+          </a>
+          <a href="madrasa.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="book-open" class="w-4 h-4 text-emerald-600"></i> Madrasa & Youth
+          </a>
+          <a href="my-mahall.html" class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-left flex items-center gap-2 font-bold">
+            <i data-lucide="user-check" class="w-4 h-4"></i> My Mahall
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       START-UP RESIDENT SECURITY GATE OVERLAY / MODAL
+       Shown when resident is not yet authenticated with User ID & Password
+       ========================================================================== -->
+  <div id="resident-security-gate-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto">
+    <div class="relative w-full max-w-xl rounded-3xl bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-950 border border-emerald-500/50 shadow-2xl p-6 sm:p-8 text-white my-8">
+      
+      <!-- Ambient Glow effects -->
+      <div class="absolute -right-10 -top-10 w-44 h-44 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-10 -bottom-10 w-44 h-44 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-5">
+        <!-- Gate Badge & Icon -->
+        <div class="flex items-center justify-between">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Startup Security Gate</span>
+          </div>
+          <span class="text-[11px] font-mono text-slate-400">Resident Authentication</span>
+        </div>
+
+        <div>
+          <h2 class="text-2xl font-black font-heading text-white tracking-tight flex items-center gap-2">
+            <span>Resident Portal Security Access</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
+            Please enter your official <strong class="text-emerald-300">Family User ID</strong> and <strong class="text-emerald-300">Security Password</strong> assigned during family registration in the Admin Portal to unlock this private resident portal.
+          </p>
+        </div>
+
+        <!-- Alert Notification -->
+        <div id="gate-sec-alert" class="hidden"></div>
+
+        <!-- Authentication Form -->
+        <form onsubmit="handleGateLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-emerald-200 mb-1.5">
+              Registered Family User ID <span class="text-rose-400">*</span>
+            </label>
+            <div class="relative">
+              <i data-lucide="key" class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3.5"></i>
+              <input type="text" id="gate-sec-userid" required placeholder="e.g. W01-F001 or custom User ID"
+                class="w-full bg-slate-950/90 border border-slate-700 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 font-mono tracking-wide focus:outline-none transition">
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Issued during census registration in the Admin Portal.</p>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-emerald-200">
+                Security Password / PIN <span class="text-rose-400">*</span>
+              </label>
+              <span class="text-[11px] text-slate-400">Default: <code class="text-cyan-300 font-mono">1968</code></span>
+            </div>
+            <div class="relative">
+              <i data-lucide="lock" class="w-4 h-4 text-emerald-400 absolute left-3.5 top-3.5"></i>
+              <input type="password" id="gate-sec-password" required placeholder="Enter password / PIN"
+                class="w-full bg-slate-950/90 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder-slate-500 font-mono tracking-wide focus:outline-none transition">
+              <button type="button" onclick="toggleGatePasswordVisibility()" class="absolute right-3.5 top-3 text-slate-400 hover:text-white transition">
+                <i id="gate-pass-eye" data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="submit"
+              class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-sm shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transform active:scale-95 transition">
+              <i data-lucide="unlock" class="w-4 h-4 text-amber-300"></i>
+              <span>Unlock Resident Dashboard</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center pt-2">
+          <a href="index.html" class="text-xs text-slate-400 hover:text-emerald-300 transition">
+            &larr; Back to Main Portal Start-Up Security Section
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN RESIDENT PORTAL CONTENT (Gated by Start-up Security) -->
+  <div id="resident-portal-main-content" class="transition-all duration-300">
+
+  <!-- ==========================================================================
+       HERO BANNER: MY MAHALL RESIDENT PORTAL
+       ========================================================================== -->
+  <section class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-950 text-white py-10 px-4 relative overflow-hidden shadow-lg border-b border-emerald-800/40">
+    <div class="absolute inset-0 islamic-bg-pattern pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+            <a href="index.html" class="hover:underline flex items-center gap-1"><i data-lucide="home" class="w-3.5 h-3.5"></i> Home</a>
+            <span>/</span>
+            <span class="text-amber-400">Resident Services Portal</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-black font-heading tracking-tight flex items-center gap-3">
+            <i data-lucide="user-check" class="w-9 h-9 text-emerald-400"></i>
+            Ahlan Wa Sahlan, Ahmed Koya!
+          </h1>
+          <p class="text-slate-300 text-sm md:text-base max-w-3xl mt-2">
+            Family ID: <strong class="text-amber-300 font-mono">W02-F005</strong> • Al-Falah Villa, Ward 02. Manage your official family cards, certificate applications, subscriptions, and confidential assistance.
+          </p>
+        </div>
+
+        <!-- Household Status Pill -->
+        <div class="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/15 text-right shrink-0 flex flex-col items-start md:items-end">
+          <span class="text-[11px] uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            MEMBERSHIP STATUS: ACTIVE
+          </span>
+          <div class="text-2xl md:text-3xl font-black font-mono text-white mt-1">
+            5 Members
+          </div>
+          <span class="text-xs text-amber-300">
+            Dues Paid Through: September 2026
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Sticky Sub-Navbar Filter Pills -->
+      <div class="mt-8 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-semibold">
+        <a href="#dashboard" class="px-3.5 py-1.5 rounded-full bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 border border-emerald-600/50 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-400"></i> Resident Dashboard
+        </a>
+        <a href="#family-id" class="px-3.5 py-1.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/50 whitespace-nowrap transition flex items-center gap-1.5 font-bold">
+          <i data-lucide="credit-card" class="w-3.5 h-3.5 text-amber-400"></i> Smart Digital Family ID
+        </a>
+        <a href="#members" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="users" class="w-3.5 h-3.5 text-emerald-300"></i> 5 Registered Members
+        </a>
+        <a href="#request-cert" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="file-plus" class="w-3.5 h-3.5 text-teal-300"></i> Request Certificate
+        </a>
+        <a href="#download-certs" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="printer" class="w-3.5 h-3.5 text-blue-300"></i> Download Certificates
+        </a>
+        <a href="#app-status" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-300"></i> Application Status
+        </a>
+        <a href="#pay-dues" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-400"></i> Pay Subscription
+        </a>
+        <a href="#receipts" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="receipt" class="w-3.5 h-3.5 text-cyan-300"></i> Digital Receipts
+        </a>
+        <a href="#confidential-sulhu" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-pink-300"></i> Confidential Sulhu
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       MAIN CONTENT: ALL 9 SUB-NAVBAR FEATURES
+       ========================================================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
+
+    <!-- -----------------------------------------------------------------------
+         1. RESIDENT DASHBOARD OVERVIEW
+         ----------------------------------------------------------------------- -->
+    <section id="dashboard" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Identity 01 • Household Summary
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Resident Family Dashboard
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-slate-400 uppercase font-semibold">Subscription Status</span>
+          <div class="text-xl font-black text-emerald-600">PAID & UP TO DATE</div>
+          <span class="text-[10px] text-slate-500">₹250 / month (Next due: Oct 2026)</span>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-slate-400 uppercase font-semibold">Registered Dependents</span>
+          <div class="text-xl font-black text-slate-900 dark:text-white">5 Members</div>
+          <span class="text-[10px] text-slate-500">2 Madrasa students enrolled</span>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-slate-400 uppercase font-semibold">Active Applications</span>
+          <div class="text-xl font-black text-amber-600">1 In Review</div>
+          <span class="text-[10px] text-slate-500">Marriage NOC for Mohammed Zeeshan</span>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-slate-400 uppercase font-semibold">Welfare Aid Pledges</span>
+          <div class="text-xl font-black text-teal-600">₹3,000 Contributed</div>
+          <span class="text-[10px] text-slate-500">3 Dialysis sessions sponsored</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         1.B: MY PROGRAM REGISTRATIONS & TICKETS (CLOUD FIRESTORE UID-ISOLATED)
+         ----------------------------------------------------------------------- -->
+    <section id="my-registrations" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="ticket" class="w-4 h-4"></i> Cloud Firestore Isolated Records • Authenticated UID
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <span>My Program Registrations & Tickets</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            All ticket selections and registrations saved specifically to your authenticated account in Cloud Firestore.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openResidentEventBookingModal()"
+            class="btn-primary text-xs px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-950/20 active:scale-95 transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Register for a Program</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Container where current user's registrations are rendered -->
+      <div id="user-registrations-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically via renderUserRegistrations() -->
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         2. SMART DIGITAL FAMILY ID (3D INTERACTIVE FLIP CARD)
+         ----------------------------------------------------------------------- -->
+    <section id="family-id" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="credit-card" class="w-4 h-4"></i> Identity 02 • Digital NFC Card
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Smart Digital Family ID Card (Click Card to Flip)
+          </h2>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="flipFamilyCard()" class="btn-outline text-xs !py-1.5 !px-3">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Flip Card View
+          </button>
+          <button onclick="window.app.showToast('Downloaded Smart Family Card PDF', 'success')" class="btn-primary text-xs !py-1.5 !px-3.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Print Card
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+        <!-- 3D Flip Card Container -->
+        <div class="lg:col-span-2">
+          <div id="smart-family-card" class="flip-card cursor-pointer" onclick="flipFamilyCard()">
+            <div class="flip-card-inner">
+              
+              <!-- CARD FRONT -->
+              <div class="flip-card-front bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white p-6 rounded-3xl border-2 border-amber-400/40 shadow-2xl flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-emerald-500/10 pointer-events-none"></div>
+                
+                <!-- Top Header -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-10 h-10 rounded-full border border-amber-400 shadow-sm" />
+                    <div>
+                      <span class="text-[11px] font-mono tracking-widest text-amber-300 uppercase font-bold block">Noorul Huda Mahall Jama'ath</span>
+                      <span class="text-xs font-semibold text-slate-300">Digital Resident Identification Card</span>
+                    </div>
+                  </div>
+                  <span class="bg-amber-400/20 text-amber-300 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-400/30 uppercase">
+                    VERIFIED RESIDENT
+                  </span>
+                </div>
+
+                <!-- Mid Section -->
+                <div class="grid grid-cols-3 gap-2 my-2">
+                  <div>
+                    <span class="text-[9px] uppercase tracking-wider text-slate-400 block">Family Head</span>
+                    <strong class="text-base text-white font-bold block">Ahmed Koya</strong>
+                    <span class="text-[10px] text-slate-300">Al-Falah Villa</span>
+                  </div>
+                  <div>
+                    <span class="text-[9px] uppercase tracking-wider text-slate-400 block">Family ID</span>
+                    <strong class="text-base text-amber-300 font-mono font-black block">W02-F005</strong>
+                    <span class="text-[10px] text-slate-300">Ward 02</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[9px] uppercase tracking-wider text-slate-400 block">Dependents</span>
+                    <strong class="text-base text-emerald-400 font-black block">5 Persons</strong>
+                    <span class="text-[10px] text-slate-300">Valid: 2024-2027</span>
+                  </div>
+                </div>
+
+                <!-- Bottom Bar -->
+                <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] text-slate-400 font-mono">
+                  <span>REG: KL-KZK/1968/42</span>
+                  <span class="text-amber-300 flex items-center gap-1"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Click to view reverse / QR verification</span>
+                </div>
+              </div>
+
+              <!-- CARD BACK -->
+              <div class="flip-card-back bg-gradient-to-r from-slate-900 via-slate-950 to-emerald-950 text-white p-6 rounded-3xl border-2 border-emerald-500/40 shadow-2xl flex flex-col justify-between relative overflow-hidden">
+                <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                  <span class="text-xs font-bold text-amber-300">VERIFICATION & EMERGENCY INFO</span>
+                  <span id="card-back-uid" class="text-[10px] font-mono text-slate-400">UID: 9842-8811-0025</span>
+                </div>
+
+                <div class="flex items-center justify-between gap-4 my-2">
+                  <div class="space-y-1 text-xs">
+                    <div><span class="text-slate-400">Spouse:</span> <strong id="card-back-spouse">Sainaba Koya (O+)</strong></div>
+                    <div><span class="text-slate-400">Children:</span> <strong id="card-back-children">Zeeshan, Fatima, Bilal</strong></div>
+                    <div><span class="text-slate-400">Emergency Phone:</span> <strong id="card-back-phone" class="text-amber-300">+91 98472 11223</strong></div>
+                    <div><span class="text-slate-400">Hospital Preferred:</span> <strong>Calicut MIMS</strong></div>
+                  </div>
+
+                  <!-- QR Code Mock -->
+                  <div class="bg-white p-2 rounded-xl text-black shrink-0 text-center">
+                    <div class="w-20 h-20 bg-slate-900 flex items-center justify-center text-white text-[9px] font-mono rounded">
+                      [QR CODE]
+                    </div>
+                    <span class="text-[8px] font-mono font-bold block mt-0.5">SCAN TO VERIFY</span>
+                  </div>
+                </div>
+
+                <div class="text-[9px] text-slate-500 border-t border-white/10 pt-2 flex justify-between">
+                  <span>Issued by General Secretary, Noorul Huda Mahall</span>
+                  <span class="text-emerald-400">Click again to view front</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Actions & Wallet Integration -->
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 text-xs">
+          <h3 class="font-bold text-slate-900 dark:text-white text-sm">Smart Card Utilities</h3>
+          <p class="text-slate-500">
+            Use your Smart Family ID for instant admission in Madrasa, free library borrowing, auditorium concessions, and hospital emergency identification.
+          </p>
+          <button onclick="window.app.showToast('Added Family ID to Apple Wallet / Google Wallet', 'success')" class="w-full py-2.5 rounded-xl bg-black text-white hover:bg-slate-800 font-bold transition flex items-center justify-center gap-2">
+            <i data-lucide="smartphone" class="w-4 h-4 text-amber-400"></i> Add to Smartphone Wallet
+          </button>
+          <button onclick="window.app.showToast('Requested Physical PVC Smart Card (Delivery in 5 days)', 'info')" class="w-full py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold transition flex items-center justify-center gap-2">
+            <i data-lucide="credit-card" class="w-4 h-4 text-emerald-600"></i> Order PVC Card (₹50)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         3. 5 REGISTERED MEMBERS
+         ----------------------------------------------------------------------- -->
+    <section id="members" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="users" class="w-4 h-4"></i> Identity 03 • Family Members Roster
+          </span>
+          <h2 id="members-heading" class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Registered Dependents of Ahmed Koya (5 Members)
+          </h2>
+        </div>
+        <button onclick="openAddMemberModal()" class="btn-outline text-xs !py-1.5 !px-3">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Update / Add Family Member
+        </button>
+      </div>
+
+      <div id="members-roster-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+        <!-- Member 1: Ahmed Koya -->
+        <div class="glass-panel p-5 rounded-2xl border-2 border-emerald-500/60 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-black text-emerald-700 dark:text-emerald-400 uppercase">Head of Household</span>
+            <span class="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-full text-[10px]">Blood: B+</span>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Ahmed Koya</h4>
+          <p class="text-slate-500">Age: 52 • Occupation: Textile Merchant • Phone: +91 98472 11223</p>
+        </div>
+
+        <!-- Member 2: Sainaba -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-400 uppercase">Spouse</span>
+            <span class="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-full text-[10px]">Blood: O+</span>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Sainaba Koya</h4>
+          <p class="text-slate-500">Age: 48 • Homemaker • Active in Women's Quran Majlis</p>
+        </div>
+
+        <!-- Member 3: Mohammed Zeeshan -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-400 uppercase">Son (Eldest)</span>
+            <span class="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-full text-[10px]">Blood: B+</span>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Mohammed Zeeshan</h4>
+          <p class="text-slate-500">Age: 19 • B.Com Student at Farook College • Nikah application submitted</p>
+        </div>
+
+        <!-- Member 4: Fatima Zahra -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-400 uppercase">Daughter</span>
+            <span class="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-full text-[10px]">Blood: A+</span>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Fatima Zahra</h4>
+          <p class="text-slate-500">Age: 14 • Madrasa Std 9 (Roll NHM-101) • 1st Rank student</p>
+        </div>
+
+        <!-- Member 5: Bilal Ahmed -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-400 uppercase">Son (Youngest)</span>
+            <span class="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-full text-[10px]">Blood: B+</span>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Bilal Ahmed Koya</h4>
+          <p class="text-slate-500">Age: 10 • Madrasa Std 4 (Roll NHM-102) • Hifdh Juz 30 completed</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         4. REQUEST OFFICIAL CERTIFICATES (4-STEP WIZARD)
+         ----------------------------------------------------------------------- -->
+    <section id="request-cert" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="file-plus" class="w-4 h-4"></i> Services 04 • Application Wizard
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Request Official Mahall Certificates Online
+        </h2>
+      </div>
+
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Type -->
+          <div class="space-y-1.5">
+            <label class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">Certificate Type</label>
+            <select id="cert-type-select" onchange="toggleMyMahallWifeField()" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 font-medium">
+              <option value="marriage">Marriage NOC / Nikah Certificate</option>
+              <option value="residence">Mahall Membership & Residence Certificate</option>
+              <option value="conduct">Good Character & Moral Conduct Certificate</option>
+              <option value="destitute">Welfare & Educational Aid Eligibility</option>
+            </select>
+          </div>
+
+          <!-- Applicant -->
+          <div class="space-y-1.5">
+            <label class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">Applicant Name *</label>
+            <input id="cert-applicant-input" type="text" value="Mohammed Zeeshan" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 font-medium" />
+          </div>
+
+          <!-- Name of Wife of Applicant (Marriage NOC) -->
+          <div id="wrapper-mymahall-wife" class="space-y-1.5 bg-emerald-50/60 dark:bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/30">
+            <label class="font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider block flex items-center justify-between text-[11px]">
+              <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3 text-emerald-600"></i> Name of Wife of Applicant *</span>
+              <span class="text-[9px] bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 px-1 py-0.5 rounded font-bold">Nikah</span>
+            </label>
+            <input id="cert-wife-input" type="text" value="Fathima Nida (D/o Moideen Kutty)" placeholder="e.g. Fathima Nida (D/o Moideen Kutty)" class="w-full bg-white dark:bg-slate-800 border border-emerald-500/40 rounded-lg px-2.5 py-1 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 font-medium" />
+          </div>
+
+          <!-- Purpose -->
+          <div class="space-y-1.5">
+            <label class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">Purpose of Request</label>
+            <input id="cert-purpose-input" type="text" value="Nikah Solemnization at Nadakkavu Mahall" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500" />
+          </div>
+
+          <!-- Submit Button -->
+          <div class="sm:col-span-2 lg:col-span-4 flex justify-end pt-1">
+            <button onclick="submitCertificateRequest()" class="btn-primary text-xs !py-2.5 px-6 shadow-md flex items-center gap-2 font-bold">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i> Submit Certificate Application &rarr;
+            </button>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-slate-500">
+          Typical turnaround time: 24 to 48 hours. Digitally signed by General Secretary P. K. Abdurahman with holographic QR code.
+        </p>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         5. DOWNLOAD CERTIFICATES VAULT
+         ----------------------------------------------------------------------- -->
+    <section id="download-certs" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="printer" class="w-4 h-4"></i> Services 05 • Digital Vault
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Issued Official Certificates & Digital Downloads
+        </h2>
+      </div>
+
+      <div id="certificates-vault-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         6. APPLICATION STATUS TRACKER
+         ----------------------------------------------------------------------- -->
+    <section id="app-status" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="clock" class="w-4 h-4"></i> Services 06 • Live Stepper
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Application Progress Tracker
+        </h2>
+      </div>
+
+      <div id="app-status-card" class="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6 text-xs">
+        <!-- Tracker Type Selector Tabs -->
+        <div class="flex flex-wrap items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="switchAppTrackerType('CERT')" id="tab-tracker-cert" class="px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white text-xs transition">
+            📜 Certificate Requests
+          </button>
+          <button type="button" onclick="switchAppTrackerType('AUDITORIUM')" id="tab-tracker-auditorium" class="px-3.5 py-1.5 rounded-xl font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs transition">
+            🏛️ Auditorium Reservations
+          </button>
+          <button type="button" onclick="switchAppTrackerType('VOLUNTEER')" id="tab-tracker-volunteer" class="px-3.5 py-1.5 rounded-xl font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs transition">
+            🤝 Volunteer Applications
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+          <div>
+            <strong id="app-status-title" class="text-slate-900 dark:text-white text-sm block">Tracking Application: CERT-2026-0891 (Marriage NOC)</strong>
+            <span id="app-status-sub" class="text-slate-500">Submitted by Ahmed Koya on behalf of Mohammed Zeeshan</span>
+          </div>
+          <span id="app-status-pill" class="text-emerald-600 font-bold">Status: Step 4 of 4 (Completed)</span>
+        </div>
+
+        <!-- 4-Step Progress Stepper -->
+        <div id="app-status-stepper" class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
+          <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">1. Submitted</strong>
+            <span class="text-[10px] text-slate-400">10-Feb 11:30 AM</span>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">2. Ward Verification</strong>
+            <span class="text-[10px] text-slate-400">Ward Member Endorsed</span>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">3. Secretary Approval</strong>
+            <span class="text-[10px] text-slate-400">P. K. Abdurahman Approved</span>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">4. Certificate Issued</strong>
+            <span class="text-[10px] text-emerald-600 font-bold">Ready for Download</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         7. PAY SUBSCRIPTION & DUES (UPI SIMULATOR)
+         ----------------------------------------------------------------------- -->
+    <section id="pay-dues" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="wallet" class="w-4 h-4"></i> Contributions 07 • Subscription Gateway
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Pay Monthly Household Subscription & Dues
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <span class="text-xs font-bold text-emerald-600 uppercase">Monthly Dues Calculator</span>
+          <div class="space-y-2">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Select Months Ahead:</label>
+            <select id="pay-months-select" onchange="updatePayAmount()" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="1">1 Month (₹250)</option>
+              <option value="3">3 Months (₹750)</option>
+              <option value="6" selected>6 Months (₹1,500)</option>
+              <option value="12">1 Year Annual (₹3,000)</option>
+            </select>
+          </div>
+          <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl flex justify-between items-center">
+            <span class="text-slate-600 dark:text-slate-300">Total Payable:</span>
+            <strong id="pay-total-display" class="text-lg font-black text-emerald-700 dark:text-emerald-300">₹1,500</strong>
+          </div>
+          <button onclick="simulatePayment()" class="w-full btn-primary text-xs !py-2.5 shadow-md">
+            Pay via UPI / Google Pay / Card
+          </button>
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <span class="text-xs font-bold text-amber-600 uppercase">UPI Instant QR Code</span>
+          <div class="bg-white p-3 rounded-2xl text-center w-fit mx-auto border border-slate-200">
+            <div class="w-28 h-28 bg-slate-900 text-white flex items-center justify-center text-[10px] font-mono rounded-lg mx-auto">
+              [UPI QR CODE]
+            </div>
+            <span class="text-[9px] font-bold text-slate-700 block mt-1">noorulhuda@sbi</span>
+          </div>
+          <p class="text-[11px] text-slate-500 text-center">Scan with any UPI App (GPay, PhonePe, Paytm) for instant receipt generation.</p>
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <span class="text-xs font-bold text-teal-600 uppercase">Tax Exemption & Waqf Fund</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Where Your Contributions Go</h4>
+          <p class="text-slate-500 leading-relaxed">
+            Your ₹250/month fee funds electricity for the central masjid, honorarium for teaching scholars, campus water filtration, and maintenance of the local qabarstan.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         8. DIGITAL RECEIPTS
+         ----------------------------------------------------------------------- -->
+    <section id="receipts" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-cyan-600 dark:text-cyan-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="receipt" class="w-4 h-4"></i> Contributions 08 • Transaction Ledger
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Digital Payment Receipts
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm text-xs">
+        <table class="w-full text-left">
+          <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 uppercase text-[10px]">
+            <tr>
+              <th class="p-3">Receipt No</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">Particulars</th>
+              <th class="p-3">Amount</th>
+              <th class="p-3">Payment Mode</th>
+              <th class="p-3">Action</th>
+            </tr>
+          </thead>
+          <tbody id="receipts-table-body" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         9. CONFIDENTIAL SULHU REQUEST
+         ----------------------------------------------------------------------- -->
+    <section id="confidential-sulhu" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-pink-600 dark:text-pink-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="shield-alert" class="w-4 h-4"></i> Mediation 09 • Strictly Private Channel
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Confidential Sulhu & Reconciliation Request
+        </h2>
+      </div>
+
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6 text-xs">
+        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+          Submit confidential matters directly to Chief Imam Usthad Abdul Rasheed Faizy and certified legal mediators. All correspondence is strictly encrypted and protected under community privacy oaths.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="space-y-1.5">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Category of Matter</label>
+            <select id="sulhu-category-select" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="Family & Matrimonial Counseling">Family & Matrimonial Counseling</option>
+              <option value="Inheritance / Estate Distribution">Inheritance / Estate Distribution</option>
+              <option value="Property Boundary Dispute">Property Boundary Dispute</option>
+              <option value="Commercial / Business Settlement">Commercial / Business Settlement</option>
+            </select>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Preferred Mode</label>
+            <select id="sulhu-mode-select" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="Private In-Person Hearing (Imam Office)">Private In-Person Hearing (Imam Office)</option>
+              <option value="Confidential Telephone Consultation">Confidential Telephone Consultation</option>
+              <option value="Home Visit by Elder Panel">Home Visit by Elder Panel</option>
+            </select>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Preferred Date Window</label>
+            <input id="sulhu-date-input" type="date" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Brief Confidential Summary</label>
+          <textarea id="sulhu-desc-input" rows="3" placeholder="Describe the matter briefly. Strictly visible only to the Chief Imam and Arbitrators..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+        </div>
+
+        <button onclick="submitSulhuRequest()" class="btn-primary text-xs !py-2.5 !px-5 shadow-md">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i> Submit Confidential Request
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       GLOBAL FOOTER
+       ========================================================================== -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-16 pt-12 pb-8 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-emerald-500" />
+          <span class="font-bold text-base text-white">Noorul Huda Mahall</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed mb-3">
+          Official digital portal for Noorul Huda Mahall Jama'ath, Central Mosque Road, Ward 02, Calicut, Kerala - 673004.
+        </p>
+        <div class="text-amber-400 font-medium">Estd. 1968 • Reg No: KL-KZK/1968/42</div>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Quick Navigation</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li><a href="index.html" class="hover:text-emerald-400 transition">Home Dashboard</a></li>
+          <li><a href="prayer.html" class="hover:text-emerald-400 transition">Prayer & Mosque</a></li>
+          <li><a href="community.html" class="hover:text-emerald-400 transition">Community & Aid</a></li>
+          <li><a href="madrasa.html" class="hover:text-emerald-400 transition">Madrasa & Youth</a></li>
+          <li><a href="contributions.html" class="hover:text-emerald-400 transition">Contributions & Dues</a></li>
+          <li><a href="my-mahall.html" class="hover:text-emerald-400 transition font-bold text-emerald-400">My Mahall Resident Portal</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Resident Support</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li>Office Helpdesk: <strong class="text-white">+91 94470 12345</strong></li>
+          <li>Ambulance 24/7: <strong class="text-white">+91 98460 99999</strong></li>
+          <li>Imam Consultation: <strong class="text-white">+91 98471 22334</strong></li>
+          <li>Hours: <span class="text-white">09:00 AM - 05:30 PM</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Logged-in Resident</h4>
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1.5 text-[11px]">
+          <div class="flex justify-between"><span>Resident:</span><span class="text-emerald-400 font-bold">Ahmed Koya</span></div>
+          <div class="flex justify-between"><span>Family ID:</span><span class="text-amber-400 font-bold font-mono">W02-F005</span></div>
+          <div class="flex justify-between"><span>Residence:</span><span class="text-slate-300">Al-Falah Villa</span></div>
+          <div class="flex justify-between"><span>Ward:</span><span class="text-emerald-400 font-bold">Ward 02</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
+      <div>&copy; 2026 Noorul Huda Mahall Jama'ath. All rights reserved. Built for community service.</div>
+      <div class="flex gap-4">
+        <a href="about.html" class="hover:underline">About Mahall</a>
+        <a href="services.html" class="hover:underline">Services & FAQ</a>
+        <a href="index.html" class="hover:underline">Portal Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Certificate Preview Modal -->
+  <div id="cert-preview-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+  <!-- Certificate Preview Modal -->
+  <div id="cert-preview-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div>
+          <h3 id="cert-modal-type-title" class="font-bold text-slate-900 dark:text-white text-base">Certificate Preview</h3>
+          <span id="cert-modal-ref" class="text-[10px] font-mono text-emerald-600 font-bold">CERT-2026-0891</span>
+        </div>
+        <button onclick="closeCertModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-amber-50/50 dark:bg-slate-800/60 border-2 border-emerald-600/60 text-center space-y-3 relative">
+        <div class="flex items-center justify-center gap-3">
+          <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-12 h-12 rounded-full border border-emerald-600 shadow-sm" />
+          <div class="text-left">
+            <h4 class="font-black text-slate-900 dark:text-white text-sm">NOORUL HUDA MAHALL JAMA'ATH</h4>
+            <span class="text-[9px] text-slate-500 font-mono">Reg. No: KL-KZK/1968/42 • Calicut, Kerala</span>
+          </div>
+        </div>
+        <div class="h-0.5 bg-gradient-to-r from-transparent via-emerald-600 to-transparent my-2"></div>
+        <span id="cert-modal-badge" class="text-[10px] uppercase font-mono text-emerald-700 font-black block tracking-wider">OFFICIAL CLEARANCE CERTIFICATE</span>
+        <p id="cert-modal-body" class="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed text-justify px-2">
+          This is to attest that <strong>Mohammed Zeeshan</strong> (Son of Ahmed Koya, Family ID: W02-F005, Ward 02) is a bona fide resident of Noorul Huda Mahall with verified good character. Clearance is hereby granted for Nikah Registration.
+        </p>
+        <div class="flex items-center justify-between pt-4 text-[10px] font-mono text-slate-500 border-t border-slate-200 dark:border-slate-700">
+          <div class="text-left">
+            <div class="text-slate-400 text-[9px]">Verified & Endorsed</div>
+            <strong class="text-slate-800 dark:text-slate-200">Usthad A. Faizy</strong><br>
+            <span>Chief Imam & Qazi</span>
+          </div>
+          <div class="w-14 h-14 bg-white p-1 rounded border border-slate-300 dark:border-slate-600 flex flex-col items-center justify-center">
+            <div class="w-10 h-10 bg-slate-900 text-white text-[7px] flex items-center justify-center font-mono rounded">QR SEAL</div>
+            <span class="text-[6px] font-bold text-slate-700 mt-0.5">VERIFIED</span>
+          </div>
+          <div class="text-right">
+            <div class="text-slate-400 text-[9px]">Issued by Authority</div>
+            <strong class="text-slate-800 dark:text-slate-200">P. K. Abdurahman</strong><br>
+            <span>General Secretary</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="closeCertModal()" class="flex-1 btn-outline text-xs !py-2">Close</button>
+        <button onclick="downloadActiveCertPDF()" class="flex-1 btn-primary text-xs !py-2 flex items-center justify-center gap-1.5">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Receipt Modal -->
+  <div id="receipt-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center font-bold">
+            <i data-lucide="check" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">Payment Receipt</h3>
+            <span id="receipt-modal-no" class="text-[10px] font-mono text-emerald-600 font-bold">RCP-2026-4421</span>
+          </div>
+        </div>
+        <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3 font-mono text-[11px]">
+        <div class="flex justify-between text-slate-500">
+          <span>Date & Time:</span>
+          <strong id="receipt-modal-date" class="text-slate-800 dark:text-slate-200">Today, 09:15 AM</strong>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>Family ID:</span>
+          <strong id="receipt-modal-family" class="text-slate-800 dark:text-slate-200 font-bold">W02-F005</strong>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>Resident Name:</span>
+          <strong id="receipt-modal-payer" class="text-slate-800 dark:text-slate-200">Ahmed Koya</strong>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>Payment Mode:</span>
+          <strong id="receipt-modal-mode" class="text-emerald-600">UPI (Google Pay)</strong>
+        </div>
+        <div class="border-t border-dashed border-slate-300 dark:border-slate-600 pt-2 flex justify-between items-center text-xs">
+          <span class="font-bold font-sans text-slate-800 dark:text-slate-200">Total Amount Paid:</span>
+          <strong id="receipt-modal-amount" class="text-base font-black text-emerald-600 font-mono">₹1,500</strong>
+        </div>
+        <div class="text-[9px] text-slate-400 text-center pt-2 border-t border-slate-200 dark:border-slate-700 font-sans">
+          Officially recorded in Noorul Huda Mahall General Ledger.
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="closeReceiptModal()" class="flex-1 btn-outline text-xs !py-2">Close</button>
+        <button onclick="window.app.showToast('Printing official receipt...', 'success')" class="flex-1 btn-primary text-xs !py-2 flex items-center justify-center gap-1.5">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Family Member Modal -->
+  <div id="add-member-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 space-y-4 text-xs shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i data-lucide="user-plus" class="w-4 h-4 text-emerald-600"></i> Add Family Member
+        </h3>
+        <button onclick="closeAddMemberModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Full Name</label>
+          <input id="new-member-name" type="text" placeholder="e.g. Ayesha Koya" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Relationship</label>
+            <select id="new-member-relation" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="Spouse">Spouse</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Parent">Parent</option>
+              <option value="Sibling">Sibling</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Age</label>
+            <input id="new-member-age" type="number" placeholder="Age" min="1" max="110" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Blood Group</label>
+            <select id="new-member-blood" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white">
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-bold text-slate-700 dark:text-slate-300 block">Contact Phone</label>
+            <input id="new-member-phone" type="text" placeholder="+91 ..." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700 dark:text-slate-300 block">Occupation / Education</label>
+          <input id="new-member-occupation" type="text" placeholder="e.g. Student, Teacher, etc." class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white" />
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeAddMemberModal()" class="flex-1 btn-outline text-xs !py-2">Cancel</button>
+        <button onclick="saveNewFamilyMember()" class="flex-1 btn-primary text-xs !py-2 font-bold">Add to Roster</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CERTIFICATE PREVIEW MODAL -->
+  <div id="cert-preview-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="max-w-xl w-full my-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="file-check" class="w-5 h-5 text-emerald-300"></i>
+          <div>
+            <h3 class="font-bold text-sm" id="cert-modal-type-title">OFFICIAL CERTIFICATE</h3>
+            <span class="text-[10px] text-emerald-200 font-mono" id="cert-modal-ref">CERT-2026-0891</span>
+          </div>
+        </div>
+        <button onclick="closeCertModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold">&times;</button>
+      </div>
+
+      <!-- Certificate Document Container (Official Paper Style) -->
+      <div class="p-4 sm:p-6 bg-slate-100 dark:bg-slate-950/60">
+        <div class="bg-white text-slate-900 p-6 rounded-2xl border-2 border-emerald-900/40 shadow-xl font-serif text-xs space-y-4 relative">
+          <!-- Bismillah & Header -->
+          <div class="text-center space-y-1 border-b border-emerald-900/20 pb-3">
+            <p class="font-arabic text-sm text-emerald-900 font-bold">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+            <h2 class="text-base sm:text-lg font-black font-sans tracking-wide text-emerald-950">NOORUL HUDA MAHALL JAMA'ATH</h2>
+            <p class="text-[9px] uppercase tracking-wider text-slate-500 font-sans font-bold">Registered under Wakf Act No: WKF/KRL/984/1968</p>
+            <p class="text-[9px] text-slate-400 font-sans">Central Juma Masjid & Office of General Secretary, Calicut, Kerala - 673001</p>
+          </div>
+
+          <!-- Document Title & Ref -->
+          <div class="text-center py-1">
+            <span id="cert-modal-doc-title" class="inline-block px-3 py-1 border-b-2 border-emerald-800 font-sans font-black text-xs sm:text-sm tracking-wider uppercase text-emerald-950">
+              MARRIAGE NOC
+            </span>
+            <div class="flex justify-between text-[10px] text-slate-500 font-mono mt-2 pt-1 border-t border-slate-100">
+              <span>Certificate Ref: <strong id="cert-modal-ref-inner" class="text-slate-800">CERT-2026-0891</strong></span>
+              <span>Date: <strong id="cert-modal-date-inner" class="text-slate-800">26 Sept 2026</strong></span>
+            </div>
+          </div>
+
+          <!-- Attestation Body -->
+          <div id="cert-modal-body" class="leading-relaxed space-y-2 text-slate-800 font-sans text-xs">
+            <!-- Dynamic Content populated via JS -->
+          </div>
+
+          <!-- Official Stamp & Signatures -->
+          <div class="pt-6 border-t border-slate-200 flex items-end justify-between font-sans">
+            <div class="text-center space-y-1">
+              <div class="w-14 h-14 border-2 border-dashed border-emerald-700/60 rounded-full flex flex-col items-center justify-center text-[7px] text-emerald-800 font-bold leading-tight mx-auto uppercase">
+                <span>OFFICIAL</span>
+                <span>MAHALL</span>
+                <span>SEAL</span>
+              </div>
+              <span class="text-[8px] text-slate-400">Noorul Huda Mahall Seal</span>
+            </div>
+            <div class="text-right">
+              <div class="font-bold text-xs text-slate-900">P. K. Abdurahman (General Secretary)</div>
+              <div class="text-[9px] text-slate-500">General Secretary</div>
+              <div class="text-[9px] text-slate-400">Executive Committee</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Authenticated with Cryptographic QR Seal
+        </span>
+        <div class="flex gap-2">
+          <button onclick="closeCertModal()" class="btn-outline text-xs !py-1.5 !px-3">Close</button>
+          <button onclick="downloadActiveCertPDF()" class="btn-primary text-xs !py-1.5 !px-3 flex items-center gap-1 font-bold">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECEIPT MODAL -->
+  <div id="receipt-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="receipt" class="w-5 h-5 text-emerald-600"></i> Official Payment Receipt
+        </h3>
+        <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+      </div>
+      <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 space-y-2 text-xs">
+        <div class="flex justify-between"><span class="text-slate-500">Receipt No:</span><strong class="font-mono text-emerald-700 dark:text-emerald-400">REC-2026-9921</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Payer Head:</span><strong class="text-slate-800 dark:text-slate-200">Mohammed Zeeshan (W02-F005)</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Amount Paid:</span><strong class="text-emerald-600 font-bold text-sm">₹250.00</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Status:</span><span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[9px] font-bold">SETTLED</span></div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeReceiptModal()" class="btn-outline text-xs !py-2 !px-4">Close</button>
+        <button onclick="if(window.app) window.app.showToast('Receipt downloaded!', 'success'); closeReceiptModal();" class="btn-primary text-xs !py-2 !px-4">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FLOATING MAHALL AI ASSISTANT CHAT WIDGET (ALL PAGES)
+       ========================================================================== -->
+  <div id="mahall-floating-chat-container" class="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-[80] font-sans">
+    <!-- Floating Trigger Button -->
+    <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+      id="ai-chat-floating-btn"
+      aria-label="Open Mahall AI Assistant"
+      title="Ask Mahall AI Assistant"
+      class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-800 via-emerald-700 to-teal-600 text-white shadow-2xl border-2 border-amber-400 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group relative">
+      <i data-lucide="bot" class="w-7 h-7 text-amber-300 group-hover:rotate-12 transition-transform"></i>
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-amber-500 text-[9px] font-black text-slate-950 items-center justify-center shadow">AI</span>
+      </span>
+    </button>
+
+    <!-- Interactive Chat Drawer -->
+    <div id="ai-chat-drawer"
+      class="absolute bottom-16 right-0 w-[340px] sm:w-[400px] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col hidden transition-all duration-300 z-[90]">
+      
+      <!-- Chat Header -->
+      <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center font-bold text-base shadow">
+            🌙
+          </div>
+          <div>
+            <h4 class="font-bold text-sm leading-tight flex items-center gap-1.5">
+              Mahall AI Assistant
+              <span class="text-[9px] bg-emerald-600/80 px-1.5 py-0.5 rounded-full font-medium text-emerald-100">Live</span>
+            </h4>
+            <p class="text-[11px] text-emerald-200">Full website guide & community assistant</p>
+          </div>
+        </div>
+        <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="p-2.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="MahallAI.handleChipClick('When is Jumu\'ah prayer and Khutbah?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🕌 Jumu'ah
+        </button>
+        <button onclick="MahallAI.handleChipClick('How can I get a Marriage NOC certificate?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🧾 Marriage NOC
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me about Noorul Huda Madrasa timings')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          📖 Madrasa
+        </button>
+        <button onclick="MahallAI.handleChipClick('Emergency ambulance number and blood donors')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🚑 Ambulance
+        </button>
+        <button onclick="MahallAI.handleChipClick('How to pay Mahall monthly subscription dues?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          💳 Pay ₹250
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me the history of Noorul Huda Mahall')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🏛️ History
+        </button>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="ai-chat-messages" class="p-4 h-72 sm:h-80 overflow-y-auto space-y-3 text-slate-800 dark:text-slate-200">
+        <div class="flex items-start gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 text-xs font-bold shadow">
+            🌙
+          </div>
+          <div class="chat-bubble-ai text-xs md:text-sm px-4 py-2.5 max-w-[88%] border border-slate-200/80 dark:border-slate-700 shadow-sm leading-relaxed">
+            Assalamu Alaikum! I am the <strong>Noorul Huda Mahall AI Assistant</strong>. Ask me anything about prayer times, marriage NOC, madrasa, ambulance, Zakat, or community services across our entire website!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-2">
+        <input id="ai-chat-input" onkeydown="if(event.key==='Enter') MahallAI.sendMessage()" type="text"
+          placeholder="Ask anything about our Mahall..."
+          class="flex-grow text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 transition" />
+        <button onclick="MahallAI.sendMessage()" class="btn-primary p-2.5 rounded-xl shadow hover:scale-105 transition" aria-label="Send Message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  </div><!-- End resident-portal-main-content (Gated by Start-up Security) -->
+
+  <!-- ==========================================================================
+       PROGRAM REGISTRATION & TICKET BOOKING MODAL (FIRESTORE)
+       ========================================================================== -->
+  <div id="resident-event-booking-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-slate-900 border border-emerald-900/60 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative my-8 text-white">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <i data-lucide="ticket" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white font-heading">Program Registration Desk</h3>
+            <p class="text-xs text-slate-400">Save tickets directly to your authenticated UID</p>
+          </div>
+        </div>
+        <button onclick="closeResidentEventBookingModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="resident-event-booking-form" onsubmit="handleResidentBookEventSubmit(event)" class="space-y-4 pt-4 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold uppercase tracking-wider mb-1.5">Select Program / Event <span class="text-rose-400">*</span></label>
+          <select id="booking-event-id" class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 rounded-xl px-3.5 py-2.5 text-white focus:outline-none">
+            <option value="annual-campus-program" data-title="Annual Campus Program 2026">Annual Campus Program 2026 (Grand Annual Meet)</option>
+            <option value="evt-3" data-title="NHYM Civil Services & AI Career Conclave">NHYM Civil Services & AI Career Conclave</option>
+            <option value="quran-fest" data-title="Grand Qur'an Study Circle & Tajweed Workshop">Grand Qur'an Study Circle & Tajweed Workshop</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold uppercase tracking-wider mb-1.5">Number of Tickets <span class="text-rose-400">*</span></label>
+          <div class="flex items-center gap-3">
+            <select id="booking-tickets" class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 rounded-xl px-3.5 py-2.5 text-white font-mono font-bold text-sm focus:outline-none">
+              <option value="1">1 Ticket (Individual Pass)</option>
+              <option value="2" selected>2 Tickets (Double Entry)</option>
+              <option value="3">3 Tickets</option>
+              <option value="4">4 Tickets</option>
+              <option value="5">5 Tickets (Family Delegation)</option>
+              <option value="6">6 Tickets</option>
+              <option value="8">8 Tickets</option>
+              <option value="10">10 Tickets (Group Delegation)</option>
+            </select>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Each ticket grants access to auditorium seating and program materials.</p>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold uppercase tracking-wider mb-1.5">Special Requests / Attendee Notes</label>
+          <textarea id="booking-notes" rows="2" placeholder="e.g. Elderly attendee requiring ground floor seating..."
+            class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 rounded-xl p-3 text-white placeholder-slate-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="flex items-center justify-between text-[11px] text-slate-400">
+            <span>Ownership Identifier:</span>
+            <span id="booking-owner-uid" class="font-mono text-cyan-400">UID...</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Security Rule: Tickets are permanently registered under your verified Firebase UID.</p>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeResidentEventBookingModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold">
+            Cancel
+          </button>
+          <button type="submit" id="btn-submit-booking" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold flex items-center gap-2 shadow-lg active:scale-95 transition">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Confirm & Reserve Tickets</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script>
+    let currentFamilyId = 'W02-F005';
+    let activePreviewCert = null;
+
+    function flipFamilyCard() {
+      const card = document.getElementById('smart-family-card');
+      if (card) card.classList.toggle('is-flipped');
+    }
+
+    function updatePayAmount() {
+      const select = document.getElementById('pay-months-select');
+      if (!select) return;
+      const months = parseInt(select.value) || 1;
+      const total = months * 250;
+      const display = document.getElementById('pay-total-display');
+      if (display) display.innerText = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function initResidentPortal() {
+      const isAuthed = (typeof AuthService !== 'undefined') && AuthService.isAuthenticated();
+      const gateModal = document.getElementById('resident-security-gate-modal');
+      const mainContent = document.getElementById('resident-portal-main-content');
+      const topStatus = document.getElementById('top-resident-auth-status');
+
+      if (!isAuthed) {
+        if (gateModal) {
+          gateModal.classList.remove('hidden');
+          gateModal.classList.add('flex');
+          gateModal.style.display = 'flex';
+        }
+        if (mainContent) {
+          mainContent.classList.add('filter', 'blur-sm', 'pointer-events-none', 'select-none');
+        }
+        if (topStatus) {
+          topStatus.innerHTML = `
+            <a href="login.html?redirect=my-mahall.html" class="px-2.5 py-1 rounded bg-amber-950 text-amber-300 border border-amber-800 text-[11px] font-bold flex items-center gap-1 hover:text-white">
+              <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Sign In Required</span>
+            </a>
+          `;
+        }
+        renderGateDemoPills();
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      // User is authenticated!
+      if (gateModal) {
+        gateModal.classList.add('hidden');
+        gateModal.classList.remove('flex');
+        gateModal.style.display = 'none';
+      }
+      if (mainContent) {
+        mainContent.classList.remove('filter', 'blur-sm', 'pointer-events-none', 'select-none');
+      }
+
+      const currentUser = AuthService.getCurrentUser() || {};
+      const uid = AuthService.getUid();
+
+      if (typeof AuthService !== 'undefined' && typeof AuthService.updateGlobalHeaderUI === 'function') {
+        AuthService.updateGlobalHeaderUI();
+      }
+
+      renderFamilyProfile();
+      renderUserRegistrations();
+      renderMembersRoster();
+      renderCertificatesVault();
+      renderReceiptsTable();
+      renderApplicationTracker();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderGateDemoPills() {
+      const container = document.getElementById('gate-demo-pills');
+      if (!container) return;
+      container.innerHTML = `
+        <button type="button" onclick="autofillGateLogin('shayal123', 'shayal123')"
+          class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-emerald-950 text-slate-300 hover:text-emerald-300 border border-slate-700 text-[10px] font-mono flex items-center gap-1 transition">
+          <span>Shayal</span>
+          <span class="text-emerald-400">(2 Tickets)</span>
+        </button>
+        <button type="button" onclick="autofillGateLogin('rifan456', 'rifan456')"
+          class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-emerald-950 text-slate-300 hover:text-emerald-300 border border-slate-700 text-[10px] font-mono flex items-center gap-1 transition">
+          <span>Rifan</span>
+          <span class="text-emerald-400">(5 Tickets)</span>
+        </button>
+        <a href="login.html?redirect=my-mahall.html" class="px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-semibold">
+          Advanced Login &rarr;
+        </a>
+      `;
+    }
+
+    function autofillGateLogin(userId, password) {
+      const u = document.getElementById('gate-sec-userid');
+      const p = document.getElementById('gate-sec-password');
+      if (u) u.value = userId;
+      if (p) p.value = password;
+      handleGateLogin(null);
+    }
+
+    function toggleGatePasswordVisibility() {
+      const p = document.getElementById('gate-sec-password');
+      const eye = document.getElementById('gate-pass-eye');
+      if (p) {
+        if (p.type === 'password') {
+          p.type = 'text';
+          if (eye) eye.setAttribute('data-lucide', 'eye-off');
+        } else {
+          p.type = 'password';
+          if (eye) eye.setAttribute('data-lucide', 'eye');
+        }
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    async function handleGateLogin(e) {
+      if (e) e.preventDefault();
+      const userId = (document.getElementById('gate-sec-userid')?.value || '').trim();
+      const pass = (document.getElementById('gate-sec-password')?.value || '').trim();
+      const alertBox = document.getElementById('gate-sec-alert');
+
+      if (!userId || !pass) {
+        if (alertBox) {
+          alertBox.className = 'p-3 rounded-xl text-xs font-semibold bg-amber-950/80 text-amber-300 border border-amber-800 flex items-center gap-2';
+          alertBox.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i> Please enter both User ID and Password.';
+          alertBox.classList.remove('hidden');
+        }
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      try {
+        if (typeof AuthService === 'undefined') {
+          throw new Error('Authentication Service is initializing. Please wait a moment.');
+        }
+        const session = await AuthService.login(userId, pass);
+        if (alertBox) alertBox.classList.add('hidden');
+        initResidentPortal();
+        if (window.app) {
+          window.app.showToast(`Authenticated! Welcome, ${session.user.name} (UID: ${session.uid})`, 'success');
+        }
+      } catch (err) {
+        if (alertBox) {
+          alertBox.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-950/80 text-rose-300 border border-rose-800 flex items-center gap-2';
+          alertBox.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i> ${err.message || 'Authentication failed. Please verify credentials.'}`;
+          alertBox.classList.remove('hidden');
+        }
+        if (window.app) window.app.showToast(err.message || 'Authentication failed', 'error');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    async function lockResidentPortal() {
+      if (typeof AuthService !== 'undefined') {
+        await AuthService.logout();
+      }
+      initResidentPortal();
+      if (window.app) {
+        window.app.showToast('Resident session ended.', 'info');
+      }
+    }
+
+    function renderFamilyProfile() {
+      const user = (typeof AuthService !== 'undefined') ? AuthService.getCurrentUser() : null;
+      const uid = (typeof AuthService !== 'undefined') ? AuthService.getUid() : 'UID_UNKNOWN';
+      const userName = user ? user.name : 'Resident Member';
+      const userIdent = (user && (user.username || user.email)) || uid;
+      const userWard = (user && user.ward) || 'Ward 02 (Masjid Central)';
+      const userHouse = (user && user.houseName) || 'Resident Household';
+
+      // Update hero greeting and details
+      const heroTitle = document.querySelector('h1.font-heading');
+      if (heroTitle) {
+        heroTitle.innerHTML = `<i data-lucide="user-check" class="w-9 h-9 text-emerald-400"></i> Ahlan Wa Sahlan, ${userName}!`;
+      }
+      const heroSub = document.querySelector('p.text-slate-300');
+      if (heroSub) {
+        heroSub.innerHTML = `Firebase UID: <strong class="text-cyan-300 font-mono select-all">${uid}</strong> • User ID: <strong class="text-amber-300 font-mono">${userIdent}</strong> • ${userHouse}, ${userWard}. All personal records and registrations are permanently saved under your authenticated UID in Cloud Firestore.`;
+      }
+
+      // Update smart card front
+      const cardHead = document.querySelector('.flip-card-front strong.text-base.text-white');
+      if (cardHead) cardHead.innerText = userName;
+      const cardHouse = document.querySelector('.flip-card-front span.text-\\[10px\\].text-slate-300');
+      if (cardHouse) cardHouse.innerText = userHouse;
+      const cardId = document.querySelector('.flip-card-front strong.text-amber-300');
+      if (cardId) cardId.innerText = `${uid}`;
+      const cardWard = document.querySelector('.flip-card-front strong.text-amber-300 + span');
+      if (cardWard) cardWard.innerText = userWard;
+    }
+
+    async function renderUserRegistrations() {
+      const container = document.getElementById('user-registrations-container');
+      if (!container) return;
+
+      try {
+        if (typeof AuthService === 'undefined' || !AuthService.isAuthenticated()) {
+          container.innerHTML = `<div class="p-6 text-center text-slate-400 col-span-full">Please log in to view your program registrations.</div>`;
+          return;
+        }
+
+        const regs = await AuthService.getUserRegistrations();
+
+        if (!regs || regs.length === 0) {
+          container.innerHTML = `
+            <div class="p-8 rounded-2xl bg-slate-900/60 border border-dashed border-slate-800 text-center col-span-full space-y-2">
+              <i data-lucide="ticket" class="w-10 h-10 text-slate-600 mx-auto"></i>
+              <h4 class="font-bold text-white text-sm">No Program Registrations Found</h4>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto">You have not registered for any upcoming events yet. Click below to book program tickets.</p>
+              <button onclick="openResidentEventBookingModal()" class="btn-primary text-xs px-4 py-2 rounded-xl font-bold mt-2">
+                Register for Annual Campus Program
+              </button>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = regs.map(reg => `
+          <div class="glass-panel p-5 rounded-2xl border border-emerald-900/50 space-y-3 relative overflow-hidden group hover:border-emerald-600/60 transition">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider font-mono">
+                <i data-lucide="ticket" class="w-3 h-3"></i> ${reg.ticketCount} ${reg.ticketCount === 1 ? 'Ticket' : 'Tickets'}
+              </span>
+              <span class="px-2 py-0.5 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold uppercase font-mono">
+                ${reg.status || 'Registered'}
+              </span>
+            </div>
+
+            <div>
+              <h4 class="font-bold text-white text-base font-heading group-hover:text-emerald-300 transition">
+                ${reg.eventTitle || 'Annual Campus Program 2026'}
+              </h4>
+              <p class="text-xs text-slate-400 mt-0.5 font-mono">Pass Code: <strong class="text-amber-300">${reg.ticketNumber || reg.id}</strong></p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] space-y-1">
+              <div class="flex items-center justify-between text-slate-400">
+                <span>Reserved For:</span>
+                <strong class="text-slate-200">${reg.ownerName || 'You'}</strong>
+              </div>
+              <div class="flex items-center justify-between text-slate-400">
+                <span>Owner Firebase UID:</span>
+                <span class="font-mono text-cyan-400 text-[10px]">${reg.ownerUid || ''}</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-400">
+                <span>Date:</span>
+                <span>${reg.createdAt ? new Date(reg.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Confirmed'}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1 border-t border-slate-800/60 text-xs">
+              <button onclick="viewEPassDetails('${reg.registrationId || reg.id}', '${reg.ticketCount}', '${reg.eventTitle}', '${reg.ticketNumber}')"
+                class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 transition">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i> <span>View Digital E-Pass</span>
+              </button>
+              <button onclick="cancelUserRegistration('${reg.registrationId || reg.id}')"
+                class="text-rose-400 hover:text-rose-300 text-[11px] font-medium transition">
+                Cancel
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        if (window.lucide) lucide.createIcons();
+      } catch (err) {
+        console.error('Error rendering user registrations:', err);
+        container.innerHTML = `<div class="p-4 text-xs text-rose-400">Error loading registrations: ${err.message}</div>`;
+      }
+    }
+
+    function openResidentEventBookingModal() {
+      const modal = document.getElementById('resident-event-booking-modal');
+      const uidBox = document.getElementById('booking-owner-uid');
+      if (uidBox && typeof AuthService !== 'undefined') {
+        uidBox.textContent = AuthService.getUid() || 'Not authenticated';
+      }
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closeResidentEventBookingModal() {
+      const modal = document.getElementById('resident-event-booking-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    async function handleResidentBookEventSubmit(e) {
+      e.preventDefault();
+      const selectEvt = document.getElementById('booking-event-id');
+      const eventId = selectEvt ? selectEvt.value : 'annual-campus-program';
+      const eventTitle = selectEvt ? selectEvt.options[selectEvt.selectedIndex].getAttribute('data-title') : 'Annual Campus Program 2026';
+      const ticketCount = parseInt(document.getElementById('booking-tickets')?.value || '1', 10);
+      const notes = document.getElementById('booking-notes')?.value || '';
+
+      try {
+        await AuthService.registerEvent({
+          eventId,
+          eventTitle,
+          ticketCount,
+          notes
+        });
+
+        closeResidentEventBookingModal();
+        if (window.app) {
+          window.app.showToast(`Successfully registered ${ticketCount} ticket(s) for ${eventTitle}!`, 'success');
+        }
+        await renderUserRegistrations();
+      } catch (err) {
+        alert(err.message || 'Could not register for event.');
+      }
+    }
+
+    async function cancelUserRegistration(regId) {
+      if (!confirm('Are you sure you want to cancel this program registration?')) return;
+      try {
+        await AuthService.cancelRegistration(regId);
+        if (window.app) window.app.showToast('Registration cancelled.', 'info');
+        await renderUserRegistrations();
+      } catch (err) {
+        alert(err.message || 'Error cancelling registration');
+      }
+    }
+
+    function viewEPassDetails(regId, ticketCount, eventTitle, ticketNumber) {
+      const user = AuthService.getCurrentUser() || {};
+      alert(`🎫 OFFICIAL E-PASS DETAILS:\n\nAttendee: ${user.name}\nProgram: ${eventTitle}\nTickets: ${ticketCount} Pass(es)\nPass Code: ${ticketNumber}\nFirebase UID: ${AuthService.getUid()}\nStatus: Confirmed in Cloud Firestore`);
+    }
+
+      const membersCount = (family.members && family.members.length) || family.membersCount || 1;
+      const cardDeps = document.querySelector('.flip-card-front strong.text-emerald-400');
+      if (cardDeps) cardDeps.innerText = `${membersCount} Persons`;
+
+      // Update smart card back
+      const uidEl = document.getElementById('card-back-uid');
+      const phoneEl = document.getElementById('card-back-phone');
+      const spouseEl = document.getElementById('card-back-spouse');
+      const childrenEl = document.getElementById('card-back-children');
+
+      if (uidEl) uidEl.innerText = `UID: ${family.userId || family.familyId}`;
+      if (phoneEl) phoneEl.innerText = family.phone || '+91 94470 00000';
+
+      const spouse = (family.members || []).find(m => (m.relation || '').toLowerCase().includes('spouse') || (m.relation || '').toLowerCase().includes('wife'));
+      if (spouseEl) spouseEl.innerText = spouse ? `${spouse.name} (${spouse.blood || spouse.bloodGroup || 'O+'})` : 'Registered';
+
+      const kids = (family.members || []).filter(m => (m.relation || '').toLowerCase().includes('son') || (m.relation || '').toLowerCase().includes('daughter') || (m.relation || '').toLowerCase().includes('child'));
+      if (childrenEl) childrenEl.innerText = kids.length > 0 ? kids.map(k => k.name).join(', ') : 'None registered';
+
+      // Update household status pill in hero
+      const countEl = document.querySelector('.text-2xl.md\\:text-3xl.font-mono');
+      if (countEl) countEl.innerText = `${membersCount} Members`;
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderMembersRoster() {
+      const container = document.getElementById('members-roster-container');
+      if (!container || typeof MahallDB === 'undefined') return;
+
+      const family = MahallDB.getFamilyById(currentFamilyId);
+      if (!family) return;
+
+      const members = family.members || [];
+      const heading = document.getElementById('members-heading');
+      if (heading) {
+        heading.innerText = `Registered Dependents of ${family.head} (${members.length} Members)`;
+      }
+
+      container.innerHTML = members.map((m, idx) => {
+        const isHead = idx === 0 || m.relation === 'Head of Household';
+        return `
+          <div class="glass-panel p-5 rounded-2xl ${isHead ? 'border-2 border-emerald-500/60' : 'border border-slate-200 dark:border-slate-800'} space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-black ${isHead ? 'text-emerald-700 dark:text-emerald-400 uppercase' : 'text-slate-500 dark:text-slate-400 uppercase'} text-[10px] tracking-wider">${m.relation || 'Dependent'}</span>
+              <span class="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-bold px-2 py-0.5 rounded-full text-[10px]">Blood: ${m.bloodGroup || 'O+'}</span>
+            </div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">${m.name}</h4>
+            <p class="text-slate-500 text-[11px]">
+              Age: ${m.age || 25} • ${m.occupation || 'Resident'}${m.phone ? ' • Phone: ' + m.phone : ''}
+            </p>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openAddMemberModal() {
+      const modal = document.getElementById('add-member-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeAddMemberModal() {
+      const modal = document.getElementById('add-member-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function saveNewFamilyMember() {
+      const name = (document.getElementById('new-member-name').value || '').trim();
+      const relation = document.getElementById('new-member-relation').value;
+      const age = parseInt(document.getElementById('new-member-age').value) || 18;
+      const blood = document.getElementById('new-member-blood').value;
+      const phone = (document.getElementById('new-member-phone').value || '').trim();
+      const occupation = (document.getElementById('new-member-occupation').value || '').trim();
+
+      if (!name) {
+        if (window.app) window.app.showToast('Please enter the member full name', 'error');
+        return;
+      }
+
+      if (typeof MahallDB !== 'undefined') {
+        MahallDB.addMember(currentFamilyId, {
+          name,
+          relation,
+          age,
+          bloodGroup: blood,
+          phone,
+          occupation: occupation || relation
+        });
+
+        // Reset inputs
+        document.getElementById('new-member-name').value = '';
+        document.getElementById('new-member-phone').value = '';
+        document.getElementById('new-member-occupation').value = '';
+        document.getElementById('new-member-age').value = '';
+
+        closeAddMemberModal();
+        renderFamilyProfile();
+        renderMembersRoster();
+
+        if (window.app) {
+          window.app.showToast(`Successfully added ${name} (${relation}) to Family Register!`, 'success');
+        }
+      }
+    }
+
+    function renderCertificatesVault() {
+      const container = document.getElementById('certificates-vault-container');
+      if (!container || typeof MahallDB === 'undefined') return;
+
+      const certs = MahallDB.getCertificatesByFamily(currentFamilyId);
+      if (!certs || certs.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-2 p-8 text-center glass-panel rounded-2xl text-slate-500">
+            <i data-lucide="file-text" class="w-8 h-8 mx-auto mb-2 text-slate-400"></i>
+            <p>No certificates requested yet. Use the application wizard above to submit a request.</p>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = certs.map(c => {
+        const isApproved = c.status === 'APPROVED';
+        const isPending = c.status === 'PENDING';
+        const badgeColor = isApproved ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' :
+                           isPending ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' :
+                           'bg-red-100 text-red-800';
+        const typeLabel = c.type === 'marriage' ? 'Marriage NOC / Nikah Clearance' :
+                          c.type === 'residence' ? 'Mahall Membership & Residence' :
+                          c.type === 'conduct' ? 'Good Moral Conduct' :
+                          c.type === 'destitute' ? 'Educational & Welfare Aid Eligibility' : c.type;
+
+        return `
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-emerald-600 font-bold">${c.id}</span>
+              <span class="${badgeColor} text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">${c.status}</span>
+            </div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">${typeLabel} Certificate</h4>
+            <p class="text-slate-500">Applicant: <strong>${c.applicantName}</strong> • Date: ${c.requestDate || c.issuedDate || '2026'}</p>
+            ${c.wifeName ? `<p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i> Wife: ${c.wifeName}</p>` : ''}
+            <div class="flex gap-2 pt-1">
+              <button onclick="previewCertificate('${c.id}')" class="btn-outline text-xs !py-1 !px-2.5">
+                <i data-lucide="eye" class="w-3 h-3"></i> View Certificate
+              </button>
+              <button onclick="downloadActiveCertPDF('${c.id}')" class="btn-primary text-xs !py-1 !px-2.5">
+                <i data-lucide="download" class="w-3 h-3"></i> Download PDF
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderApplicationTracker(trackerType = 'CERT') {
+      if (typeof MahallDB === 'undefined') return;
+      const certs = MahallDB.getCertificatesByFamily(currentFamilyId);
+
+      window.switchAppTrackerType = function(type) {
+        const btnCert = document.getElementById('tab-tracker-cert');
+        const btnAud = document.getElementById('tab-tracker-auditorium');
+        const btnVol = document.getElementById('tab-tracker-volunteer');
+
+        if (btnCert) btnCert.className = type === 'CERT' ? 'px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white text-xs transition' : 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs transition';
+        if (btnAud) btnAud.className = type === 'AUDITORIUM' ? 'px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white text-xs transition' : 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs transition';
+        if (btnVol) btnVol.className = type === 'VOLUNTEER' ? 'px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white text-xs transition' : 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs transition';
+
+        renderApplicationTracker(type);
+      };
+
+      const titleEl = document.getElementById('app-status-title');
+      const subEl = document.getElementById('app-status-sub');
+      const pillEl = document.getElementById('app-status-pill');
+      const stepperEl = document.getElementById('app-status-stepper');
+
+      if (trackerType === 'AUDITORIUM') {
+        const bookings = (typeof MahallDB !== 'undefined' && MahallDB.getBookings) ? MahallDB.getBookings() : [];
+        if (!bookings.length) {
+          if (titleEl) titleEl.innerText = 'No Auditorium Reservations Recorded';
+          if (subEl) subEl.innerText = 'You have not submitted an auditorium reservation yet.';
+          if (pillEl) pillEl.innerText = 'Status: None';
+          return;
+        }
+        const b = bookings[0];
+        const isApproved = b.status === 'CONFIRMED';
+        const isRejected = b.status === 'REJECTED';
+        if (titleEl) titleEl.innerText = `Auditorium Booking: ${b.event} (${b.id})`;
+        if (subEl) subEl.innerText = `Booked by: ${b.bookedBy} • Date: ${b.date} • Slot: ${b.slot}`;
+        if (pillEl) {
+          pillEl.innerText = isApproved ? 'Status: Confirmed & Reserved (Approved)' : isRejected ? 'Status: Declined by Committee' : 'Status: Under Review by Mahall Admin';
+          pillEl.className = isApproved ? 'text-emerald-600 font-bold' : isRejected ? 'text-rose-600 font-bold' : 'text-amber-600 font-bold';
+        }
+        if (stepperEl) {
+          stepperEl.innerHTML = `
+            <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+              <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">1. Request Submitted</strong>
+              <span class="text-[10px] text-slate-400">Online Application</span>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+              <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">2. Slot Verification</strong>
+              <span class="text-[10px] text-slate-400">${b.date} Available</span>
+            </div>
+            <div class="p-3.5 rounded-2xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700' : isRejected ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700' : 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700'} border">
+              <i data-lucide="${isApproved ? 'check-circle' : isRejected ? 'x-circle' : 'clock'}" class="w-5 h-5 ${isApproved ? 'text-emerald-600' : isRejected ? 'text-rose-600' : 'text-amber-600'} mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">3. Committee Review</strong>
+              <span class="text-[10px] text-slate-400">${isApproved ? 'Approved by Admin' : isRejected ? 'Declined by Admin' : 'Reviewing Tariff'}</span>
+            </div>
+            <div class="p-3.5 rounded-2xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700' : isRejected ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700' : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700'} border">
+              <i data-lucide="${isApproved ? 'calendar-check' : isRejected ? 'x-circle' : 'calendar'}" class="w-5 h-5 ${isApproved ? 'text-emerald-600' : isRejected ? 'text-rose-600' : 'text-slate-400'} mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">4. Final Booking Status</strong>
+              <span class="text-[10px] font-bold ${isApproved ? 'text-emerald-600' : isRejected ? 'text-rose-600' : 'text-slate-400'}">${isApproved ? 'Confirmed & Scheduled' : isRejected ? 'Declined' : 'Awaiting Final Signoff'}</span>
+            </div>
+          `;
+        }
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      if (trackerType === 'VOLUNTEER') {
+        const vols = (typeof MahallDB !== 'undefined' && MahallDB.getVolunteerRequests) ? MahallDB.getVolunteerRequests() : [];
+        if (!vols.length) {
+          if (titleEl) titleEl.innerText = 'No Volunteer Enlistment Applications';
+          if (subEl) subEl.innerText = 'Submit an application from the Community portal.';
+          if (pillEl) pillEl.innerText = 'Status: None';
+          return;
+        }
+        const v = vols[0];
+        const isApproved = v.status === 'APPROVED';
+        const isRejected = v.status === 'REJECTED';
+        if (titleEl) titleEl.innerText = `Volunteer Application: ${v.name} (${v.id})`;
+        if (subEl) subEl.innerText = `Squad: ${v.squad} • Availability: ${v.availability || 'Weekends'} • Ward: ${v.ward || 'Ward 02'}`;
+        if (pillEl) {
+          pillEl.innerText = isApproved ? 'Status: Officially Approved (Active Member)' : isRejected ? 'Status: Application Declined' : 'Status: Enlistment Review in Progress';
+          pillEl.className = isApproved ? 'text-emerald-600 font-bold' : isRejected ? 'text-rose-600 font-bold' : 'text-amber-600 font-bold';
+        }
+        if (stepperEl) {
+          stepperEl.innerHTML = `
+            <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+              <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">1. Application Logged</strong>
+              <span class="text-[10px] text-slate-400">${v.timestamp || 'Recorded'}</span>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+              <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">2. Skill & Ward Check</strong>
+              <span class="text-[10px] text-slate-400">Verified ${v.ward || 'Ward 02'}</span>
+            </div>
+            <div class="p-3.5 rounded-2xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700' : isRejected ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700' : 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700'} border">
+              <i data-lucide="${isApproved ? 'check-circle' : isRejected ? 'x-circle' : 'clock'}" class="w-5 h-5 ${isApproved ? 'text-emerald-600' : isRejected ? 'text-rose-600' : 'text-amber-600'} mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">3. Council Decision</strong>
+              <span class="text-[10px] text-slate-400">${isApproved ? 'Approved by Admin' : isRejected ? 'Declined by Admin' : 'Squad Leader Review'}</span>
+            </div>
+            <div class="p-3.5 rounded-2xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700' : isRejected ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700' : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700'} border">
+              <i data-lucide="${isApproved ? 'badge-check' : isRejected ? 'x-circle' : 'shield'}" class="w-5 h-5 ${isApproved ? 'text-emerald-600' : isRejected ? 'text-rose-600' : 'text-slate-400'} mx-auto mb-1"></i>
+              <strong class="block text-slate-900 dark:text-white">4. Squad Inducted</strong>
+              <span class="text-[10px] font-bold ${isApproved ? 'text-emerald-600' : isRejected ? 'text-rose-600' : 'text-slate-400'}">${isApproved ? 'Active in Corp' : isRejected ? 'Declined' : 'Pending Induction'}</span>
+            </div>
+          `;
+        }
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      if (!certs || certs.length === 0) return;
+
+      // Pick latest cert
+      const latest = certs[0];
+
+      if (titleEl) titleEl.innerText = `Tracking Application: ${latest.id} (${latest.type.toUpperCase()} Certificate)`;
+      if (subEl) subEl.innerText = `Applicant: ${latest.applicantName} • Purpose: ${latest.purpose}`;
+
+      const isApproved = latest.status === 'APPROVED';
+      const isRejected = latest.status === 'REJECTED';
+
+      if (pillEl) {
+        pillEl.innerText = isApproved ? 'Status: Step 4 of 4 (Completed & Issued)' :
+                           isRejected ? 'Status: Rejected by Council' :
+                           'Status: Step 2 of 4 (In Review by Secretary)';
+        pillEl.className = isApproved ? 'text-emerald-600 font-bold' : isRejected ? 'text-red-600 font-bold' : 'text-amber-600 font-bold';
+      }
+
+      if (stepperEl) {
+        stepperEl.innerHTML = `
+          <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">1. Submitted</strong>
+            <span class="text-[10px] text-slate-400">${latest.requestDate || 'Recorded'}</span>
+          </div>
+          <div class="p-3.5 rounded-2xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700' : 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700'} border">
+            <i data-lucide="${isApproved ? 'check-circle' : 'clock'}" class="w-5 h-5 ${isApproved ? 'text-emerald-600' : 'text-amber-600'} mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">2. Ward Endorsement</strong>
+            <span class="text-[10px] text-slate-400">${isApproved ? 'Ward 02 Verified' : 'In Review'}</span>
+          </div>
+          <div class="p-3.5 rounded-2xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700' : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700'} border">
+            <i data-lucide="${isApproved ? 'check-circle' : 'shield'}" class="w-5 h-5 ${isApproved ? 'text-emerald-600' : 'text-slate-400'} mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">3. Secretary Seal</strong>
+            <span class="text-[10px] text-slate-400">${isApproved ? 'P.K. Abdurahman Approved' : 'Pending'}</span>
+          </div>
+          <div class="p-3.5 rounded-2xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700' : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700'} border">
+            <i data-lucide="${isApproved ? 'check-circle' : 'file-check'}" class="w-5 h-5 ${isApproved ? 'text-emerald-600' : 'text-slate-400'} mx-auto mb-1"></i>
+            <strong class="block text-slate-900 dark:text-white">4. Certificate Ready</strong>
+            <span class="text-[10px] ${isApproved ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${isApproved ? 'Available for Download' : 'Awaiting Approval'}</span>
+          </div>
+        `;
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderReceiptsTable() {
+      const tbody = document.getElementById('receipts-table-body');
+      if (!tbody || typeof MahallDB === 'undefined') return;
+
+      const receipts = MahallDB.getPaymentsByFamily(currentFamilyId);
+      if (!receipts || receipts.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-4 text-center text-slate-400">No payment receipts recorded yet for this family.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = receipts.map(r => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+          <td class="p-3 font-mono font-bold text-emerald-600">${r.receiptNo}</td>
+          <td class="p-3">${r.date}</td>
+          <td class="p-3">${r.particulars || 'Monthly Subscription'}</td>
+          <td class="p-3 font-bold text-slate-900 dark:text-white">₹${r.amount.toLocaleString('en-IN')}</td>
+          <td class="p-3 text-slate-500">${r.paymentMode || 'UPI'}</td>
+          <td class="p-3">
+            <button onclick="openReceiptModalByNo('${r.receiptNo}')" class="text-emerald-600 font-bold hover:underline flex items-center gap-1">
+              <i data-lucide="receipt" class="w-3 h-3"></i> View Receipt
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function simulatePayment() {
+      const select = document.getElementById('pay-months-select');
+      const months = select ? parseInt(select.value) : 1;
+      const total = months * 250;
+
+      if (window.app) {
+        window.app.showToast(`Connecting to UPI Gateway for ₹${total}...`, 'info');
+      }
+
+      setTimeout(() => {
+        if (typeof MahallDB !== 'undefined') {
+          const family = MahallDB.getFamilyById(currentFamilyId);
+          const payment = MahallDB.recordPayment({
+            familyId: currentFamilyId,
+            amount: total,
+            monthsCount: months,
+            paymentMode: 'Google Pay (UPI)',
+            particulars: `Monthly Mahall Subscription (${months} Month${months > 1 ? 's' : ''})`
+          });
+
+          // Mark family subscription active
+          MahallDB.markDuesPaid(currentFamilyId);
+
+          if (window.app) {
+            window.app.showToast(`Payment of ₹${total} successful! Receipt ${payment.receiptNo} issued.`, 'success');
+          }
+
+          renderReceiptsTable();
+          renderFamilyProfile();
+          openReceiptModal(payment);
+        }
+      }, 1000);
+    }
+
+    function openReceiptModal(receipt) {
+      const modal = document.getElementById('receipt-modal');
+      if (!modal || !receipt) return;
+
+      const family = (typeof MahallDB !== 'undefined') ? MahallDB.getFamilyById(receipt.familyId) : null;
+      document.getElementById('receipt-modal-no').innerText = receipt.receiptNo;
+      document.getElementById('receipt-modal-date').innerText = `${receipt.date} • ${receipt.time || '10:00 AM'}`;
+      document.getElementById('receipt-modal-family').innerText = receipt.familyId;
+      document.getElementById('receipt-modal-payer').innerText = (family && family.head) || 'Ahmed Koya';
+      document.getElementById('receipt-modal-mode').innerText = receipt.paymentMode || 'UPI';
+      document.getElementById('receipt-modal-amount').innerText = `₹${receipt.amount.toLocaleString('en-IN')}`;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openReceiptModalByNo(receiptNo) {
+      if (typeof MahallDB === 'undefined') return;
+      const receipts = MahallDB.getPayments();
+      const r = receipts.find(item => item.receiptNo === receiptNo);
+      if (r) openReceiptModal(r);
+    }
+
+    function closeReceiptModal() {
+      const modal = document.getElementById('receipt-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function toggleMyMahallWifeField() {
+      const typeSelect = document.getElementById('cert-type-select');
+      const type = typeSelect ? typeSelect.value : 'marriage';
+      const isMarriage = type === 'marriage' || type.toLowerCase().includes('marriage');
+      const wifeWrapper = document.getElementById('wrapper-mymahall-wife');
+      if (wifeWrapper) {
+        wifeWrapper.style.display = isMarriage ? 'block' : 'none';
+      }
+    }
+
+    function submitCertificateRequest() {
+      const type = document.getElementById('cert-type-select').value;
+      const applicant = (document.getElementById('cert-applicant-input').value || '').trim();
+      const wifeInput = document.getElementById('cert-wife-input');
+      const wifeName = (wifeInput ? wifeInput.value : '').trim();
+      const purpose = (document.getElementById('cert-purpose-input').value || '').trim();
+
+      if (!applicant) {
+        if (window.app) window.app.showToast('Please enter the applicant name', 'error');
+        return;
+      }
+
+      const isMarriage = type === 'marriage' || type.toLowerCase().includes('marriage');
+      if (isMarriage && !wifeName) {
+        if (window.app) window.app.showToast('Please enter the Name of Wife of Applicant for Marriage NOC.', 'warning');
+        if (wifeInput) wifeInput.focus();
+        return;
+      }
+
+      if (typeof MahallDB !== 'undefined') {
+        const cert = MahallDB.createCertificateRequest({
+          familyId: currentFamilyId,
+          applicantName: applicant,
+          relation: 'Applicant',
+          certType: isMarriage ? 'Marriage NOC' : type,
+          certificateType: isMarriage ? 'Marriage NOC' : type,
+          wifeName: wifeName,
+          purpose: purpose || (isMarriage ? 'Nikah Solemnization & Marriage Registration' : 'Official Clearance')
+        });
+
+        if (window.app) {
+          window.app.showToast(`Certificate request submitted! Ref: ${cert.id || cert.certId}`, 'success');
+        }
+
+        renderCertificatesVault();
+        renderApplicationTracker();
+      }
+    }
+
+    function previewCertificate(id) {
+      if (typeof MahallDB === 'undefined') return;
+      const certs = MahallDB.getCertificates();
+      const cert = certs.find(c => c.id === id || c.certId === id) || certs[0];
+      if (!cert) return;
+
+      activePreviewCert = cert;
+      const family = MahallDB.getFamilyById(cert.familyId);
+      const isMarriage = (cert.type || cert.certType || '').toLowerCase().includes('marriage');
+
+      const refEl = document.getElementById('cert-modal-ref');
+      if (refEl) refEl.innerText = cert.id || cert.certId;
+      const refInner = document.getElementById('cert-modal-ref-inner');
+      if (refInner) refInner.innerText = cert.id || cert.certId;
+      const dateInner = document.getElementById('cert-modal-date-inner');
+      if (dateInner) dateInner.innerText = cert.approvedAt || cert.submittedAt || cert.requestDate || '26 Sept 2026';
+
+      const typeTitle = document.getElementById('cert-modal-type-title');
+      if (typeTitle) typeTitle.innerText = `${(cert.type || cert.certType).toUpperCase()} CERTIFICATE`;
+      const docTitle = document.getElementById('cert-modal-doc-title');
+      if (docTitle) docTitle.innerText = isMarriage ? 'MARRIAGE NOC' : (cert.type || cert.certType || 'OFFICIAL CERTIFICATE').toUpperCase();
+
+      const bodyEl = document.getElementById('cert-modal-body');
+      if (bodyEl) {
+        if (isMarriage) {
+          bodyEl.innerHTML = `
+            <p>This is to certify that Janab <strong>${cert.applicantName}</strong> (${cert.relation || 'Son/Ward'}, registered under Family Identity <strong class="font-mono text-emerald-800">${cert.familyId}</strong>), is a bonafide resident and member in good standing of Noorul Huda Mahall Jama'ath jurisdiction.</p>
+            <div class="my-3 p-3.5 rounded-xl bg-emerald-50 border border-emerald-600/30 text-emerald-950 space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block">Marriage Solemnization Clearance Record:</span>
+              <p class="text-xs">Name of Wife of Applicant: <strong class="text-slate-900 text-sm font-bold underline decoration-emerald-500">${cert.wifeName || 'Fathima Nida (D/o Moideen Kutty)'}</strong></p>
+              <p class="text-[11px] text-emerald-700 pt-0.5">Nikah clearance formally granted with no lawful objection under Wakf Act and Mahall Jama'ath bylaws.</p>
+            </div>
+            <p>This certificate is officially issued upon verified records of the Mahall Census Register for the specific purpose of: <strong>${cert.purpose || 'Nikah Solemnization & Government Marriage Registration'}</strong>.</p>
+            <p class="text-[10px] text-slate-500 italic pt-1">Verification Hash: <strong>${cert.verificationHash || 'NHM-VERIFIED-SEAL-999197'}</strong>. Scan QR or visit public portal verification desk to validate this document.</p>
+          `;
+        } else {
+          bodyEl.innerHTML = `
+            <p>This is to attest that <strong>${cert.applicantName}</strong> (Family ID: ${cert.familyId}, ${family ? family.ward : 'Ward 02'}) is a bona fide resident member of Noorul Huda Mahall Jama'ath in good standing.</p>
+            <p>This certificate is officially issued upon legitimate request for the purpose of: <strong>${cert.purpose}</strong>.</p>
+            <p class="text-[10px] text-slate-500 italic">Verification Hash: <strong>${cert.verificationHash || 'NHM-VERIFIED-SEAL-999197'}</strong>.</p>
+          `;
+        }
+      }
+
+      const modal = document.getElementById('cert-preview-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeCertModal() {
+      const modal = document.getElementById('cert-preview-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function downloadActiveCertPDF(id) {
+      const certId = id || (activePreviewCert ? activePreviewCert.id : 'CERT-2026-0891');
+      if (window.app) {
+        window.app.showToast(`Downloaded verified digital certificate ${certId} with cryptographic QR seal.`, 'success');
+      }
+    }
+
+    function submitSulhuRequest() {
+      const cat = document.getElementById('sulhu-category-select').value;
+      const mode = document.getElementById('sulhu-mode-select').value;
+      const date = document.getElementById('sulhu-date-input').value;
+      const desc = (document.getElementById('sulhu-desc-input').value || '').trim();
+
+      if (!desc) {
+        if (window.app) window.app.showToast('Please provide a brief confidential summary', 'error');
+        return;
+      }
+
+      if (typeof MahallDB !== 'undefined') {
+        const family = MahallDB.getFamilyById(currentFamilyId);
+        const petition = MahallDB.createSulhuPetition({
+          familyId: currentFamilyId,
+          petitionerName: (family && family.head) || 'Ahmed Koya',
+          category: cat,
+          preferredMode: mode,
+          preferredDate: date || 'Flexible',
+          description: desc
+        });
+
+        document.getElementById('sulhu-desc-input').value = '';
+        if (window.app) {
+          window.app.showToast(`Confidential Sulhu petition ${petition.id} submitted directly to Chief Imam.`, 'success');
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      window.app = new MahallApp();
+
+      initResidentPortal();
+
+      // React to DB changes in other tabs / modals
+      window.addEventListener('mahalldb_updated', () => {
+        initResidentPortal();
+      });
+
+      window.addEventListener('mahall_auth_changed', (e) => {
+        if (e.detail && e.detail.familyId) {
+          currentFamilyId = e.detail.familyId;
+        }
+        initResidentPortal();
+      });
+
+      // Scroll morph
+      const header = document.getElementById('main-header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      });
+    });
+  </script>
+  <!-- Notification Drawer Container -->
+  <div id="notification-drawer" class="hidden"></div>
+</body>
+</html>

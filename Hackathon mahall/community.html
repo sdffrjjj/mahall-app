@@ -1,0 +1,3049 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community & Aid Services | Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Blood donor directory, 24/7 ambulance desk, emergency relief, dialysis fund, monthly ration kits, scholarships, campus map, auditorium booking, and Qabarstan registry." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Chart.js CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col min-h-screen selection:bg-emerald-700 selection:text-white pb-16 md:pb-0">
+
+  <!-- ==========================================================================
+       TOP BAR: ROLE SWITCHER
+       ========================================================================== -->
+  <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2 px-4 shadow-sm relative z-[70]">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Mahall Identity & Helpline -->
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs tracking-wide">
+          <i data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Noorul Huda Mahall Jama'ath</span>
+        </span>
+        <span class="hidden md:inline text-slate-600">•</span>
+        <span class="hidden md:flex items-center gap-1 text-slate-400 text-xs">
+          <i data-lucide="phone-call" class="w-3 h-3 text-emerald-400"></i>
+          <span>Office: +91 495 2724800</span>
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-200 border border-slate-700 transition">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span id="current-lang-text" class="font-medium">English</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+          </button>
+          <div class="absolute right-0 mt-1.5 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl hidden group-hover:block z-[90] overflow-hidden py-1">
+            <button onclick="window.app.applyLanguage('en')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>English</span>
+              <span class="text-[10px] text-slate-400 font-mono">EN</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ml')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>മലയാളം (Malayalam)</span>
+              <span class="text-[10px] text-emerald-600 font-bold">ML</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ar')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium font-arabic flex items-center justify-between">
+              <span>العربية (Arabic)</span>
+              <span class="text-[10px] text-amber-600 font-bold">AR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button id="theme-toggle-btn" onclick="window.toggleTheme ? window.toggleTheme(event) : (window.app && window.app.toggleTheme && window.app.toggleTheme())" title="Toggle Theme" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer">
+          <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4 text-amber-400"></i>
+        </button>
+
+        <!-- Notification Bell -->
+        <button id="notif-bell-btn" onclick="window.toggleNotificationDrawer ? window.toggleNotificationDrawer(event) : (window.app && window.app.toggleNotificationDrawer && window.app.toggleNotificationDrawer(event))"
+          class="notif-trigger-btn relative p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer" title="Portal Notifications">
+          <i data-lucide="bell" class="w-4 h-4 text-emerald-400 pointer-events-none"></i>
+          <span id="notif-badge" class="notif-badge-el absolute -top-1 -right-1 bg-red-500 text-white font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] ring-2 ring-slate-900 pointer-events-none">0</span>
+        </button>
+
+        <!-- Auth Status Container (Firebase Multi-User) -->
+        <div id="top-resident-auth-status" class="auth-status-container flex items-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN BRAND HEADER & FLOATING CAPSULE NAVBAR
+       ========================================================================== -->
+  <header id="main-header" class="main-navbar-sticky sticky top-0 z-50 transition-all duration-300">
+    <div id="navbar-capsule" class="navbar-capsule-container transition-all duration-300">
+      <div id="navbar-inner-bar" class="flex items-center justify-between h-16 md:h-18 gap-2 lg:gap-4 w-full transition-all duration-300">
+        
+        <!-- Left: Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 shrink-0 group">
+          <img src="assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall Logo" class="brand-logo-img w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-emerald-600 shadow-sm object-cover shrink-0 group-hover:scale-105 transition" />
+          <div class="leading-tight shrink-0">
+            <span class="brand-title text-base md:text-lg font-black tracking-tight text-emerald-950 dark:text-emerald-400 font-heading whitespace-nowrap">
+              Noorul Huda
+            </span>
+            <span class="brand-sub text-[10px] text-slate-500 dark:text-slate-400 font-medium block whitespace-nowrap">
+              Mahall Jama'ath • Estd 1968
+            </span>
+          </div>
+        </a>
+
+        <!-- Center: 10-Category Navigation Bar -->
+        <nav class="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1 text-xs font-semibold mx-auto">
+          
+          <!-- 1. HOME -->
+          <a href="index.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+            <span>Home</span>
+          </a>
+
+          <!-- 2. ABOUT MAHALL -->
+          <div class="relative group">
+            <a href="about.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>About Mahall</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[240px] space-y-1">
+              <a href="about.html#history" class="mega-item">
+                <i data-lucide="history" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Mahall History</span>
+              </a>
+              <a href="about.html#about-mosque" class="mega-item">
+                <i data-lucide="landmark" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">About Mosque</span>
+              </a>
+              <a href="about.html#imam-khateeb" class="mega-item">
+                <i data-lucide="user-check" class="mega-item-icon text-amber-500"></i>
+                <span class="mega-item-title text-xs">Imam & Khateeb</span>
+              </a>
+              <a href="about.html#committee" class="mega-item">
+                <i data-lucide="users" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Executive Committee</span>
+              </a>
+              <a href="about.html#vision-mission" class="mega-item">
+                <i data-lucide="target" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Vision & Mission</span>
+              </a>
+              <a href="map.html" class="mega-item bg-emerald-50/60 dark:bg-emerald-950/40 rounded-lg">
+                <i data-lucide="map" class="mega-item-icon text-emerald-600"></i>
+                <span class="mega-item-title text-xs font-bold text-emerald-700 dark:text-emerald-300">Mahall Map <span class="text-[9px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full ml-1">Single Page</span></span>
+              </a>
+              <a href="about.html#contact-us" class="mega-item">
+                <i data-lucide="phone" class="mega-item-icon"></i>
+                <span class="mega-item-title text-xs">Contact Us</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 3. PRAYER & MOSQUE -->
+          <div class="relative group">
+            <a href="prayer.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Prayer & Mosque</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="prayer.html#todays-times" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Today's Prayer Times</span></a>
+              <a href="prayer.html#jumua" class="mega-item"><i data-lucide="sun" class="mega-item-icon"></i><span class="mega-item-title text-xs">Jumu'ah Schedule</span></a>
+              <a href="prayer.html#adhan-iqamah" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">Adhan / Iqamah</span></a>
+              <a href="prayer.html#ramadan" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Timetable</span></a>
+              <a href="prayer.html#eid-prayer" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Prayer</span></a>
+              <a href="prayer.html#khutbah" class="mega-item"><i data-lucide="mic" class="mega-item-icon"></i><span class="mega-item-title text-xs">Khutbah Schedule</span></a>
+              <a href="prayer.html#mosque-info" class="mega-item"><i data-lucide="info" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Information</span></a>
+            </div>
+          </div>
+
+          <!-- 4. ANNOUNCEMENTS -->
+          <div class="relative group">
+            <a href="announcements.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Announcements</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="announcements.html#all-announcements" class="mega-item"><i data-lucide="bell" class="mega-item-icon"></i><span class="mega-item-title text-xs">All Announcements</span></a>
+              <a href="announcements.html#mosque-notices" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Notices</span></a>
+              <a href="announcements.html#community-notices" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Notices</span></a>
+              <a href="announcements.html#emergency-notices" class="mega-item"><i data-lucide="alert-triangle" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Emergency Notices</span></a>
+              <a href="announcements.html#funeral-janazah" class="mega-item"><i data-lucide="flag" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Funeral / Janazah</span></a>
+            </div>
+          </div>
+
+          <!-- 5. EVENTS & PROGRAMS -->
+          <div class="relative group">
+            <a href="events.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Events & Programs</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="events.html#upcoming-events" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Upcoming Events</span></a>
+              <a href="events.html#calendar" class="mega-item"><i data-lucide="calendar-days" class="mega-item-icon"></i><span class="mega-item-title text-xs">Event Calendar</span></a>
+              <a href="events.html#islamic-programs" class="mega-item"><i data-lucide="book-open" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Programs</span></a>
+              <a href="events.html#quran-programs" class="mega-item"><i data-lucide="award" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Programs</span></a>
+              <a href="events.html#youth-programs" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Youth Programs</span></a>
+              <a href="events.html#children-programs" class="mega-item"><i data-lucide="smile" class="mega-item-icon"></i><span class="mega-item-title text-xs">Children's Programs</span></a>
+              <a href="events.html#past-events" class="mega-item"><i data-lucide="history" class="mega-item-icon"></i><span class="mega-item-title text-xs">Past Events</span></a>
+            </div>
+          </div>
+
+          <!-- 6. EDUCATION -->
+          <div class="relative group">
+            <a href="education.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Education</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="education.html#madrasa" class="mega-item"><i data-lucide="school" class="mega-item-icon"></i><span class="mega-item-title text-xs">Madrasa Academy</span></a>
+              <a href="education.html#quran-classes" class="mega-item"><i data-lucide="book" class="mega-item-icon"></i><span class="mega-item-title text-xs">Qur'an Classes</span></a>
+              <a href="education.html#arabic-classes" class="mega-item"><i data-lucide="languages" class="mega-item-icon"></i><span class="mega-item-title text-xs">Arabic Classes</span></a>
+              <a href="education.html#islamic-studies" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Islamic Studies</span></a>
+              <a href="education.html#class-schedule" class="mega-item"><i data-lucide="clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Class Schedule</span></a>
+              <a href="education.html#teachers" class="mega-item"><i data-lucide="user-check" class="mega-item-icon"></i><span class="mega-item-title text-xs">Teachers Directory</span></a>
+              <a href="education.html#study-materials" class="mega-item"><i data-lucide="file-text" class="mega-item-icon"></i><span class="mega-item-title text-xs">Study Materials</span></a>
+              <div class="border-t border-slate-100 dark:border-slate-800 my-1 pt-1">
+                <a href="ADMIN/index.html#madrasa" class="mega-item text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50/60 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 rounded-lg">
+                  <i data-lucide="shield-check" class="mega-item-icon text-emerald-600"></i>
+                  <span class="mega-item-title text-xs">Education Admin Portal</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. COMMUNITY (Active Page) -->
+          <div class="relative group">
+            <a href="community.html" class="nav-link text-emerald-700 dark:text-emerald-400 font-bold border-b-2 border-emerald-600">
+              <span>Community</span>
+              <svg class="w-3 h-3 text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="community.html#community-services" class="mega-item"><i data-lucide="heart-handshake" class="mega-item-icon"></i><span class="mega-item-title text-xs">Community Services</span></a>
+              <a href="community.html#volunteer" class="mega-item"><i data-lucide="helping-hand" class="mega-item-icon"></i><span class="mega-item-title text-xs">Volunteer Wing</span></a>
+              <a href="community.html#womens-programs" class="mega-item"><i data-lucide="users" class="mega-item-icon"></i><span class="mega-item-title text-xs">Women's Programs</span></a>
+              <a href="community.html#blood-donors" class="mega-item"><i data-lucide="droplet" class="mega-item-icon text-red-500"></i><span class="mega-item-title text-xs">Blood Donors Directory</span></a>
+              <a href="community.html#jobs" class="mega-item"><i data-lucide="briefcase" class="mega-item-icon"></i><span class="mega-item-title text-xs">Job Opportunities</span></a>
+              <a href="community.html#community-support" class="mega-item"><i data-lucide="heart" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Community Support</span></a>
+            </div>
+          </div>
+
+          <!-- 8. GALLERY -->
+          <div class="relative group">
+            <a href="gallery.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Gallery</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[230px] space-y-1">
+              <a href="gallery.html#photos" class="mega-item"><i data-lucide="image" class="mega-item-icon"></i><span class="mega-item-title text-xs">Photos</span></a>
+              <a href="gallery.html#videos" class="mega-item"><i data-lucide="video" class="mega-item-icon"></i><span class="mega-item-title text-xs">Videos</span></a>
+              <a href="gallery.html#mosque-gallery" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Architecture</span></a>
+              <a href="gallery.html#programs-gallery" class="mega-item"><i data-lucide="calendar" class="mega-item-icon"></i><span class="mega-item-title text-xs">Programs & Events</span></a>
+              <a href="gallery.html#ramadan-gallery" class="mega-item"><i data-lucide="moon" class="mega-item-icon"></i><span class="mega-item-title text-xs">Ramadan Moments</span></a>
+              <a href="gallery.html#eid-gallery" class="mega-item"><i data-lucide="sparkles" class="mega-item-icon"></i><span class="mega-item-title text-xs">Eid Celebrations</span></a>
+            </div>
+          </div>
+
+          <!-- 9. CONTRIBUTIONS -->
+          <div class="relative group">
+            <a href="contributions.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>Contributions</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown w-[250px] space-y-1">
+              <a href="contributions.html#subscription" class="mega-item"><i data-lucide="wallet" class="mega-item-icon text-amber-500"></i><span class="mega-item-title text-xs">Mahall Subscription</span></a>
+              <a href="contributions.html#mosque-fund" class="mega-item"><i data-lucide="landmark" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mosque Fund</span></a>
+              <a href="contributions.html#zakat" class="mega-item"><i data-lucide="coins" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Zakat Calculator</span></a>
+              <a href="contributions.html#sadaqah" class="mega-item"><i data-lucide="heart" class="mega-item-icon"></i><span class="mega-item-title text-xs">Sadaqah (Charity)</span></a>
+              <a href="contributions.html#education-fund" class="mega-item"><i data-lucide="graduation-cap" class="mega-item-icon"></i><span class="mega-item-title text-xs">Education Fund</span></a>
+              <a href="contributions.html#relief-fund" class="mega-item"><i data-lucide="shield-alert" class="mega-item-icon text-rose-500"></i><span class="mega-item-title text-xs">Emergency Relief Fund</span></a>
+            </div>
+          </div>
+
+          <!-- 10. MORE -->
+          <div class="relative group">
+            <a href="services.html" class="nav-link text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400">
+              <span>More</span>
+              <svg class="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown nav-dropdown-right w-[240px] space-y-1">
+              <a href="services.html#certificate-requests" class="mega-item"><i data-lucide="file-check" class="mega-item-icon text-emerald-600"></i><span class="mega-item-title text-xs">Certificate Requests</span></a>
+              <a href="services.html#document-requests" class="mega-item"><i data-lucide="folder-clock" class="mega-item-icon"></i><span class="mega-item-title text-xs">Document Requests</span></a>
+              <a href="services.html#faq" class="mega-item"><i data-lucide="help-circle" class="mega-item-icon"></i><span class="mega-item-title text-xs">Mahall FAQ</span></a>
+              <a href="services.html#downloads" class="mega-item"><i data-lucide="download" class="mega-item-icon"></i><span class="mega-item-title text-xs">Downloads Center</span></a>
+              <a href="services.html#contact-help" class="mega-item"><i data-lucide="life-buoy" class="mega-item-icon"></i><span class="mega-item-title text-xs">Contact / Help</span></a>
+            </div>
+          </div>
+
+        </nav>
+
+        <!-- Right: Search Box & Mobile Menu Trigger -->
+        <div class="navbar-search-wrapper flex items-center gap-2 shrink-0 pr-1 sm:pr-2">
+          <div class="relative hidden xl:flex items-center">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none"></i>
+            <input id="global-search-input" onkeyup="window.app.handleGlobalSearch(event)" type="text" placeholder="Search Mahall..." class="nav-search-input bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700/80 rounded-full pl-8 pr-3 py-1 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-600 transition-all shadow-inner" />
+          </div>
+
+          <button onclick="window.app.toggleMobileMenu()" aria-label="Toggle navigation menu" class="lg:hidden p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Collapsible Menu (Accordion of 10 categories) -->
+      <div id="mobile-collapsible-menu" class="lg:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 px-4 py-4 space-y-2 shadow-xl max-h-[75vh] overflow-y-auto">
+        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Mahall Portals</div>
+        <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <a href="index.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="home" class="w-4 h-4 text-emerald-600"></i> Home</a>
+          <a href="about.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4 text-emerald-600"></i> About Mahall</a>
+          <a href="prayer.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="compass" class="w-4 h-4 text-emerald-600"></i> Prayer & Mosque</a>
+          <a href="announcements.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="bell" class="w-4 h-4 text-emerald-600"></i> Announcements</a>
+          <a href="events.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4 text-emerald-600"></i> Events & Programs</a>
+          <a href="education.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4 text-emerald-600"></i> Education</a>
+          <a href="community.html" class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold flex items-center gap-2 border border-emerald-300 dark:border-emerald-700"><i data-lucide="heart" class="w-4 h-4 text-emerald-600"></i> Community</a>
+          <a href="gallery.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="image" class="w-4 h-4 text-emerald-600"></i> Gallery</a>
+          <a href="contributions.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="wallet" class="w-4 h-4 text-amber-600"></i> Contributions</a>
+          <a href="services.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-emerald-600"></i> More Services</a>
+          <a href="map.html" class="col-span-2 p-2.5 rounded-xl bg-emerald-700 text-white text-center flex items-center justify-center gap-2 font-bold shadow-sm"><i data-lucide="map" class="w-4 h-4"></i> Interactive Mahall Map (Single Page) &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO BANNER: COMMUNITY & WELFARE AID
+       ========================================================================== -->
+  <section class="bg-gradient-to-r from-teal-900 via-emerald-900 to-slate-950 text-white py-10 px-4 relative overflow-hidden shadow-lg border-b border-teal-800/40">
+    <div class="absolute inset-0 islamic-bg-pattern pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-300 mb-2">
+            <a href="index.html" class="hover:underline flex items-center gap-1"><i data-lucide="home" class="w-3.5 h-3.5"></i> Home</a>
+            <span>/</span>
+            <span class="text-amber-400">Community & Welfare Aid</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-black font-heading tracking-tight flex items-center gap-3">
+            <i data-lucide="heart" class="w-9 h-9 text-red-400"></i>
+            Community Care, Emergency Aid & Campus Facilities
+          </h1>
+          <p class="text-slate-300 text-sm md:text-base max-w-3xl mt-2">
+            Standing by every member in times of need. Verified 24/7 blood donor network, emergency ICU ambulance, dialysis patient fund, monthly food security kits, education aid, and campus services.
+          </p>
+        </div>
+
+        <!-- Rapid Aid Hotline Pill -->
+        <div class="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/15 text-right shrink-0 flex flex-col items-start md:items-end">
+          <span class="text-[11px] uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+            24/7 EMERGENCY HELPDESK
+          </span>
+          <div class="text-2xl md:text-3xl font-black font-mono text-white mt-1">
+            +91 94470 12345
+          </div>
+          <span class="text-xs text-amber-300 font-semibold">
+            Ambulance Speed Dial: +91 98460 99999
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Sticky Sub-Navbar Filter Pills -->
+      <div class="mt-8 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-semibold">
+        <a href="#community-services" class="px-3.5 py-1.5 rounded-full bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 border border-emerald-600/50 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="heart-handshake" class="w-3.5 h-3.5 text-emerald-400"></i> Community Services
+        </a>
+        <a href="#volunteer" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="helping-hand" class="w-3.5 h-3.5 text-amber-400"></i> Volunteer
+        </a>
+        <a href="#womens-programs" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="users" class="w-3.5 h-3.5 text-teal-300"></i> Women's Programs
+        </a>
+        <a href="#blood-donors" class="px-3.5 py-1.5 rounded-full bg-red-900/70 hover:bg-red-800 text-red-100 border border-red-500/50 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="droplet" class="w-3.5 h-3.5 text-red-400"></i> Blood Donors
+        </a>
+        <a href="#jobs" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="briefcase" class="w-3.5 h-3.5 text-amber-400"></i> Job Opportunities
+        </a>
+        <a href="#community-support" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="heart" class="w-3.5 h-3.5 text-red-300"></i> Community Support
+        </a>
+        <a href="map.html" class="px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/50 whitespace-nowrap transition flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="map" class="w-3.5 h-3.5"></i> Interactive Map &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       MAIN CONTENT: ALL 9 SUB-NAVBAR FEATURES
+       ========================================================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
+
+    <!-- =======================================================================
+         1. COMMUNITY SERVICES
+         ======================================================================= -->
+    <section id="community-services" class="scroll-mt-24 space-y-8">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="heart-handshake" class="w-4 h-4"></i> Section 01 • Core Facilities
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Community Services & Campus Emergency Desks
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          24/7 dedicated support desks serving all 642 registered families and neighboring residents.
+        </p>
+      </div>
+
+      <!-- 24/7 Ambulance Desk Sub-Block -->
+      <div id="ambulance" class="scroll-mt-24 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 pb-2">
+          <h3 class="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="truck" class="w-5 h-5 text-red-600"></i>
+            24/7 Community Ambulance Desk (Force Traveler ICU Unit)
+          </h3>
+          <span class="bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 text-xs font-bold px-2.5 py-0.5 rounded-full">Speed Dial: +91 98460 99999</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Live Status Card -->
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Live Vehicle Status</span>
+              <span class="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-black text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-emerald-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                AVAILABLE AT MASJID BAY
+              </span>
+            </div>
+
+            <div>
+              <h4 class="text-xl font-black text-slate-900 dark:text-white">KL-11-CB-9999</h4>
+              <p class="text-xs text-slate-500">Fully equipped ICU ambulance donated by Mahall expatriates in UAE (2023 model).</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-500">On-Duty Driver:</span>
+                <strong class="text-slate-900 dark:text-white">Janab Shafi M. (Ward 01)</strong>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Driver Contact:</span>
+                <a href="tel:+919846099999" class="text-emerald-600 font-bold hover:underline">+91 98460 99999</a>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">Service Area:</span>
+                <span class="text-slate-900 dark:text-white font-medium">Calicut District & Medical College</span>
+              </div>
+            </div>
+
+            <button onclick="callEmergencyNumber('24/7 Community ICU Ambulance', '+919846099999', 'Janab Shafi M. (Ward 01) • KL-11-CB-9999 (Masjid Bay)', true)" 
+              class="w-full py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-bold text-center block shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2">
+              <i data-lucide="phone-call" class="w-4 h-4"></i> Call Ambulance Immediately
+            </button>
+          </div>
+
+          <!-- Vehicle Equipment Checklist -->
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <h4 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
+              Onboard Medical Equipment
+            </h4>
+            <ul class="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Dual Large Oxygen Cylinders with regulator & mask</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Automated External Defibrillator (AED Machine)</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Multi-parameter Patient Vital Monitor (ECG, SpO2, NIBP)</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Foldable Scoop Stretcher with spine board & head immobilizer</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Emergency suction apparatus & basic life support kits</li>
+            </ul>
+          </div>
+
+          <!-- Emergency Numbers -->
+          <div id="emergency" class="scroll-mt-24 glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <h4 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i data-lucide="phone-call" class="w-5 h-5 text-amber-500"></i>
+              Emergency Hospital & Police
+            </h4>
+            <div class="space-y-2 text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
+                <div>
+                  <strong class="block text-slate-900 dark:text-white">Calicut Medical College</strong>
+                  <span class="text-[10px] text-slate-400">Casualty / Trauma ICU (7.2 km)</span>
+                </div>
+                <button onclick="callEmergencyNumber('Calicut Medical College (Casualty/ICU)', '04952350212', 'Casualty / Trauma ICU Desk (Distance: 7.2 km)')" 
+                  class="p-2 rounded-xl bg-red-100 hover:bg-red-200 dark:bg-red-950 dark:hover:bg-red-900 text-red-700 dark:text-red-300 transition" title="Dial Medical College">
+                  <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
+                <div>
+                  <strong class="block text-slate-900 dark:text-white">Town Police Control Room</strong>
+                  <span class="text-[11px] text-slate-400">Dial 112 or 0495 2720233</span>
+                </div>
+                <button onclick="callEmergencyNumber('Town Police Control Room', '112', 'Police Control Room Calicut & Coastal Patrol (Dial 112 / 0495 2720233)')" 
+                  class="p-2 rounded-xl bg-blue-100 hover:bg-blue-200 dark:bg-blue-950 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300 transition" title="Dial Police">
+                  <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
+                <div>
+                  <strong class="block text-slate-900 dark:text-white">Fire & Beach Rescue</strong>
+                  <span class="text-[11px] text-slate-400">Dial 101 or 0495 2365333</span>
+                </div>
+                <button onclick="callEmergencyNumber('Fire & Beach Rescue Services', '101', 'Fire Emergency & Coastal Lifeguard Station (Dial 101 / 0495 2365333)')" 
+                  class="p-2 rounded-xl bg-amber-100 hover:bg-amber-200 dark:bg-amber-950 dark:hover:bg-amber-900 text-amber-700 dark:text-amber-300 transition" title="Dial Fire Rescue">
+                  <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Auditorium & Qabarstan Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+        <!-- Community Auditorium Card -->
+        <div id="auditorium" class="scroll-mt-24 glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="p-2 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400">
+                <i data-lucide="home" class="w-5 h-5"></i>
+              </span>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-base">Community Auditorium</h4>
+                <span class="text-xs text-slate-500">800 Guests Capacity • 450 Dining Batch</span>
+              </div>
+            </div>
+            <button onclick="openHallBookingModal()" class="btn-primary text-xs !py-1.5 !px-3">
+              Book Hall
+            </button>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Central air-conditioned auditorium with elevated stage, acoustic Bose sound, 125kVA generator, and commercial catering kitchen. Registered Mahall members receive a 40% subsidized tariff for weddings and events.
+          </p>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800">
+              <span class="text-[10px] text-slate-400 block">General Tariff</span>
+              <strong class="text-slate-900 dark:text-white">₹35,000</strong>
+            </div>
+            <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300">
+              <span class="text-[10px] block">Mahall Resident</span>
+              <strong>₹21,000 (40% off)</strong>
+            </div>
+            <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300">
+              <span class="text-[10px] block">Welfare Families</span>
+              <strong>100% Free</strong>
+            </div>
+          </div>
+
+          <!-- Real-Time Booking Status & Public Reservations Calendar -->
+          <div class="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-600"></i>
+                <span>Reservation Decisions & Confirmed Schedule</span>
+              </span>
+              <button type="button" onclick="toggleAuditoriumStatusDesk()" id="toggle-auditorium-status-btn" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold flex items-center gap-1">
+                <span>View Bookings Desk</span> &darr;
+              </button>
+            </div>
+
+            <div id="auditorium-status-desk" class="space-y-3 bg-slate-50 dark:bg-slate-950/70 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+              <!-- Search box for applicant status lookup -->
+              <div class="flex gap-2">
+                <input type="text" id="booking-search-input" placeholder="Search by event, applicant or phone..." oninput="searchPublicBookings()"
+                  class="flex-1 p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+                <button type="button" onclick="searchPublicBookings()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold">Search</button>
+              </div>
+
+              <!-- List of confirmed & recent bookings -->
+              <div id="public-bookings-container" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                <!-- Dynamically rendered via renderPublicBookings() -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mahall Qabarstan Card -->
+        <div id="qabarstan" class="scroll-mt-24 glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                <i data-lucide="cross" class="w-5 h-5"></i>
+              </span>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-base">Mahall Qabarstan Registry</h4>
+                <span class="text-xs text-slate-500">Sectors A, B, C, D • Digital Records from 1968</span>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-emerald-600 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 24/7 Graveyard Care
+            </span>
+          </div>
+
+          <!-- Sector Filter Chips -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] font-semibold scrollbar-none">
+            <button type="button" onclick="filterQabarSector('ALL', this)" class="qabar-filter-btn px-2.5 py-1 rounded-lg bg-emerald-700 text-white font-bold transition">All</button>
+            <button type="button" onclick="filterQabarSector('Sector A', this)" class="qabar-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition">Sector A</button>
+            <button type="button" onclick="filterQabarSector('Sector B', this)" class="qabar-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition">Sector B</button>
+            <button type="button" onclick="filterQabarSector('Sector C', this)" class="qabar-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition">Sector C</button>
+            <button type="button" onclick="filterQabarSector('Sector D', this)" class="qabar-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition">Sector D</button>
+          </div>
+
+          <div class="flex gap-2">
+            <input id="qabar-search-input" oninput="searchQabarRecords()" type="text" placeholder="Search deceased record by name, ward, or year..." class="flex-grow bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            <button onclick="searchQabarRecords()" class="btn-primary text-xs !py-1.5 !px-3">Search</button>
+          </div>
+
+          <div class="overflow-x-auto max-h-48 overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+            <table class="w-full text-left">
+              <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] uppercase sticky top-0">
+                <tr>
+                  <th class="p-2">Name</th>
+                  <th class="p-2">Ward</th>
+                  <th class="p-2">Year</th>
+                  <th class="p-2">Plot Location</th>
+                  <th class="p-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="qabar-results-body" class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                <!-- Dynamically loaded via renderQabarstanRecords() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         2. VOLUNTEER WING
+         ======================================================================= -->
+    <section id="volunteer" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="helping-hand" class="w-4 h-4"></i> Section 02 • Community Volunteer Corp
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Mahall Volunteer Wing & Rapid Response Teams (180+ Active Members)
+          </h2>
+        </div>
+        <button onclick="openVolunteerCorpModal()" class="btn-gold text-xs !py-1.5 !px-3.5 shadow-sm flex items-center gap-1.5">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Join Volunteer Corp
+        </button>
+      </div>
+
+      <!-- 4 Volunteer Squads Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Squad 1 -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="p-2.5 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 w-fit">
+            <i data-lucide="waves" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Disaster & Flood Rescue Squad</h4>
+          <p class="text-xs text-slate-500">42 trained swimmers and emergency first responders equipped with life vests, inflatable boats, and rescue ropes.</p>
+          <span class="text-[11px] font-bold text-blue-600 block pt-1">Lead: Fawaz Rahman (Ward 3)</span>
+        </div>
+
+        <!-- Squad 2 -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="p-2.5 rounded-xl bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 w-fit">
+            <i data-lucide="truck" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Medical Emergency Drivers</h4>
+          <p class="text-xs text-slate-500">28 licensed volunteer drivers on 8-hour standby rotations for hospital transfers and emergency ambulance dispatch.</p>
+          <span class="text-[11px] font-bold text-red-600 block pt-1">Lead: Shafi M. (Ward 1)</span>
+        </div>
+
+        <!-- Squad 3 -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 w-fit">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Janazah & Burial Squad</h4>
+          <p class="text-xs text-slate-500">35 dedicated brothers providing honorable Ghusl, Kafan shrouding, and cemetery preparation support with zero charges.</p>
+          <span class="text-[11px] font-bold text-emerald-600 block pt-1">Lead: K. V. Usman (Ward 2)</span>
+        </div>
+
+        <!-- Squad 4 -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div class="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 w-fit">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Food Kit Packaging Logistics</h4>
+          <p class="text-xs text-slate-500">75 youth volunteers who assemble and discreetly hand-deliver 120 monthly ration packages on the 1st of every month.</p>
+          <span class="text-[11px] font-bold text-amber-600 block pt-1">Lead: Adil Moideen (Ward 4)</span>
+        </div>
+      </div>
+
+      <!-- Real-Time Volunteer Enlistment Decisions & Squad Status Board -->
+      <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold">
+              <i data-lucide="badge-check" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Volunteer Corp Enlistment Approval & Status Board</h3>
+              <p class="text-xs text-slate-500">Live official decisions for community squad volunteers approved by Mahall Administration.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="public-vol-approved-badge" class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 text-xs font-bold border border-emerald-300 dark:border-emerald-800 font-mono">
+              Live Real-Time Sync
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Quick Status Search -->
+          <div class="bg-slate-50 dark:bg-slate-950/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
+            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <i data-lucide="search" class="w-4 h-4 text-emerald-600"></i> Check My Enlistment Status
+            </h4>
+            <p class="text-slate-500 text-[11px]">Enter your phone number or name to check if your squad application was approved or rejected.</p>
+            <input type="text" id="volunteer-search-input" placeholder="e.g. 98472 or Shabeer" oninput="searchPublicVolunteerRequests()"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 text-xs" />
+            <div id="volunteer-search-result" class="pt-2 hidden space-y-1.5">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Live Roster of Decisions -->
+          <div class="md:col-span-2 space-y-2">
+            <div class="flex items-center justify-between text-xs text-slate-500 font-medium pb-1">
+              <span>Recent Squad Applications & Official Decisions</span>
+              <span class="text-[10px] text-emerald-600 font-mono font-semibold">Updated in real-time</span>
+            </div>
+            <div id="public-volunteer-roster" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-xs">
+              <!-- Dynamically rendered via renderPublicVolunteerRoster() -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         3. WOMEN'S PROGRAMS (SISTERS WING)
+         ======================================================================= -->
+    <section id="womens-programs" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-teal-600 dark:text-teal-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="users" class="w-4 h-4"></i> Section 03 • Sisters Wing
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Noorul Huda Vanitha Vedi (Women's Wing)
+          </h2>
+        </div>
+        <button onclick="openVanithaDeskModal()" class="btn-outline text-xs !py-1.5 !px-3.5 shadow-sm flex items-center gap-1.5">
+          <i data-lucide="phone" class="w-3.5 h-3.5"></i> Contact Vanitha Desk
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-[10px] font-bold text-emerald-600 uppercase">Spiritual Education</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Weekly Tafsir & Tajweed Halqa</h4>
+          <p class="text-xs text-slate-500">Every Saturday 02:30 PM at 1st Floor Women's Hall. Quran recitation correction and family ethics guidance.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-[10px] font-bold text-amber-600 uppercase">Self-Reliance</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Stitching & Tailoring Cooperative</h4>
+          <p class="text-xs text-slate-500">12 sewing machines provided. 34 sisters earn dignified home-based income crafting school uniforms and abayas.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-[10px] font-bold text-red-600 uppercase">Maternal Health</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Mother & Child Health Advisory</h4>
+          <p class="text-xs text-slate-500">Monthly free pediatric check-ups, infant vaccination awareness, and post-natal care guidance by volunteer lady doctors.</p>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-[10px] font-bold text-teal-600 uppercase">Counseling</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Confidential Family Guidance</h4>
+          <p class="text-xs text-slate-500">Private counseling for adolescent parenting, marital harmony, and stress management with complete anonymity.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         5. BLOOD DONOR DIRECTORY
+         ======================================================================= -->
+    <section id="blood-donors" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-red-600 dark:text-red-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="droplet" class="w-4 h-4"></i> Section 05 • Life Saving Registry
+          </span>
+          <h2 id="donor-directory-heading" class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Verified Blood Donor Directory (145 Active Donors)
+          </h2>
+        </div>
+        <button onclick="openDonorRegModal()" class="btn-primary text-xs !py-1.5 !px-3 shadow-sm bg-red-700 hover:bg-red-800">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Register as Blood Donor
+        </button>
+      </div>
+
+      <!-- Blood Group Filters -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold">
+        <span class="text-slate-500 uppercase mr-1">Filter Group:</span>
+        <button onclick="filterBloodGroup('all')" class="bg-pill px-3 py-1.5 rounded-full bg-red-600 text-white shadow-sm">All (145)</button>
+        <button onclick="filterBloodGroup('O+')" class="bg-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-700 dark:text-slate-300">O+ (42)</button>
+        <button onclick="filterBloodGroup('A+')" class="bg-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-700 dark:text-slate-300">A+ (34)</button>
+        <button onclick="filterBloodGroup('B+')" class="bg-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-700 dark:text-slate-300">B+ (38)</button>
+        <button onclick="filterBloodGroup('AB+')" class="bg-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-700 dark:text-slate-300">AB+ (16)</button>
+        <button onclick="filterBloodGroup('O-')" class="bg-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-700 dark:text-slate-300">O- (6 Rare)</button>
+        <button onclick="filterBloodGroup('A-')" class="bg-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-700 dark:text-slate-300">A- (5 Rare)</button>
+        <button onclick="filterBloodGroup('B-')" class="bg-pill px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-700 dark:text-slate-300">B- (4 Rare)</button>
+      </div>
+
+      <!-- Donors Grid -->
+      <div id="donors-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         6. JOB OPPORTUNITIES & CAREER DESK
+         ======================================================================= -->
+    <section id="jobs" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="briefcase" class="w-4 h-4"></i> Section 06 • Employment Exchange
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Mahall Career & Job Opportunities Desk
+          </h2>
+        </div>
+        <button onclick="openJobAppModal('General CV Talent Bank')" class="btn-primary text-xs !py-1.5 !px-3.5 shadow-sm">
+          <i data-lucide="upload" class="w-3.5 h-3.5"></i> Submit CV to Mahall Bank
+        </button>
+      </div>
+
+      <!-- Job Listings Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Job 1 -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Dubai, UAE (Gulf)</span>
+            <span class="text-xs font-mono font-bold text-slate-900 dark:text-white">AED 4,500 - 6,000</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Senior Accountant (Tally / ERP)</h4>
+            <p class="text-xs text-slate-500">Al-Aman Trading LLC, Deira. Posted by Mahall NRI Council.</p>
+          </div>
+          <div class="text-[11px] text-slate-400">B.Com + 3 yrs Gulf experience required. Visa provided.</div>
+          <button onclick="openJobAppModal('Senior Accountant (Tally / ERP)')" class="w-full btn-outline text-xs !py-1.5">Apply via Mahall Desk</button>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Calicut (Local)</span>
+            <span class="text-xs font-mono font-bold text-slate-900 dark:text-white">₹25,000 - 32,000</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Store Supervisor & Inventory Lead</h4>
+            <p class="text-xs text-slate-500">Hilite Mall Retail Supermarket. Immediate joining.</p>
+          </div>
+          <div class="text-[11px] text-slate-400">Graduate + Malayalam/English fluency. 8-hour shift.</div>
+          <button onclick="openJobAppModal('Store Supervisor & Inventory Lead')" class="w-full btn-outline text-xs !py-1.5">Apply via Mahall Desk</button>
+        </div>
+
+        <!-- Job 3 -->
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Riyadh, KSA</span>
+            <span class="text-xs font-mono font-bold text-slate-900 dark:text-white">SAR 5,000 - 7,000</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Site Civil Engineer</h4>
+            <p class="text-xs text-slate-500">Bin Ladin Contracting Group. Transferable Iqama preferred.</p>
+          </div>
+          <div class="text-[11px] text-slate-400">B.Tech Civil with AutoCAD & structural supervision skills.</div>
+          <button onclick="openJobAppModal('Site Civil Engineer')" class="w-full btn-outline text-xs !py-1.5">Apply via Mahall Desk</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         7. COMMUNITY SUPPORT (WELFARE AID)
+         ======================================================================= -->
+    <section id="community-support" class="scroll-mt-24 space-y-8">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="heart" class="w-4 h-4"></i> Section 07 • Welfare Endowments
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Mahall Community Support & Welfare Aid
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Direct financial subsidies and endowments supporting healthcare, food security, and community relief.
+        </p>
+      </div>
+
+      <!-- Medical Relief & Dialysis Fund -->
+      <div id="medical-fund" class="scroll-mt-24 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-2">
+          <h3 class="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="heart" class="w-5 h-5 text-red-600"></i>
+            Mahall Medical Relief & Dialysis Fund
+          </h3>
+          <button onclick="openDialysisSponsorModal()" class="btn-primary text-xs !py-1.5 !px-3.5 shadow-sm">
+            <i data-lucide="heart" class="w-3.5 h-3.5"></i> Sponsor a Dialysis (₹1,000)
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">This Month's Dialysis Goal</span>
+            <div class="flex items-baseline justify-between">
+              <span id="dialysis-raised-amount" class="text-3xl font-black text-slate-900 dark:text-white">₹1,84,000</span>
+              <span id="dialysis-target-amount" class="text-xs text-slate-500">Target: ₹2,40,000</span>
+            </div>
+            <div class="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div id="dialysis-goal-bar" class="h-full bg-emerald-600 rounded-full transition-all duration-500" style="width: 76%;"></div>
+            </div>
+            <p id="dialysis-goal-desc" class="text-xs text-slate-500">76% funded. Provides 184 free dialysis sessions this month for 14 chronic renal failure patients.</p>
+          </div>
+
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h4 class="text-base font-bold text-slate-900 dark:text-white">Direct Hospital Settlement</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              All dialysis payments are directly remitted to certified non-profit nephrology centers (CH Centre, IQRAA, and Medical College Society). Zero overhead.
+            </p>
+            <div class="pt-2 text-xs font-bold text-emerald-600 flex items-center gap-1">
+              <i data-lucide="shield-check" class="w-4 h-4"></i> Audited by Mahall Finance Council
+            </div>
+          </div>
+
+          <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h4 class="text-base font-bold text-slate-900 dark:text-white">Free Chronic Medicine Scheme</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Free monthly insulin, cardiac medications, and hypertension tablets delivered to 68 elderly residents on the 1st of every month.
+            </p>
+            <button onclick="openMedicalAssistanceModal()" class="w-full btn-outline text-xs !py-2">
+              Apply for Medical Assistance
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Ration Kits -->
+      <div id="ration-kits" class="scroll-mt-24 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-2">
+          <h3 class="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-500"></i>
+            Monthly Ration Kits for Destitute Families (120 Kits)
+          </h3>
+          <button onclick="openRationSponsorModal()" class="btn-gold text-xs !py-1.5 !px-3.5 shadow-sm">
+            <i data-lucide="gift" class="w-3.5 h-3.5"></i> Sponsor a Family Kit (₹2,500/mo)
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span class="text-[11px] font-bold text-emerald-600 uppercase">Staple Grains</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">25 kg Premium Rice</h4>
+            <p class="text-xs text-slate-500">Quality Boiled Rice (Jaya/Matta) along with 5kg Whole Wheat Atta.</p>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span class="text-[11px] font-bold text-amber-600 uppercase">Cooking Essentials</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">2L Pure Coconut Oil</h4>
+            <p class="text-xs text-slate-500">Refined cooking oil, 2kg Sugar, 1kg Premium Tea Dust, and Iodized Salt.</p>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span class="text-[11px] font-bold text-blue-600 uppercase">Protein & Pulses</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">5kg Assorted Dal & Grams</h4>
+            <p class="text-xs text-slate-500">Toor Dal, Green Moong, Black Chickpeas (Kadala), and Urad Dal.</p>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span class="text-[11px] font-bold text-teal-600 uppercase">Next Distribution</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">1st of Next Month</h4>
+            <p class="text-xs text-slate-500">Discreet delivery directly to beneficiary homes by ward volunteer teams.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       GLOBAL FOOTER
+       ========================================================================== -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-16 pt-12 pb-8 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-emerald-500" />
+          <span class="font-bold text-base text-white">Noorul Huda Mahall</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed mb-3">
+          Official community portal of Noorul Huda Mahall Jama'ath, Central Mosque Road, Ward 02, Calicut, Kerala - 673004.
+        </p>
+        <div class="text-amber-400 font-medium">Estd. 1968 • Reg No: KL-KZK/1968/42</div>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Quick Navigation</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li><a href="index.html" class="hover:text-emerald-400 transition">Home Dashboard</a></li>
+          <li><a href="prayer.html" class="hover:text-emerald-400 transition">Prayer & Mosque</a></li>
+          <li><a href="community.html" class="hover:text-emerald-400 transition font-bold text-emerald-400">Community & Aid</a></li>
+          <li><a href="madrasa.html" class="hover:text-emerald-400 transition">Madrasa & Youth</a></li>
+          <li><a href="contributions.html" class="hover:text-emerald-400 transition">Contributions & Dues</a></li>
+          <li><a href="my-mahall.html" class="hover:text-emerald-400 transition">My Mahall Resident Portal</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Emergency & Aid</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li>Ambulance 24/7: <strong class="text-white">+91 98460 99999</strong></li>
+          <li>Mahall Helpdesk: <strong class="text-white">+91 94470 12345</strong></li>
+          <li>Chief Imam: <strong class="text-white">+91 98471 22334</strong></li>
+          <li>Office Phone: <strong class="text-white">+91 495 2724800</strong></li>
+          <li>Email: <span class="text-slate-300">office@noorulhudamahall.org</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Community Statistics</h4>
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1.5 text-[11px]">
+          <div class="flex justify-between"><span>Registered Donors:</span><span class="text-red-400 font-bold">145 Active</span></div>
+          <div class="flex justify-between"><span>Monthly Ration Kits:</span><span class="text-emerald-400 font-bold">120 Families</span></div>
+          <div class="flex justify-between"><span>Dialysis Sponsored:</span><span class="text-emerald-400 font-bold">184 Sessions</span></div>
+          <div class="flex justify-between"><span>Ambulance Trips:</span><span class="text-amber-400 font-bold">340+ Served</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
+      <div>&copy; 2026 Noorul Huda Mahall Jama'ath. All rights reserved. Built for community service.</div>
+      <div class="flex gap-4">
+        <a href="about.html" class="hover:underline">About Mahall</a>
+        <a href="services.html" class="hover:underline">Services & FAQ</a>
+        <a href="index.html" class="hover:underline">Portal Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MODAL 1: EMERGENCY CALL & SPEED DIAL DIALOG
+       ========================================================================== -->
+  <div id="emergency-call-modal" class="fixed inset-0 z-[120] bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div id="em-call-icon-wrap" class="w-10 h-10 rounded-2xl bg-red-100 dark:bg-red-950 text-red-600 flex items-center justify-center shadow-inner">
+            <i data-lucide="phone-call" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="em-call-title" class="font-bold text-slate-900 dark:text-white text-base">Emergency Call Desk</h3>
+            <p id="em-call-desc" class="text-xs text-slate-500">24/7 Immediate Response</p>
+          </div>
+        </div>
+        <button onclick="closeEmergencyCallModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-center space-y-2">
+        <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Official Emergency Line</span>
+        <div id="em-call-number" class="text-2xl sm:text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400 tracking-tight">
+          +91 98460 99999
+        </div>
+        <p class="text-[11px] text-slate-500 dark:text-slate-400">Toll-free / Direct Mahall Line • Priority Queue</p>
+      </div>
+
+      <div class="space-y-2.5">
+        <a id="em-call-dial-link" href="tel:+919846099999" class="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-center block shadow-lg shadow-red-600/30 hover:scale-[1.02] active:scale-95 transition flex items-center justify-center gap-2">
+          <i data-lucide="phone" class="w-4 h-4"></i>
+          <span>Dial Directly (<span id="em-call-dial-btn-text">+91 98460 99999</span>)</span>
+        </a>
+
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="em-call-copy-btn" onclick="copyEmergencyNumber()" class="py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="em-call-copy-text">Copy Number</span>
+          </button>
+          <a id="em-call-whatsapp-link" href="#" target="_blank" class="py-2.5 px-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: AUDITORIUM BOOKING REQUEST MODAL
+       ========================================================================== -->
+  <div id="auditorium-booking-modal" class="fixed inset-0 z-[120] bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="max-w-xl w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200 my-8">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 flex items-center justify-center shadow-inner">
+            <i data-lucide="calendar" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">Book Community Auditorium</h3>
+            <p class="text-xs text-slate-500">800 Guests Capacity • 450 Dining Batch</p>
+          </div>
+        </div>
+        <button onclick="closeHallBookingModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleHallBookingSubmit(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Occasion / Event Title *</label>
+          <input type="text" id="bkg-event-name" required placeholder="e.g. Wedding Reception & Nikah, Family Majlis"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-600" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Applicant Name *</label>
+            <input type="text" id="bkg-applicant-name" required placeholder="Full Name"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-600" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Contact Phone *</label>
+            <input type="tel" id="bkg-applicant-phone" required placeholder="+91 94470 00000"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-emerald-600" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Resident Category *</label>
+            <select id="bkg-tariff-type" onchange="updateHallTariffEstimate()" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-600">
+              <option value="RESIDENT" selected>Mahall Resident (40% Subsidy - ₹21,000)</option>
+              <option value="GENERAL">General Public (₹35,000)</option>
+              <option value="WELFARE">Welfare / Destitute (100% Free)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Resident Family ID (if applicable)</label>
+            <input type="text" id="bkg-family-id" placeholder="e.g. W02-F005"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-emerald-600" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Booking Date *</label>
+            <input type="date" id="bkg-date" required
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Time Slot *</label>
+            <select id="bkg-slot" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-600">
+              <option value="Full Day (09:00 AM - 08:00 PM)">Full Day (09:00 AM - 08:00 PM)</option>
+              <option value="Morning Batch (08:00 AM - 02:00 PM)">Morning Batch (08:00 AM - 02:00 PM)</option>
+              <option value="Evening Batch (03:00 PM - 09:30 PM)">Evening Batch (03:00 PM - 09:30 PM)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Estimated Guests</label>
+            <input type="number" id="bkg-guests" value="450" min="50" max="1200" step="50"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-emerald-600" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Estimated Tariff</label>
+            <div id="bkg-tariff-display" class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-mono font-bold text-sm">
+              ₹21,000 (Subsidized)
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Special Requirements / Kitchen Catering Notes</label>
+          <textarea id="bkg-notes" rows="2" placeholder="e.g., Elevated bridal stage setup, commercial dining gas supply, audio mic requirements"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeHallBookingModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold transition">
+            Cancel
+          </button>
+          <button type="submit" id="bkg-submit-btn" class="btn-primary px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg">
+            <i data-lucide="send" class="w-4 h-4"></i> Submit Booking Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: VOLUNTEER CORP JOIN & ENLISTMENT MODAL
+       ========================================================================== -->
+  <div id="volunteer-corp-modal" class="fixed inset-0 z-[120] bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="max-w-xl w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200 my-8">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 flex items-center justify-center shadow-inner">
+            <i data-lucide="user-plus" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">Join Mahall Volunteer Corp</h3>
+            <p class="text-xs text-slate-500">Rapid Response Teams & Humanitarian Squads</p>
+          </div>
+        </div>
+        <button onclick="closeVolunteerCorpModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleVolunteerCorpSubmit(event)" class="space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Volunteer Full Name *</label>
+            <input type="text" id="vol-name" required placeholder="Your full name"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-600" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">WhatsApp / Phone *</label>
+            <input type="tel" id="vol-phone" required placeholder="+91 94470 00000"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-emerald-600" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Select Squad Preference *</label>
+            <select id="vol-squad" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-600">
+              <option value="Disaster & Flood Rescue Squad">Disaster & Flood Rescue Squad</option>
+              <option value="Medical Emergency Drivers">Medical Emergency Drivers</option>
+              <option value="Janazah & Burial Squad">Janazah & Burial Squad</option>
+              <option value="Food Kit Packaging Logistics">Food Kit Packaging Logistics</option>
+              <option value="General Mahall Volunteering">General Mahall Volunteering</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Mahall Ward / Family ID</label>
+            <input type="text" id="vol-ward" placeholder="e.g. Ward 02 (W02-F005)"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Blood Group</label>
+            <select id="vol-blood" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-emerald-600">
+              <option value="O+">O+</option>
+              <option value="A+">A+</option>
+              <option value="B+">B+</option>
+              <option value="AB+">AB+</option>
+              <option value="O-">O-</option>
+              <option value="A-">A-</option>
+              <option value="B-">B-</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Availability Schedule</label>
+            <select id="vol-availability" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-600">
+              <option value="24/7 Emergency Standby">24/7 Emergency Standby</option>
+              <option value="Weekends Only">Weekends Only</option>
+              <option value="Night Hours (08:00 PM - 06:00 AM)">Night Hours (08:00 PM - 06:00 AM)</option>
+              <option value="Flexible On-Call">Flexible On-Call</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Relevant Skills & Experience</label>
+          <textarea id="vol-skills" rows="2" placeholder="e.g. Swimmer / Lifeguard, Heavy Vehicle License, Electrical work, Nursing background"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeVolunteerCorpModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold transition">
+            Cancel
+          </button>
+          <button type="submit" id="vol-submit-btn" class="btn-gold px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg">
+            <i data-lucide="send" class="w-4 h-4"></i> Submit Enlistment Application
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 4: QABARSTAN DECEASED RECORD & DUA CARD MODAL
+       ========================================================================== -->
+  <div id="qabarstan-detail-modal" class="fixed inset-0 z-[120] bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shadow-inner">
+            <i data-lucide="cross" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">Mahall Qabarstan Record</h3>
+            <p class="text-xs text-slate-500">Official Cemetery Registry</p>
+          </div>
+        </div>
+        <button onclick="closeQabarDetailModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3 text-xs">
+        <div>
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Deceased Name</span>
+          <h4 id="qab-det-name" class="text-lg font-bold text-slate-900 dark:text-white">Marhum V. P. Alavi Haji</h4>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-slate-600 dark:text-slate-300">
+          <div><span class="text-slate-400 block text-[10px]">Passing Date / Year:</span> <strong id="qab-det-date" class="text-slate-900 dark:text-white">2026</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">Age at Passing:</span> <strong id="qab-det-age" class="text-slate-900 dark:text-white">78 Years</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">Ward / Residence:</span> <strong id="qab-det-ward" class="text-slate-900 dark:text-white">Ward 02</strong></div>
+          <div><span class="text-slate-400 block text-[10px]">House Name:</span> <strong id="qab-det-house" class="text-slate-900 dark:text-white">Baitul Noor</strong></div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 flex items-center justify-between">
+          <span class="text-slate-600 dark:text-slate-300 font-medium">Burial Plot:</span>
+          <span id="qab-det-plot" class="font-mono font-bold text-emerald-700 dark:text-emerald-300 text-sm">Sector B • 42</span>
+        </div>
+      </div>
+
+      <!-- Dua for the deceased -->
+      <div class="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-center space-y-1">
+        <p class="font-arabic text-amber-900 dark:text-amber-200 text-sm leading-relaxed" dir="rtl">
+          اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ
+        </p>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 italic">
+          "O Allah, forgive them, have mercy upon them, and grant them Jannat-ul-Firdaus."
+        </p>
+      </div>
+
+      <div class="pt-1 flex justify-end">
+        <button onclick="closeQabarDetailModal()" class="w-full py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white font-semibold text-xs transition">
+          Close Record
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 5: VANITHA VEDI (WOMEN'S WING) CONTACT DESK MODAL
+       ========================================================================== -->
+  <div id="vanitha-desk-modal" class="fixed inset-0 z-[120] bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200 my-8">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-400 flex items-center justify-center shadow-inner">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">Vanitha Vedi Contact Desk</h3>
+            <p class="text-xs text-slate-500">Women's Wing & Family Support Services</p>
+          </div>
+        </div>
+        <button onclick="closeVanithaDeskModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Information List -->
+      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 space-y-2.5 text-xs">
+        <div class="flex justify-between items-center pb-1.5 border-b border-slate-200/60 dark:border-slate-800">
+          <span class="text-slate-500">President:</span>
+          <strong class="text-slate-900 dark:text-white">Smt. Khadeeja Teacher</strong>
+        </div>
+        <div class="flex justify-between items-center pb-1.5 border-b border-slate-200/60 dark:border-slate-800">
+          <span class="text-slate-500">General Secretary:</span>
+          <strong class="text-slate-900 dark:text-white">Smt. Fathima K.</strong>
+        </div>
+        <div class="flex justify-between items-center pb-1.5 border-b border-slate-200/60 dark:border-slate-800">
+          <span class="text-slate-500">Helpline Phone:</span>
+          <a href="tel:+919447012388" class="text-emerald-600 dark:text-emerald-400 font-mono font-bold hover:underline">+91 94470 12388</a>
+        </div>
+        <div class="flex justify-between items-center pb-1.5 border-b border-slate-200/60 dark:border-slate-800">
+          <span class="text-slate-500">Office Location:</span>
+          <span class="text-slate-900 dark:text-white font-medium text-right">1st Floor, Women's Annex, Central Campus</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-500">Weekly Meeting:</span>
+          <span class="text-amber-600 dark:text-amber-400 font-semibold">Every Saturday 02:30 PM</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2">
+        <a href="tel:+919447012388" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-center block shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2 text-xs">
+          <i data-lucide="phone" class="w-4 h-4"></i> Call Vanitha Desk (+91 94470 12388)
+        </a>
+        <a href="https://wa.me/919447012388?text=Assalamu%20Alaikum%20Vanitha%20Vedi%20Noorul%20Huda%20Mahall" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-semibold text-center block transition flex items-center justify-center gap-2 text-xs">
+          <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp Consultation
+        </a>
+      </div>
+
+      <!-- Quick Inquiry / Counseling Request -->
+      <form onsubmit="handleVanithaQuerySubmit(event)" class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+        <span class="font-bold text-slate-900 dark:text-white block">Send Confidential Inquiry / Request</span>
+        <input type="text" id="vanitha-req-name" required placeholder="Your Name"
+          class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none" />
+        <input type="tel" id="vanitha-req-phone" required placeholder="Phone Number"
+          class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none" />
+        <textarea id="vanitha-req-msg" required rows="2" placeholder="Message or confidential counseling requirement"
+          class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none"></textarea>
+        <button type="submit" class="w-full py-2 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white font-semibold transition flex items-center justify-center gap-1.5">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i> Submit Confidential Message
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FLOATING MAHALL AI ASSISTANT CHAT WIDGET (ALL PAGES)
+       ========================================================================== -->
+  <div id="mahall-floating-chat-container" class="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-[80] font-sans">
+    <!-- Floating Trigger Button -->
+    <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+      id="ai-chat-floating-btn"
+      aria-label="Open Mahall AI Assistant"
+      title="Ask Mahall AI Assistant"
+      class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-800 via-emerald-700 to-teal-600 text-white shadow-2xl border-2 border-amber-400 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group relative">
+      <i data-lucide="bot" class="w-7 h-7 text-amber-300 group-hover:rotate-12 transition-transform"></i>
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-amber-500 text-[9px] font-black text-slate-950 items-center justify-center shadow">AI</span>
+      </span>
+    </button>
+
+    <!-- Interactive Chat Drawer -->
+    <div id="ai-chat-drawer"
+      class="absolute bottom-16 right-0 w-[340px] sm:w-[400px] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col hidden transition-all duration-300 z-[90]">
+      
+      <!-- Chat Header -->
+      <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center font-bold text-base shadow">
+            🌙
+          </div>
+          <div>
+            <h4 class="font-bold text-sm leading-tight flex items-center gap-1.5">
+              Mahall AI Assistant
+              <span class="text-[9px] bg-emerald-600/80 px-1.5 py-0.5 rounded-full font-medium text-emerald-100">Live</span>
+            </h4>
+            <p class="text-[11px] text-emerald-200">Full website guide & community assistant</p>
+          </div>
+        </div>
+        <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="p-2.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="MahallAI.handleChipClick('When is Jumu\'ah prayer and Khutbah?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🕌 Jumu'ah
+        </button>
+        <button onclick="MahallAI.handleChipClick('How can I get a Marriage NOC certificate?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🧾 Marriage NOC
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me about Noorul Huda Madrasa timings')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          📖 Madrasa
+        </button>
+        <button onclick="MahallAI.handleChipClick('Emergency ambulance number and blood donors')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🚑 Ambulance
+        </button>
+        <button onclick="MahallAI.handleChipClick('How to pay Mahall monthly subscription dues?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          💳 Pay ₹250
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me the history of Noorul Huda Mahall')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🏛️ History
+        </button>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="ai-chat-messages" class="p-4 h-72 sm:h-80 overflow-y-auto space-y-3 text-slate-800 dark:text-slate-200">
+        <div class="flex items-start gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 text-xs font-bold shadow">
+            🌙
+          </div>
+          <div class="chat-bubble-ai text-xs md:text-sm px-4 py-2.5 max-w-[88%] border border-slate-200/80 dark:border-slate-700 shadow-sm leading-relaxed">
+            Assalamu Alaikum! I am the <strong>Noorul Huda Mahall AI Assistant</strong>. Ask me anything about prayer times, marriage NOC, madrasa, ambulance, Zakat, or community services across our entire website!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-2">
+        <input id="ai-chat-input" onkeydown="if(event.key==='Enter') MahallAI.sendMessage()" type="text"
+          placeholder="Ask anything about our Mahall..."
+          class="flex-grow text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 transition" />
+        <button onclick="MahallAI.sendMessage()" class="btn-primary p-2.5 rounded-xl shadow hover:scale-105 transition" aria-label="Send Message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  <!-- ==========================================================================
+       MODAL 1: REGISTER AS BLOOD DONOR MODAL
+       ========================================================================== -->
+  <div id="donor-reg-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-red-100 dark:bg-red-950/80 text-red-600 dark:text-red-400 flex items-center justify-center">
+            <i data-lucide="droplet" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Register as Blood Donor</h3>
+            <p class="text-xs text-slate-500">Join our 24/7 Mahall Life-Saving Emergency Blood Network</p>
+          </div>
+        </div>
+        <button onclick="closeDonorRegModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleDonorRegSubmit(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Donor Full Name *</label>
+          <input type="text" id="reg-donor-name" required placeholder="Legal full name"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Blood Group *</label>
+            <select id="reg-donor-group" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
+              <option value="O+">O+ (Universal RBC)</option>
+              <option value="A+">A+ (Positive)</option>
+              <option value="B+">B+ (Positive)</option>
+              <option value="AB+">AB+ (Universal Plasma)</option>
+              <option value="O-">O- (Universal Emergency)</option>
+              <option value="A-">A- (Negative)</option>
+              <option value="B-">B- (Negative)</option>
+              <option value="AB-">AB- (Rare Negative)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Phone Number (WhatsApp) *</label>
+            <input type="tel" id="reg-donor-phone" required placeholder="+91 94470 12345"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Ward Location</label>
+            <select id="reg-donor-ward" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
+              <option value="Ward 02 (Masjid Central)">Ward 02 (Masjid Central)</option>
+              <option value="Ward 01 (East Bazar)">Ward 01 (East Bazar)</option>
+              <option value="Ward 03 (Madrasa Road)">Ward 03 (Madrasa Road)</option>
+              <option value="Ward 04 (South Gate)">Ward 04 (South Gate)</option>
+              <option value="Ward 05 (Canal Side)">Ward 05 (Canal Side)</option>
+              <option value="Ward 06 (West Hill)">Ward 06 (West Hill)</option>
+              <option value="Ward 07 (North View)">Ward 07 (North View)</option>
+              <option value="Ward 08 (High School)">Ward 08 (High School)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Age & Status</label>
+            <input type="number" id="reg-donor-age" min="18" max="65" value="25"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Last Donated (Date or Period)</label>
+          <input type="text" id="reg-donor-last" placeholder="e.g. 4 months ago, or Ready immediately" value="Ready to donate"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+        </div>
+
+        <div class="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-2xl flex items-start gap-2.5">
+          <input type="checkbox" id="reg-donor-consent" required checked class="mt-0.5 rounded text-red-600 focus:ring-red-500" />
+          <label for="reg-donor-consent" class="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
+            I confirm I am medically fit, meet blood donation criteria (weighing > 50kg, no chronic transmissible illness), and consent to being contacted by Mahall administration during emergency patient requirements.
+          </label>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="closeDonorRegModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Cancel</button>
+          <button type="submit" class="btn-primary !py-2 !px-5 bg-red-700 hover:bg-red-800 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Submit for Admin Approval
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: MAHALL CAREER & JOB DESK APPLICATION MODAL
+       ========================================================================== -->
+  <div id="job-application-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <i data-lucide="briefcase" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Apply via Mahall Career Desk</h3>
+            <p class="text-xs text-slate-500">Employment assistance & Gulf/Local placement desk</p>
+          </div>
+        </div>
+        <button onclick="closeJobAppModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleJobAppSubmit(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Applying For Position *</label>
+          <input type="text" id="job-app-role" required
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-bold focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Applicant Full Name *</label>
+            <input type="text" id="job-app-name" required placeholder="Legal full name"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Contact Phone (WhatsApp) *</label>
+            <input type="tel" id="job-app-phone" required placeholder="+91 94470 12345"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Ward / Family ID</label>
+            <input type="text" id="job-app-ward" placeholder="Ward 02 (W02-F005)" value="Ward 02"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Highest Qualification *</label>
+            <input type="text" id="job-app-qual" required placeholder="e.g. B.Com, B.Tech, Plus Two"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Years of Relevant Experience *</label>
+          <input type="text" id="job-app-exp" required placeholder="e.g. 3 years in Gulf / 2 yrs local / Fresher"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Key Skills / Resume Brief / Notes</label>
+          <textarea id="job-app-notes" rows="3" placeholder="Mention key technical tools (e.g. Tally Prime, AutoCAD, ERP), language fluency, or visa status..."
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="closeJobAppModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Cancel</button>
+          <button type="submit" class="btn-primary !py-2 !px-5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+            <i data-lucide="send" class="w-4 h-4"></i> Submit to Employment Desk
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: SPONSOR A DIALYSIS MODAL
+       ========================================================================== -->
+  <div id="dialysis-sponsor-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-red-100 dark:bg-red-950/80 text-red-600 dark:text-red-400 flex items-center justify-center">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Sponsor a Life-Saving Dialysis</h3>
+            <p class="text-xs text-slate-500">₹1,000 per session • Direct non-profit nephrology settlement</p>
+          </div>
+        </div>
+        <button onclick="closeDialysisSponsorModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleDialysisSponsorSubmit(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Select Sponsorship Tier</label>
+          <div class="grid grid-cols-4 gap-2">
+            <button type="button" onclick="setDialysisTier(1000, 1)" class="dialysis-tier-btn p-2 rounded-xl border border-red-500 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 font-bold text-center">
+              <span class="block text-sm">₹1,000</span>
+              <span class="text-[10px] font-normal opacity-80">1 Session</span>
+            </button>
+            <button type="button" onclick="setDialysisTier(2000, 2)" class="dialysis-tier-btn p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-400 text-slate-700 dark:text-slate-300 font-bold text-center">
+              <span class="block text-sm">₹2,000</span>
+              <span class="text-[10px] font-normal opacity-80">2 Sessions</span>
+            </button>
+            <button type="button" onclick="setDialysisTier(5000, 5)" class="dialysis-tier-btn p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-400 text-slate-700 dark:text-slate-300 font-bold text-center">
+              <span class="block text-sm">₹5,000</span>
+              <span class="text-[10px] font-normal opacity-80">5 Sessions</span>
+            </button>
+            <button type="button" onclick="setDialysisTier(10000, 10)" class="dialysis-tier-btn p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-400 text-slate-700 dark:text-slate-300 font-bold text-center">
+              <span class="block text-sm">₹10,000</span>
+              <span class="text-[10px] font-normal opacity-80">10 Sessions</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Amount (₹) *</label>
+            <input type="number" id="dialysis-spn-amount" value="1000" min="500" step="500" required oninput="calcDialysisSessions()"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Sessions Sponsored</label>
+            <input type="text" id="dialysis-spn-sessions" value="1 Session" readonly
+              class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 font-bold" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Donor / Sponsor Name *</label>
+            <input type="text" id="dialysis-spn-name" required placeholder="Your full name"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Contact Phone *</label>
+            <input type="tel" id="dialysis-spn-phone" required placeholder="+91 94470 12345"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Dedication / Dua Note (Isal-e-Sawab)</label>
+          <input type="text" id="dialysis-spn-note" placeholder="e.g. In memory of late parents / For family wellness and Shifa"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Payment Channel</label>
+          <select id="dialysis-spn-mode" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition">
+            <option value="UPI (Instant GPay / PhonePe / Paytm)">UPI (Instant GPay / PhonePe / Paytm)</option>
+            <option value="Direct Bank NEFT / IMPS Remittance">Direct Bank NEFT / IMPS Remittance</option>
+            <option value="Cash at Mahall Relief Office Counter">Cash at Mahall Relief Office Counter</option>
+          </select>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="closeDialysisSponsorModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Cancel</button>
+          <button type="submit" class="btn-primary !py-2 !px-5 bg-red-700 hover:bg-red-800 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+            <i data-lucide="heart" class="w-4 h-4"></i> Complete Sponsorship
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 4: APPLY FOR MEDICAL ASSISTANCE
+       ========================================================================== -->
+  <div id="medical-assistance-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Apply for Medical Assistance</h3>
+            <p class="text-xs text-slate-500">Mahall Welfare Council Health Subsidy & Medicine Scheme</p>
+          </div>
+        </div>
+        <button onclick="closeMedicalAssistanceModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleMedicalAssistanceSubmit(event)" class="space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Patient Full Name *</label>
+            <input type="text" id="med-app-patient" required placeholder="Patient legal name"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Guardian / Relative Name</label>
+            <input type="text" id="med-app-guardian" placeholder="Father / Son / Self"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Contact Phone *</label>
+            <input type="tel" id="med-app-phone" required placeholder="+91 94470 12345"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Ward / House No</label>
+            <input type="text" id="med-app-ward" placeholder="Ward 02, House 22/104" value="Ward 02"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Medical Aid Scheme *</label>
+          <select id="med-app-category" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+            <option value="Dialysis Subsidy (Bi-weekly)">Dialysis Subsidy (Bi-weekly Nephrology Support)</option>
+            <option value="Free Chronic Medicine Scheme">Free Chronic Medicine Scheme (Insulin, Cardiac, BP)</option>
+            <option value="Cardiac Surgery & Stent Support">Cardiac Surgery & Stent Support</option>
+            <option value="Cancer Chemotherapy & Radiation Grant">Cancer Chemotherapy & Radiation Grant</option>
+            <option value="General Emergency Hospitalization Subsidy">General Emergency Hospitalization Subsidy</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Treating Hospital / Clinic *</label>
+            <input type="text" id="med-app-hospital" required placeholder="e.g. CH Centre, IQRAA, Govt Medical College"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Estimated Aid Requested (₹) *</label>
+            <input type="number" id="med-app-amount" required value="5000" min="500" step="500"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Diagnosis Summary / Doctor's Prescription Notes</label>
+          <textarea id="med-app-notes" rows="3" placeholder="Provide doctor diagnosis summary, prescription details, hospital registration number, or doctor name..."
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="closeMedicalAssistanceModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Cancel</button>
+          <button type="submit" class="btn-primary !py-2 !px-5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i> Submit for Welfare Approval
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 5: SPONSOR A MONTHLY FAMILY RATION KIT
+       ========================================================================== -->
+  <div id="ration-sponsor-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <i data-lucide="gift" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Sponsor Monthly Family Ration Kit</h3>
+            <p class="text-xs text-slate-500">₹2,500/kit • 25kg Rice, 2L Oil, 5kg Pulses & Essentials</p>
+          </div>
+        </div>
+        <button onclick="closeRationSponsorModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleRationSponsorSubmit(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Select Kit Package</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button type="button" onclick="setRationTier(2500, 1)" class="ration-tier-btn p-2 rounded-xl border border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-bold text-center">
+              <span class="block text-sm">₹2,500</span>
+              <span class="text-[10px] font-normal opacity-80">1 Family Kit</span>
+            </button>
+            <button type="button" onclick="setRationTier(5000, 2)" class="ration-tier-btn p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-amber-400 text-slate-700 dark:text-slate-300 font-bold text-center">
+              <span class="block text-sm">₹5,000</span>
+              <span class="text-[10px] font-normal opacity-80">2 Families</span>
+            </button>
+            <button type="button" onclick="setRationTier(10000, 4)" class="ration-tier-btn p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-amber-400 text-slate-700 dark:text-slate-300 font-bold text-center">
+              <span class="block text-sm">₹10,000</span>
+              <span class="text-[10px] font-normal opacity-80">4 Families</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Amount (₹) *</label>
+            <input type="number" id="ration-spn-amount" value="2500" min="2500" step="2500" required oninput="calcRationKits()"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Kits Sponsored</label>
+            <input type="text" id="ration-spn-kits" value="1 Family Kit" readonly
+              class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-amber-600 dark:text-amber-400 font-bold" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Sponsor Full Name *</label>
+            <input type="text" id="ration-spn-name" required placeholder="Your full name"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Contact Phone *</label>
+            <input type="tel" id="ration-spn-phone" required placeholder="+91 94470 12345"
+              class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Dedication / Dua Note</label>
+          <input type="text" id="ration-spn-note" placeholder="e.g. In memory of Marhum grandparents / Sadaqah Jariyah"
+            class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Payment Mode</label>
+          <select id="ration-spn-mode" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition">
+            <option value="UPI (Instant GPay / PhonePe / QR)">UPI (Instant GPay / PhonePe / QR)</option>
+            <option value="Direct Bank Remittance">Direct Bank Remittance</option>
+            <option value="Cash at Mahall Relief Office Counter">Cash at Mahall Relief Office Counter</option>
+          </select>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="closeRationSponsorModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Cancel</button>
+          <button type="submit" class="btn-gold !py-2 !px-5 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+            <i data-lucide="gift" class="w-4 h-4"></i> Complete Kit Sponsorship
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script>
+    // Blood Donors Dynamic Filter
+    let currentBloodGroupFilter = 'all';
+
+    function renderBloodDonors(group = currentBloodGroupFilter) {
+      currentBloodGroupFilter = group;
+      const container = document.getElementById('donors-cards-container');
+      if (!container) return;
+
+      let donors = [];
+      if (typeof MahallDB !== 'undefined' && MahallDB.getBloodDonors) {
+        donors = MahallDB.getBloodDonors();
+      } else if (window.MAHALL_DATA && MAHALL_DATA.bloodDonors) {
+        donors = MAHALL_DATA.bloodDonors;
+      }
+
+      // Update heading count dynamically
+      const heading = document.getElementById('donor-directory-heading');
+      if (heading) {
+        heading.innerText = `Verified Blood Donor Directory (${donors.length} Active Donors)`;
+      }
+
+      let filtered = donors;
+      if (group !== 'all') {
+        filtered = donors.filter(d => {
+          const bg = (d.bloodGroup || d.group || '').trim().toUpperCase();
+          return bg === group.trim().toUpperCase();
+        });
+      }
+
+      if (!filtered.length) {
+        container.innerHTML = `
+          <div class="col-span-full p-8 text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-400 text-xs">
+            No verified donors found for blood group <strong class="text-red-500 font-mono">${group}</strong>. Click "Register as Blood Donor" above to join.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(d => {
+        const bg = d.bloodGroup || d.group || 'O+';
+        const ward = d.ward || 'Ward 02';
+        const last = d.lastDonated || d.lastDonation || 'Ready to donate';
+        const phone = d.phone || '+91 94470 12345';
+        const cleanPhone = phone.replace(/[^0-9]/g, '');
+
+        return `
+        <div class="glass-panel p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 hover:-translate-y-0.5 transition shadow-sm hover:shadow-md">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 font-black flex items-center justify-center text-sm border border-red-200 dark:border-red-800 shadow-sm font-mono">
+                ${bg}
+              </span>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-xs">${d.name}</h4>
+                <span class="text-[11px] text-slate-500">${ward} • Last donated: ${last}</span>
+              </div>
+            </div>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" title="Verified & Ready to donate"></span>
+          </div>
+
+          <div class="flex gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/80">
+            <a href="tel:${cleanPhone}" class="flex-1 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-600"></i> Call
+            </a>
+            <a href="https://wa.me/${cleanPhone}?text=Assalamu%20Alaikum,%20urgent%20blood%20request%20via%20Noorul%20Huda%20Mahall%20Portal" target="_blank" class="flex-1 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="message-square" class="w-3.5 h-3.5"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterBloodGroup(group) {
+      document.querySelectorAll('.bg-pill').forEach(btn => {
+        btn.classList.remove('bg-red-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      });
+      if (event && event.target) {
+        event.target.classList.add('bg-red-600', 'text-white');
+        event.target.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      }
+      renderBloodDonors(group);
+    }
+
+    function highlightCampusLocation(loc) {
+      const locations = {
+        masjid: { title: "Central Juma Masjid (Main Sanctuary)", desc: "3-floor grand prayer hall with capacity of 2,500, dedicated women's entrance at Gate 2, and wudhu plaza." },
+        madrasa: { title: "Noorul Huda Islamic Academy (Madrasa)", desc: "12 modern classrooms, audio-visual conference room, 480 enrolled students, and staff quarters." },
+        auditorium: { title: "Noorul Huda Memorial Community Hall", desc: "800-seat air-conditioned hall with 450-seat dining area and backup power generators." },
+        ambulance: { title: "Emergency Ambulance Bay (Gate 1)", desc: "24/7 dedicated bay with driver quarters and oxygen cylinder charging station." },
+        qabarstan: { title: "Mahall Qabarstan (Cemetery)", desc: "Spiritual cemetery divided into Sectors A, B, C, D with shaded pathways and Dua stations." },
+        parking: { title: "East Ground Parking Plaza", desc: "Monitored parking for 120 cars and 250 two-wheelers with solar charging canopy." }
+      };
+
+      if (locations[loc]) {
+        document.getElementById('campus-location-title').innerText = locations[loc].title;
+        document.getElementById('campus-location-desc').innerText = locations[loc].desc;
+      }
+    }
+
+    // =========================================================================
+    // 1. EMERGENCY CALL DESK
+    // =========================================================================
+    let currentEmergencyNumber = '+919846099999';
+
+    function callEmergencyNumber(serviceName, phoneNumber, description = '', isAmbulance = false) {
+      currentEmergencyNumber = phoneNumber;
+      const modal = document.getElementById('emergency-call-modal');
+      const titleEl = document.getElementById('em-call-title');
+      const descEl = document.getElementById('em-call-desc');
+      const numEl = document.getElementById('em-call-number');
+      const dialLink = document.getElementById('em-call-dial-link');
+      const dialBtnText = document.getElementById('em-call-dial-btn-text');
+      const whatsappLink = document.getElementById('em-call-whatsapp-link');
+
+      if (titleEl) titleEl.innerText = serviceName;
+      if (descEl) descEl.innerText = description || '24/7 Immediate Response Desk';
+      if (numEl) numEl.innerText = phoneNumber;
+      if (dialLink) dialLink.href = 'tel:' + phoneNumber.replace(/\s+/g, '');
+      if (dialBtnText) dialBtnText.innerText = phoneNumber;
+
+      if (whatsappLink) {
+        if (isAmbulance || phoneNumber.includes('9846099999')) {
+          whatsappLink.parentElement.classList.remove('hidden');
+          whatsappLink.href = `https://wa.me/919846099999?text=EMERGENCY%20AMBULANCE%20REQUEST%20-%20Noorul%20Huda%20Mahall`;
+        } else {
+          whatsappLink.href = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=Emergency%20Inquiry%20Noorul%20Huda%20Mahall`;
+        }
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+
+      // Trigger tel: call directly on phone/dialer devices
+      try {
+        window.location.href = 'tel:' + phoneNumber.replace(/\s+/g, '');
+      } catch (e) {}
+
+      if (window.app && window.app.showToast) {
+        window.app.showToast(`Connecting to ${serviceName} (${phoneNumber})...`, 'info');
+      }
+    }
+
+    function closeEmergencyCallModal() {
+      const modal = document.getElementById('emergency-call-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function copyEmergencyNumber() {
+      const cleanNum = currentEmergencyNumber.replace(/\s+/g, '');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(cleanNum).then(() => {
+          showCopySuccess();
+        });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = cleanNum;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showCopySuccess();
+      }
+    }
+
+    function showCopySuccess() {
+      const textEl = document.getElementById('em-call-copy-text');
+      if (textEl) {
+        const orig = textEl.innerText;
+        textEl.innerText = 'Copied!';
+        setTimeout(() => { textEl.innerText = orig; }, 2000);
+      }
+      if (window.app && window.app.showToast) {
+        window.app.showToast(`Copied ${currentEmergencyNumber} to clipboard!`, 'success');
+      }
+    }
+
+    // =========================================================================
+    // 2. AUDITORIUM BOOKING REQUEST
+    // =========================================================================
+    function openHallBookingModal() {
+      const modal = document.getElementById('auditorium-booking-modal');
+      const dateInput = document.getElementById('bkg-date');
+      if (dateInput && !dateInput.value) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateInput.value = tomorrow.toISOString().split('T')[0];
+      }
+      updateHallTariffEstimate();
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeHallBookingModal() {
+      const modal = document.getElementById('auditorium-booking-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function updateHallTariffEstimate() {
+      const type = document.getElementById('bkg-tariff-type')?.value || 'RESIDENT';
+      const display = document.getElementById('bkg-tariff-display');
+      if (!display) return;
+      if (type === 'RESIDENT') {
+        display.innerText = '₹21,000 (Resident Subsidized 40% Off)';
+      } else if (type === 'GENERAL') {
+        display.innerText = '₹35,000 (General Standard Tariff)';
+      } else {
+        display.innerText = '₹0 (100% Free - Welfare Scheme)';
+      }
+    }
+
+    function handleHallBookingSubmit(event) {
+      event.preventDefault();
+      const eventName = document.getElementById('bkg-event-name').value.trim();
+      const applicantName = document.getElementById('bkg-applicant-name').value.trim();
+      const phone = document.getElementById('bkg-applicant-phone').value.trim();
+      const tariffType = document.getElementById('bkg-tariff-type').value;
+      const familyId = document.getElementById('bkg-family-id').value.trim();
+      const date = document.getElementById('bkg-date').value;
+      const slot = document.getElementById('bkg-slot').value;
+      const guests = document.getElementById('bkg-guests').value;
+      const notes = document.getElementById('bkg-notes').value.trim();
+
+      let tariffText = '₹21,000 (Resident Subsidized)';
+      if (tariffType === 'GENERAL') tariffText = '₹35,000 (General Tariff)';
+      if (tariffType === 'WELFARE') tariffText = '₹0 (Welfare 100% Free)';
+
+      const submitBtn = document.getElementById('bkg-submit-btn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="inline-block animate-spin mr-1">⏳</span> Submitting...`;
+      }
+
+      setTimeout(() => {
+        try {
+          let newBooking = null;
+          if (typeof MahallDB !== 'undefined' && MahallDB.createBooking) {
+            newBooking = MahallDB.createBooking({
+              bookedBy: applicantName,
+              phone: phone,
+              familyId: familyId,
+              event: eventName,
+              date: date,
+              slot: slot,
+              tariff: tariffText,
+              guests: guests,
+              notes: notes,
+              status: 'PENDING'
+            });
+          } else {
+            newBooking = { id: `BKG-${Math.floor(100 + Math.random() * 900)}` };
+          }
+
+          closeHallBookingModal();
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Submit Booking Request`;
+          }
+
+          if (window.app && window.app.showToast) {
+            window.app.showToast(`Auditorium reservation request (${newBooking.id}) sent to Mahall Admin for approval!`, 'success');
+          } else {
+            alert(`Auditorium reservation request (${newBooking.id}) sent to Mahall Admin for approval!`);
+          }
+        } catch (err) {
+          console.error(err);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Submit Booking Request`;
+          }
+          alert('Error: ' + err.message);
+        }
+      }, 700);
+    }
+
+    // =========================================================================
+    // 3. VOLUNTEER CORP APPLICATION
+    // =========================================================================
+    function openVolunteerCorpModal() {
+      const modal = document.getElementById('volunteer-corp-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeVolunteerCorpModal() {
+      const modal = document.getElementById('volunteer-corp-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function handleVolunteerCorpSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('vol-name').value.trim();
+      const phone = document.getElementById('vol-phone').value.trim();
+      const squad = document.getElementById('vol-squad').value;
+      const ward = document.getElementById('vol-ward').value.trim() || 'Ward 02';
+      const bloodGroup = document.getElementById('vol-blood').value;
+      const availability = document.getElementById('vol-availability').value;
+      const skills = document.getElementById('vol-skills').value.trim();
+
+      const btn = document.getElementById('vol-submit-btn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="inline-block animate-spin mr-1">⏳</span> Submitting Application...`;
+      }
+
+      setTimeout(() => {
+        try {
+          let newReq = null;
+          if (typeof MahallDB !== 'undefined' && MahallDB.addVolunteerRequest) {
+            newReq = MahallDB.addVolunteerRequest({
+              name: name,
+              phone: phone,
+              ward: ward,
+              squad: squad,
+              bloodGroup: bloodGroup,
+              skills: skills,
+              availability: availability
+            });
+          } else {
+            newReq = { id: `VOL-${Math.floor(100 + Math.random() * 900)}` };
+          }
+
+          closeVolunteerCorpModal();
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Submit Enlistment Application`;
+          }
+
+          if (window.app && window.app.showToast) {
+            window.app.showToast(`Volunteer application submitted! Sent to Mahall Committee for official approval.`, 'success');
+          } else {
+            alert(`Volunteer application submitted! Sent to Mahall Committee for official approval.`);
+          }
+        } catch (e) {
+          console.error(e);
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Submit Enlistment Application`;
+          }
+          alert('Error: ' + e.message);
+        }
+      }, 700);
+    }
+
+    // =========================================================================
+    // 4. MAHALL QABARSTAN REGISTRY
+    // =========================================================================
+    let activeQabarSector = 'ALL';
+
+    function renderQabarstanRecords(sector = 'ALL', query = '') {
+      const tbody = document.getElementById('qabar-results-body');
+      if (!tbody) return;
+
+      let records = [];
+      if (typeof MahallDB !== 'undefined' && MahallDB.getQabarstanRecords) {
+        records = MahallDB.getQabarstanRecords();
+      } else {
+        records = [
+          { id: "QAB-01", name: "Marhum V. P. Alavi Haji", ward: "Ward 02", year: "2026", date: "26 Sep 2026", age: 78, houseName: "Baitul Noor", sector: "Sector B", plot: "Sector B • 42", nextOfKin: "Ahmed Koya (Son)" },
+          { id: "QAB-02", name: "Marhum K. V. Moideen Haji", ward: "Ward 01", year: "2012", date: "14 May 2012", age: 82, houseName: "Baitul Aman", sector: "Sector A", plot: "Sector A • 04", nextOfKin: "C. K. Musthafa" },
+          { id: "QAB-03", name: "Marhuma Amina Umma", ward: "Ward 02", year: "2018", date: "08 Nov 2018", age: 69, houseName: "Darussalam", sector: "Sector C", plot: "Sector C • 19", nextOfKin: "Abdul Khader" },
+          { id: "QAB-04", name: "Marhum C. H. Bava Musliyar", ward: "Ward 03", year: "2021", date: "19 Jan 2021", age: 74, houseName: "Noor Villa", sector: "Sector A", plot: "Sector A • 12", nextOfKin: "Umer Musliyar" },
+          { id: "QAB-05", name: "Marhum P. K. Aboobacker", ward: "Ward 04", year: "2024", date: "03 Feb 2024", age: 63, houseName: "Baitul Izza", sector: "Sector D", plot: "Sector D • 08", nextOfKin: "Farooq P. K." },
+          { id: "QAB-06", name: "Marhum M. K. Kunjahmed", ward: "Ward 01", year: "1968", date: "12 Apr 1968", age: 75, houseName: "Kunjahmed Manzil", sector: "Sector A", plot: "Sector A • 01", nextOfKin: "Historical Record" },
+          { id: "QAB-07", name: "Marhuma Fathima Beevi", ward: "Ward 05", year: "2023", date: "28 Jul 2023", age: 71, houseName: "Subhan Villa", sector: "Sector B", plot: "Sector B • 15", nextOfKin: "Rashid Ali" },
+          { id: "QAB-08", name: "Marhum T. K. Saidali", ward: "Ward 06", year: "2025", date: "11 Oct 2025", age: 67, houseName: "Al-Huda House", sector: "Sector C", plot: "Sector C • 33", nextOfKin: "Hamza T. K." }
+        ];
+      }
+
+      let filtered = records;
+      if (sector && sector !== 'ALL') {
+        filtered = filtered.filter(r => (r.sector || '').toUpperCase() === sector.toUpperCase());
+      }
+      if (query) {
+        const q = query.toLowerCase();
+        filtered = filtered.filter(r =>
+          (r.name || '').toLowerCase().includes(q) ||
+          (r.ward || '').toLowerCase().includes(q) ||
+          (r.year || '').toString().includes(q) ||
+          (r.plot || '').toLowerCase().includes(q) ||
+          (r.houseName || '').toLowerCase().includes(q)
+        );
+      }
+
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No matching deceased record found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/60 transition cursor-pointer" onclick="openQabarDetailModal('${r.id}')">
+          <td class="p-2 font-bold text-slate-900 dark:text-white">
+            ${r.name}
+            ${r.houseName ? `<span class="block text-[10px] text-slate-400 font-normal">${r.houseName}</span>` : ''}
+          </td>
+          <td class="p-2 text-slate-600 dark:text-slate-300">${r.ward}</td>
+          <td class="p-2 font-mono">${r.year}</td>
+          <td class="p-2 text-emerald-600 dark:text-emerald-400 font-bold font-mono text-[11px]">${r.plot}</td>
+          <td class="p-2 text-right">
+            <button type="button" onclick="event.stopPropagation(); openQabarDetailModal('${r.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-semibold text-[10px] hover:bg-emerald-100 dark:hover:bg-emerald-900 transition">
+              Dua & Details &rarr;
+            </button>
+          </td>
+        </tr>
+      `).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function searchQabarRecords() {
+      const q = (document.getElementById('qabar-search-input')?.value || '').trim();
+      renderQabarstanRecords(activeQabarSector, q);
+    }
+
+    function filterQabarSector(sector, btn) {
+      activeQabarSector = sector;
+      document.querySelectorAll('.qabar-filter-btn').forEach(b => {
+        b.className = 'qabar-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition';
+      });
+      if (btn) {
+        btn.className = 'qabar-filter-btn px-2.5 py-1 rounded-lg bg-emerald-700 text-white font-bold transition';
+      }
+      const q = (document.getElementById('qabar-search-input')?.value || '').trim();
+      renderQabarstanRecords(sector, q);
+    }
+
+    function openQabarDetailModal(id) {
+      let records = [];
+      if (typeof MahallDB !== 'undefined' && MahallDB.getQabarstanRecords) {
+        records = MahallDB.getQabarstanRecords();
+      }
+      const r = records.find(item => item.id === id) || {
+        name: "Marhum V. P. Alavi Haji",
+        ward: "Ward 02",
+        year: "2026",
+        date: "26 Sep 2026",
+        age: 78,
+        houseName: "Baitul Noor",
+        plot: "Sector B • 42"
+      };
+
+      document.getElementById('qab-det-name').innerText = r.name;
+      document.getElementById('qab-det-date').innerText = r.date || r.year || 'Recorded';
+      document.getElementById('qab-det-age').innerText = r.age ? `${r.age} Years` : 'N/A';
+      document.getElementById('qab-det-ward').innerText = r.ward || 'Ward 02';
+      document.getElementById('qab-det-house').innerText = r.houseName || 'Mahall Family';
+      document.getElementById('qab-det-plot').innerText = r.plot || 'Sector B • 42';
+
+      const modal = document.getElementById('qabarstan-detail-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeQabarDetailModal() {
+      const modal = document.getElementById('qabarstan-detail-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    // =========================================================================
+    // 5. VANITHA DESK
+    // =========================================================================
+    function openVanithaDeskModal() {
+      const modal = document.getElementById('vanitha-desk-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeVanithaDeskModal() {
+      const modal = document.getElementById('vanitha-desk-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function handleVanithaQuerySubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('vanitha-req-name')?.value.trim();
+      const phone = document.getElementById('vanitha-req-phone')?.value.trim();
+      const msg = document.getElementById('vanitha-req-msg')?.value.trim();
+
+      if (typeof MahallDB !== 'undefined' && MahallDB.logActivity) {
+        MahallDB.logActivity('INQUIRY', `Confidential Vanitha Vedi inquiry from ${name} (${phone})`);
+      }
+
+      closeVanithaDeskModal();
+      if (window.app && window.app.showToast) {
+        window.app.showToast('Your confidential inquiry was submitted to the Vanitha Vedi coordinator!', 'success');
+      } else {
+        alert('Your confidential inquiry was submitted to the Vanitha Vedi coordinator!');
+      }
+    }
+
+    // =========================================================================
+    // 6. BLOOD DONOR REGISTRATION MODAL HANDLERS
+    // =========================================================================
+    function openDonorRegModal() {
+      const modal = document.getElementById('donor-reg-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeDonorRegModal() {
+      const modal = document.getElementById('donor-reg-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function handleDonorRegSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('reg-donor-name')?.value.trim();
+      const group = document.getElementById('reg-donor-group')?.value;
+      const phone = document.getElementById('reg-donor-phone')?.value.trim();
+      const ward = document.getElementById('reg-donor-ward')?.value;
+      const age = document.getElementById('reg-donor-age')?.value;
+      const lastDonation = document.getElementById('reg-donor-last')?.value.trim();
+
+      if (!name || !phone) {
+        if (window.app) window.app.showToast('Please fill all required donor fields.', 'error');
+        return;
+      }
+
+      let newReq = null;
+      if (typeof MahallDB !== 'undefined' && MahallDB.addDonorRequest) {
+        newReq = MahallDB.addDonorRequest({
+          name: name,
+          group: group,
+          phone: phone,
+          ward: ward,
+          age: age,
+          lastDonation: lastDonation
+        });
+      }
+
+      closeDonorRegModal();
+      const msg = `Blood donor registration for ${name} (${group}) submitted! Sent to Mahall Admin for approval.`;
+      if (window.app && window.app.showToast) {
+        window.app.showToast(msg, 'success');
+      } else {
+        alert(msg);
+      }
+    }
+
+    // =========================================================================
+    // 7. MAHALL CAREER & JOB DESK MODAL HANDLERS
+    // =========================================================================
+    function openJobAppModal(jobTitle = 'General Career Opportunity') {
+      const modal = document.getElementById('job-application-modal');
+      const roleInput = document.getElementById('job-app-role');
+      if (roleInput) roleInput.value = jobTitle;
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeJobAppModal() {
+      const modal = document.getElementById('job-application-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function handleJobAppSubmit(event) {
+      event.preventDefault();
+      const jobTitle = document.getElementById('job-app-role')?.value.trim();
+      const name = document.getElementById('job-app-name')?.value.trim();
+      const phone = document.getElementById('job-app-phone')?.value.trim();
+      const ward = document.getElementById('job-app-ward')?.value.trim();
+      const qualification = document.getElementById('job-app-qual')?.value.trim();
+      const experience = document.getElementById('job-app-exp')?.value.trim();
+      const coverNotes = document.getElementById('job-app-notes')?.value.trim();
+
+      if (!name || !phone || !jobTitle) {
+        if (window.app) window.app.showToast('Please enter candidate name, phone and position.', 'error');
+        return;
+      }
+
+      let newApp = null;
+      if (typeof MahallDB !== 'undefined' && MahallDB.addJobApplication) {
+        newApp = MahallDB.addJobApplication({
+          name: name,
+          phone: phone,
+          ward: ward,
+          jobTitle: jobTitle,
+          qualification: qualification,
+          experience: experience,
+          coverNotes: coverNotes
+        });
+      }
+
+      closeJobAppModal();
+      const msg = `Job application for "${jobTitle}" submitted to Mahall Employment Desk! Sent to Admin for review.`;
+      if (window.app && window.app.showToast) {
+        window.app.showToast(msg, 'success');
+      } else {
+        alert(msg);
+      }
+    }
+
+    // =========================================================================
+    // 8. DIALYSIS SPONSORSHIP MODAL & FUND GOAL HANDLERS
+    // =========================================================================
+    function openDialysisSponsorModal() {
+      const modal = document.getElementById('dialysis-sponsor-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeDialysisSponsorModal() {
+      const modal = document.getElementById('dialysis-sponsor-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function setDialysisTier(amount, sessions) {
+      const amtInput = document.getElementById('dialysis-spn-amount');
+      const sessInput = document.getElementById('dialysis-spn-sessions');
+      if (amtInput) amtInput.value = amount;
+      if (sessInput) sessInput.value = `${sessions} Session${sessions > 1 ? 's' : ''}`;
+
+      document.querySelectorAll('.dialysis-tier-btn').forEach(btn => {
+        btn.classList.remove('border-red-500', 'bg-red-50', 'dark:bg-red-950/40', 'text-red-700', 'dark:text-red-300');
+        btn.classList.add('border-slate-200', 'dark:border-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      });
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('border-red-500', 'bg-red-50', 'dark:bg-red-950/40', 'text-red-700', 'dark:text-red-300');
+        event.currentTarget.classList.remove('border-slate-200', 'dark:border-slate-800');
+      }
+    }
+
+    function calcDialysisSessions() {
+      const amtInput = document.getElementById('dialysis-spn-amount');
+      const sessInput = document.getElementById('dialysis-spn-sessions');
+      const amt = Number(amtInput?.value || 1000);
+      const sess = Math.max(1, Math.floor(amt / 1000));
+      if (sessInput) sessInput.value = `${sess} Session${sess > 1 ? 's' : ''}`;
+    }
+
+    function updateDialysisGoalDisplay() {
+      if (typeof MahallDB === 'undefined' || !MahallDB.getDialysisFundData) return;
+      const fund = MahallDB.getDialysisFundData();
+      const raisedEl = document.getElementById('dialysis-raised-amount');
+      const targetEl = document.getElementById('dialysis-target-amount');
+      const barEl = document.getElementById('dialysis-goal-bar');
+      const descEl = document.getElementById('dialysis-goal-desc');
+
+      const raised = fund.raised || 184000;
+      const target = fund.target || 240000;
+      const sessions = fund.sessions || 184;
+      const patients = fund.patients || 14;
+      const pct = Math.min(100, Math.round((raised / target) * 100));
+
+      if (raisedEl) raisedEl.innerText = `₹${raised.toLocaleString('en-IN')}`;
+      if (targetEl) targetEl.innerText = `Target: ₹${target.toLocaleString('en-IN')}`;
+      if (barEl) barEl.style.width = `${pct}%`;
+      if (descEl) descEl.innerText = `${pct}% funded. Provides ${sessions} free dialysis sessions this month for ${patients} chronic renal failure patients.`;
+    }
+
+    function handleDialysisSponsorSubmit(event) {
+      event.preventDefault();
+      const amount = Number(document.getElementById('dialysis-spn-amount')?.value || 1000);
+      const name = document.getElementById('dialysis-spn-name')?.value.trim();
+      const phone = document.getElementById('dialysis-spn-phone')?.value.trim();
+      const note = document.getElementById('dialysis-spn-note')?.value.trim();
+      const mode = document.getElementById('dialysis-spn-mode')?.value;
+      const sessions = Math.max(1, Math.floor(amount / 1000));
+
+      if (typeof MahallDB !== 'undefined' && MahallDB.recordDialysisSponsorship) {
+        MahallDB.recordDialysisSponsorship({
+          sponsorName: name,
+          phone: phone,
+          amount: amount,
+          sessions: sessions,
+          note: note,
+          mode: mode
+        });
+      }
+
+      closeDialysisSponsorModal();
+      updateDialysisGoalDisplay();
+      const msg = `Jazakallah Khair ${name}! Sponsored ${sessions} dialysis session(s) (₹${amount.toLocaleString('en-IN')}). Fund tracker updated!`;
+      if (window.app && window.app.showToast) {
+        window.app.showToast(msg, 'success');
+      } else {
+        alert(msg);
+      }
+    }
+
+    // =========================================================================
+    // 9. MEDICAL ASSISTANCE FORM HANDLERS
+    // =========================================================================
+    function openMedicalAssistanceModal() {
+      const modal = document.getElementById('medical-assistance-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeMedicalAssistanceModal() {
+      const modal = document.getElementById('medical-assistance-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function handleMedicalAssistanceSubmit(event) {
+      event.preventDefault();
+      const patient = document.getElementById('med-app-patient')?.value.trim();
+      const guardian = document.getElementById('med-app-guardian')?.value.trim();
+      const phone = document.getElementById('med-app-phone')?.value.trim();
+      const ward = document.getElementById('med-app-ward')?.value.trim();
+      const category = document.getElementById('med-app-category')?.value;
+      const hospital = document.getElementById('med-app-hospital')?.value.trim();
+      const amount = Number(document.getElementById('med-app-amount')?.value || 5000);
+      const notes = document.getElementById('med-app-notes')?.value.trim();
+
+      if (!patient || !phone || !hospital) {
+        if (window.app) window.app.showToast('Please enter patient name, phone and hospital details.', 'error');
+        return;
+      }
+
+      let newReq = null;
+      if (typeof MahallDB !== 'undefined' && MahallDB.addMedicalAidRequest) {
+        newReq = MahallDB.addMedicalAidRequest({
+          patientName: patient,
+          guardian: guardian,
+          phone: phone,
+          ward: ward,
+          category: category,
+          hospital: hospital,
+          amountRequested: amount,
+          doctorNotes: notes
+        });
+      }
+
+      closeMedicalAssistanceModal();
+      const msg = `Medical relief subsidy application (${category}) for ${patient} submitted! Sent to Mahall Admin for approval.`;
+      if (window.app && window.app.showToast) {
+        window.app.showToast(msg, 'success');
+      } else {
+        alert(msg);
+      }
+    }
+
+    // =========================================================================
+    // 10. MONTHLY FAMILY RATION KIT SPONSORSHIP HANDLERS
+    // =========================================================================
+    function openRationSponsorModal() {
+      const modal = document.getElementById('ration-sponsor-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeRationSponsorModal() {
+      const modal = document.getElementById('ration-sponsor-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function setRationTier(amount, kits) {
+      const amtInput = document.getElementById('ration-spn-amount');
+      const kitInput = document.getElementById('ration-spn-kits');
+      if (amtInput) amtInput.value = amount;
+      if (kitInput) kitInput.value = `${kits} Family Kit${kits > 1 ? 's' : ''}`;
+
+      document.querySelectorAll('.ration-tier-btn').forEach(btn => {
+        btn.classList.remove('border-amber-500', 'bg-amber-50', 'dark:bg-amber-950/40', 'text-amber-700', 'dark:text-amber-300');
+        btn.classList.add('border-slate-200', 'dark:border-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      });
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('border-amber-500', 'bg-amber-50', 'dark:bg-amber-950/40', 'text-amber-700', 'dark:text-amber-300');
+        event.currentTarget.classList.remove('border-slate-200', 'dark:border-slate-800');
+      }
+    }
+
+    function calcRationKits() {
+      const amtInput = document.getElementById('ration-spn-amount');
+      const kitInput = document.getElementById('ration-spn-kits');
+      const amt = Number(amtInput?.value || 2500);
+      const kits = Math.max(1, Math.floor(amt / 2500));
+      if (kitInput) kitInput.value = `${kits} Family Kit${kits > 1 ? 's' : ''}`;
+    }
+
+    function handleRationSponsorSubmit(event) {
+      event.preventDefault();
+      const amount = Number(document.getElementById('ration-spn-amount')?.value || 2500);
+      const name = document.getElementById('ration-spn-name')?.value.trim();
+      const phone = document.getElementById('ration-spn-phone')?.value.trim();
+      const note = document.getElementById('ration-spn-note')?.value.trim();
+      const mode = document.getElementById('ration-spn-mode')?.value;
+      const kits = Math.max(1, Math.floor(amount / 2500));
+
+      if (typeof MahallDB !== 'undefined' && MahallDB.recordRationSponsorship) {
+        MahallDB.recordRationSponsorship({
+          sponsorName: name,
+          phone: phone,
+          amount: amount,
+          kits: kits,
+          note: note,
+          mode: mode
+        });
+      }
+
+      closeRationSponsorModal();
+      const msg = `Jazakallah Khair ${name}! Sponsored ${kits} monthly family ration kit(s) (₹${amount.toLocaleString('en-IN')}) for destitute families.`;
+      if (window.app && window.app.showToast) {
+        window.app.showToast(msg, 'success');
+      } else {
+        alert(msg);
+      }
+    }
+
+    function renderPublicBookings(query = '') {
+      const container = document.getElementById('public-bookings-container');
+      if (!container) return;
+      const bookings = (typeof MahallDB !== 'undefined' && MahallDB.getBookings) ? MahallDB.getBookings() : [];
+
+      let list = bookings;
+      if (query) {
+        const q = query.toLowerCase().trim();
+        list = list.filter(b => 
+          (b.event && b.event.toLowerCase().includes(q)) ||
+          (b.bookedBy && b.bookedBy.toLowerCase().includes(q)) ||
+          (b.phone && b.phone.includes(q)) ||
+          (b.id && b.id.toLowerCase().includes(q))
+        );
+      }
+
+      if (!list.length) {
+        container.innerHTML = `<p class="text-slate-400 text-center py-3 text-xs">No matching reservations found.</p>`;
+        return;
+      }
+
+      container.innerHTML = list.map(b => {
+        const isApproved = b.status === 'CONFIRMED';
+        const isRejected = b.status === 'REJECTED';
+        const badgeColor = isApproved ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+          : (isRejected ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-900'
+          : 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-800');
+
+        return `
+          <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <strong class="text-slate-900 dark:text-white font-bold text-xs">${b.event}</strong>
+                <span class="px-2 py-0.5 rounded-full ${badgeColor} border text-[9px] font-mono font-bold">${b.status}</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Date: <strong class="text-slate-700 dark:text-slate-300">${b.date}</strong> (${b.slot}) • By: ${b.bookedBy}</p>
+            </div>
+            ${b.tariff ? `<span class="text-[10px] font-mono font-bold text-emerald-600 shrink-0">${b.tariff}</span>` : ''}
+          </div>
+        `;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function searchPublicBookings() {
+      const q = document.getElementById('booking-search-input')?.value || '';
+      renderPublicBookings(q);
+    }
+
+    function toggleAuditoriumStatusDesk() {
+      const desk = document.getElementById('auditorium-status-desk');
+      const btn = document.getElementById('toggle-auditorium-status-btn');
+      if (desk) {
+        desk.classList.toggle('hidden');
+        if (btn) btn.innerHTML = desk.classList.contains('hidden') ? `<span>View Bookings Desk</span> &darr;` : `<span>Hide Desk</span> &uarr;`;
+      }
+    }
+
+    function renderPublicVolunteerRoster(query = '') {
+      const container = document.getElementById('public-volunteer-roster');
+      if (!container) return;
+      const requests = (typeof MahallDB !== 'undefined' && MahallDB.getVolunteerRequests) ? MahallDB.getVolunteerRequests() : [];
+
+      let list = requests;
+      if (query) {
+        const q = query.toLowerCase().trim();
+        list = list.filter(r => 
+          (r.name && r.name.toLowerCase().includes(q)) ||
+          (r.squad && r.squad.toLowerCase().includes(q)) ||
+          (r.phone && r.phone.includes(q)) ||
+          (r.id && r.id.toLowerCase().includes(q))
+        );
+      }
+
+      if (!list.length) {
+        container.innerHTML = `<p class="text-slate-400 text-center py-4 text-xs">No volunteer records found.</p>`;
+        return;
+      }
+
+      container.innerHTML = list.map(r => {
+        const isApproved = r.status === 'APPROVED';
+        const isRejected = r.status === 'REJECTED';
+        const badgeColor = isApproved ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+          : (isRejected ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-900'
+          : 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-800');
+
+        return `
+          <div class="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-900 dark:text-white text-xs">${r.name}</span>
+                <span class="px-2 py-0.5 rounded-full ${badgeColor} border text-[9px] font-mono font-bold">${r.status}</span>
+                <span class="text-[10px] text-slate-400 font-mono">${r.ward || 'Ward 02'}</span>
+              </div>
+              <p class="text-[11px] text-emerald-600 font-medium">${r.squad}</p>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="text-[10px] text-slate-400 block">${r.timestamp || 'Recent'}</span>
+              ${isApproved ? `<span class="text-[10px] font-bold text-emerald-600">✓ Active Member</span>` : (isRejected ? `<span class="text-[10px] text-rose-500 font-bold">Declined</span>` : `<span class="text-[10px] text-amber-500">Under Review</span>`)}
+            </div>
+          </div>
+        `;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function searchPublicVolunteerRequests() {
+      const q = (document.getElementById('volunteer-search-input')?.value || '').trim();
+      const resContainer = document.getElementById('volunteer-search-result');
+      renderPublicVolunteerRoster(q);
+
+      if (!q) {
+        if (resContainer) resContainer.classList.add('hidden');
+        return;
+      }
+
+      const requests = (typeof MahallDB !== 'undefined' && MahallDB.getVolunteerRequests) ? MahallDB.getVolunteerRequests() : [];
+      const match = requests.find(r => 
+        (r.phone && r.phone.includes(q)) || 
+        (r.name && r.name.toLowerCase().includes(q.toLowerCase())) ||
+        (r.id && r.id.toLowerCase() === q.toLowerCase())
+      );
+
+      if (resContainer) {
+        resContainer.classList.remove('hidden');
+        if (match) {
+          const isApp = match.status === 'APPROVED';
+          const isRej = match.status === 'REJECTED';
+          resContainer.innerHTML = `
+            <div class="p-2.5 rounded-xl ${isApp ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200' : isRej ? 'bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200' : 'bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200'}">
+              <div class="font-bold flex items-center justify-between">
+                <span>${match.name}</span>
+                <span class="uppercase font-mono text-[9px] font-black">${match.status}</span>
+              </div>
+              <p class="text-[11px] mt-0.5">${match.squad}</p>
+              <p class="text-[10px] opacity-80 mt-1">${isApp ? '✅ Application officially approved by Mahall Committee. Welcome to the squad!' : isRej ? '❌ Application declined by secretariat at this time.' : '⏳ Application is currently under committee review.'}</p>
+            </div>
+          `;
+        } else {
+          resContainer.innerHTML = `<p class="text-slate-400 text-[11px] p-2">No application found matching "${q}".</p>`;
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      if (!window.app) {
+        window.app = new MahallApp();
+      }
+      renderBloodDonors('all');
+      renderQabarstanRecords('ALL');
+      renderPublicBookings();
+      renderPublicVolunteerRoster();
+      updateDialysisGoalDisplay();
+
+      // Listen for reactive updates from Admin panel & cross-tab sync
+      window.addEventListener('mahalldb_updated', () => {
+        renderBloodDonors();
+        renderPublicBookings();
+        renderPublicVolunteerRoster();
+        updateDialysisGoalDisplay();
+      });
+      window.addEventListener('storage', (e) => {
+        if (!e.key || e.key.startsWith('mahall_')) {
+          renderBloodDonors();
+          renderPublicBookings();
+          renderPublicVolunteerRoster();
+          updateDialysisGoalDisplay();
+        }
+      });
+      window.addEventListener('mahall_live_notification', () => {
+        renderBloodDonors();
+        renderPublicBookings();
+        renderPublicVolunteerRoster();
+        updateDialysisGoalDisplay();
+      });
+
+      // Scroll morph
+      const header = document.getElementById('main-header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      });
+    });
+  </script>
+  <!-- Notification Drawer Container -->
+  <div id="notification-drawer" class="hidden"></div>
+</body>
+</html>

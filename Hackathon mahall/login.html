@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication & Security Gateway | Noorul Huda Mahall</title>
+  <meta name="description"
+    content="Secure Multi-User Authentication Center for Noorul Huda Mahall Jama'ath. Resident login, registration, password recovery, and executive administration access." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309'
+            },
+            slate: {
+              850: '#151f32',
+              900: '#0f172a',
+              950: '#090d16'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Shared Design System -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen selection:bg-emerald-600 selection:text-white relative overflow-x-hidden">
+
+  <!-- Ambient Luxury Glows -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Top Simple Navigation -->
+  <header class="relative z-30 border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md px-4 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-9 h-9 rounded-full ring-2 ring-emerald-500/40 object-cover shadow-sm group-hover:scale-105 transition" />
+        <div>
+          <span class="text-base font-black tracking-tight text-white font-heading block leading-none">NOORUL HUDA</span>
+          <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Mahall Community Portal</span>
+        </div>
+      </a>
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>Public Website</span>
+        </a>
+        <span class="text-slate-700">|</span>
+        <a href="events.html" class="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 transition">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+          <span>Programs</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 flex items-center justify-center p-4 sm:p-6 relative z-10 my-6">
+    <div class="max-w-xl w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+
+      <!-- Header -->
+      <div class="text-center mb-6">
+        <div class="inline-flex p-3 bg-emerald-950/80 border border-emerald-700/40 rounded-2xl mb-3 shadow-inner">
+          <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400"></i>
+        </div>
+        <h1 class="text-2xl font-black font-heading tracking-tight text-white">Unified Security Access</h1>
+        <p class="text-xs text-slate-400 mt-1">Multi-User Authentication with Firebase UID-Isolated Data Architecture</p>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex items-center gap-1 p-1 bg-slate-950 rounded-2xl border border-slate-800 mb-6 text-xs font-semibold">
+        <button type="button" onclick="switchAuthTab('login')" id="tab-btn-login"
+          class="flex-1 py-2.5 rounded-xl transition text-center bg-emerald-600 text-white shadow-sm">
+          Sign In
+        </button>
+        <button type="button" onclick="switchAuthTab('signup')" id="tab-btn-signup"
+          class="flex-1 py-2.5 rounded-xl transition text-center text-slate-400 hover:text-white">
+          Sign Up / Register
+        </button>
+      </div>
+
+      <!-- Status Alert Box -->
+      <div id="auth-alert" class="hidden mb-4 p-3.5 rounded-xl text-xs font-medium flex items-center gap-2.5">
+        <!-- Injected dynamically -->
+      </div>
+
+      <!-- Loading State Overlay -->
+      <div id="auth-loading" class="hidden py-8 flex flex-col items-center justify-center text-center space-y-3">
+        <div class="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+        <p class="text-xs text-slate-300 font-medium" id="auth-loading-text">Verifying security credentials with Firebase...</p>
+      </div>
+
+      <!-- =====================================================================
+           PANEL 1: USER SIGN IN
+           ===================================================================== -->
+      <form id="form-login" onsubmit="handleUserLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            User ID or Email <span class="text-rose-400">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i data-lucide="user" class="w-4 h-4 text-emerald-400"></i>
+            </span>
+            <input type="text" id="login-identifier" required placeholder="e.g. shayal123, rifan456, or email"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 font-mono tracking-wide focus:outline-none transition" />
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Accepts registered username (e.g. shayal123) or official email.</p>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Password <span class="text-rose-400">*</span>
+            </label>
+            <button type="button" onclick="switchAuthTab('reset')" class="text-[11px] text-emerald-400 hover:underline">
+              Forgot Password?
+            </button>
+          </div>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i data-lucide="lock" class="w-4 h-4 text-cyan-400"></i>
+            </span>
+            <input type="password" id="login-password" required placeholder="••••••••"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder-slate-500 font-mono focus:outline-none transition" />
+            <button type="button" onclick="togglePassVisibility('login-password', 'eye-login')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white">
+              <i id="eye-login" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" id="login-remember" checked class="w-4 h-4 rounded bg-slate-950 border-slate-700 text-emerald-600 focus:ring-emerald-500" />
+            <span>Persist session across visits</span>
+          </label>
+        </div>
+
+        <button type="submit" id="btn-submit-login"
+          class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm shadow-xl shadow-emerald-950/50 flex items-center justify-center gap-2 transition active:scale-[0.99]">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>AUTHENTICATE & ENTER PORTAL</span>
+        </button>
+      </form>
+
+      <!-- =====================================================================
+           PANEL 2: FAMILY REGISTRATION / SIGN UP NEW HOUSEHOLD
+           ===================================================================== -->
+      <form id="form-signup" onsubmit="handleUserSignup(event)" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Head of Family Full Name <span class="text-rose-400">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i data-lucide="user-check" class="w-4 h-4 text-emerald-400"></i>
+            </span>
+            <input type="text" id="signup-head" required placeholder="e.g. V. P. Mohammed Basheer"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none transition" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              House / Villa Name <span class="text-rose-400">*</span>
+            </label>
+            <input type="text" id="signup-housename" required placeholder="e.g. Baitul Aman"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              House Number
+            </label>
+            <input type="text" id="signup-houseno" placeholder="e.g. 14/280"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 font-mono focus:outline-none transition" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Primary Mobile Number <span class="text-rose-400">*</span>
+            </label>
+            <input type="tel" id="signup-phone" required placeholder="+91 98470 00000"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 font-mono focus:outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Residential Ward <span class="text-rose-400">*</span>
+            </label>
+            <select id="signup-ward"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none transition">
+              <option value="Ward 02 (Masjid Central)">Ward 02 (Masjid Central)</option>
+              <option value="Ward 01 (East Bazar)">Ward 01 (East Bazar)</option>
+              <option value="Ward 03 (River View)">Ward 03 (River View)</option>
+              <option value="Ward 04 (Hill Valley)">Ward 04 (Hill Valley)</option>
+              <option value="Ward 05 (Town West)">Ward 05 (Town West)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Email Address (Optional)
+            </label>
+            <input type="email" id="signup-email" placeholder="family@mahall.org"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Number of Family Members
+            </label>
+            <select id="signup-members"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none transition">
+              <option value="1">1 Member (Individual)</option>
+              <option value="2">2 Members</option>
+              <option value="3">3 Members</option>
+              <option value="4" selected>4 Members (Standard)</option>
+              <option value="5">5 Members</option>
+              <option value="6">6 Members</option>
+              <option value="7">7+ Members (Large Family)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Create Family Security PIN / Password <span class="text-rose-400">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i data-lucide="lock" class="w-4 h-4 text-cyan-400"></i>
+            </span>
+            <input type="password" id="signup-password" required minlength="4" value="1968" placeholder="e.g. 1968"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder-slate-500 font-mono focus:outline-none transition" />
+            <button type="button" onclick="togglePassVisibility('signup-password', 'eye-signup')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white">
+              <i id="eye-signup" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Default Mahall PIN is 1968 or customize your secret code.</p>
+        </div>
+
+        <button type="submit" id="btn-submit-signup"
+          class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm shadow-xl flex items-center justify-center gap-2 transition active:scale-[0.99]">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          <span>REGISTER FAMILY & ACTIVATE AUTHENTICATION</span>
+        </button>
+      </form>
+
+
+      <!-- =====================================================================
+           PANEL 4: PASSWORD RESET
+           ===================================================================== -->
+      <form id="form-reset" onsubmit="handlePasswordReset(event)" class="space-y-4 hidden">
+        <p class="text-xs text-slate-400">
+          Enter your registered email address. We will verify your account and trigger a secure Firebase password reset procedure.
+        </p>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            Registered Email <span class="text-rose-400">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
+            </span>
+            <input type="email" id="reset-email" required placeholder="user@mahall.org"
+              class="w-full bg-slate-950 border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none transition" />
+          </div>
+        </div>
+
+        <button type="submit" id="btn-submit-reset"
+          class="w-full py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm shadow flex items-center justify-center gap-2 transition">
+          <i data-lucide="send" class="w-4 h-4 text-emerald-400"></i>
+          <span>SEND PASSWORD RESET LINK</span>
+        </button>
+
+        <div class="text-center pt-2">
+          <button type="button" onclick="switchAuthTab('login')" class="text-xs text-slate-400 hover:text-white underline">
+            &larr; Back to Sign In
+          </button>
+        </div>
+      </form>
+
+      <!-- Footer Info -->
+      <div class="mt-6 pt-5 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
+        <span>🔒 256-bit Firebase Auth Encryption</span>
+        <a href="index.html" class="hover:text-emerald-400 transition">&larr; Return to Home</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <!-- Official Google Firebase SDK Compatibility (v10.8.0) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Tab Controller
+    function switchAuthTab(tab) {
+      const forms = {
+        login: document.getElementById('form-login'),
+        signup: document.getElementById('form-signup'),
+        reset: document.getElementById('form-reset')
+      };
+
+      const buttons = {
+        login: document.getElementById('tab-btn-login'),
+        signup: document.getElementById('tab-btn-signup')
+      };
+
+      Object.values(forms).forEach(f => f && f.classList.add('hidden'));
+      Object.values(buttons).forEach(b => {
+        if (b) {
+          b.className = 'flex-1 py-2.5 rounded-xl transition text-center text-slate-400 hover:text-white flex items-center justify-center gap-1';
+        }
+      });
+
+      if (forms[tab]) forms[tab].classList.remove('hidden');
+
+      if (buttons[tab]) {
+        buttons[tab].className = 'flex-1 py-2.5 rounded-xl transition text-center bg-emerald-600 text-white shadow-sm flex items-center justify-center gap-1';
+      }
+
+      hideAlert();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function fillTestAccount(ident, pass, label) {
+      switchAuthTab('login');
+      document.getElementById('login-identifier').value = ident;
+      document.getElementById('login-password').value = pass;
+      showAlert(`Loaded test account for ${label}. Click button to proceed.`, 'info');
+    }
+
+    function togglePassVisibility(inputId, eyeId) {
+      const el = document.getElementById(inputId);
+      const eye = document.getElementById(eyeId);
+      if (!el) return;
+      if (el.type === 'password') {
+        el.type = 'text';
+        if (eye) eye.setAttribute('data-lucide', 'eye-off');
+      } else {
+        el.type = 'password';
+        if (eye) eye.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function showAlert(msg, type = 'error') {
+      const box = document.getElementById('auth-alert');
+      if (!box) return;
+      box.classList.remove('hidden', 'bg-rose-950/80', 'text-rose-300', 'border-rose-800', 'bg-emerald-950/80', 'text-emerald-300', 'border-emerald-800', 'bg-amber-950/80', 'text-amber-300', 'border-amber-800');
+      
+      let borderBg = 'bg-rose-950/80 text-rose-300 border border-rose-800';
+      let icon = 'alert-circle';
+      if (type === 'success') {
+        borderBg = 'bg-emerald-950/80 text-emerald-300 border border-emerald-800';
+        icon = 'check-circle-2';
+      } else if (type === 'info') {
+        borderBg = 'bg-amber-950/80 text-amber-300 border border-amber-800';
+        icon = 'info';
+      }
+
+      box.className = `mb-4 p-3.5 rounded-xl text-xs font-medium flex items-center gap-2.5 ${borderBg}`;
+      box.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i> <span>${msg}</span>`;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function hideAlert() {
+      const box = document.getElementById('auth-alert');
+      if (box) box.classList.add('hidden');
+    }
+
+    function setLoading(isLoading, text = 'Verifying security credentials...') {
+      const loader = document.getElementById('auth-loading');
+      const loaderText = document.getElementById('auth-loading-text');
+      if (loaderText) loaderText.textContent = text;
+      if (loader) {
+        if (isLoading) {
+          loader.classList.remove('hidden');
+          document.querySelectorAll('form').forEach(f => f.classList.add('opacity-40', 'pointer-events-none'));
+        } else {
+          loader.classList.add('hidden');
+          document.querySelectorAll('form').forEach(f => f.classList.remove('opacity-40', 'pointer-events-none'));
+        }
+      }
+    }
+
+    function fillTestAccount(ident, pass, label) {
+      switchAuthTab(ident.includes('admin') ? 'admin' : 'login');
+      if (ident.includes('admin')) {
+        document.getElementById('admin-identifier').value = ident;
+        document.getElementById('admin-passkey').value = pass;
+      } else {
+        document.getElementById('login-identifier').value = ident;
+        document.getElementById('login-password').value = pass;
+      }
+      showAlert(`Loaded test account for ${label}. Click button to proceed.`, 'info');
+    }
+
+    function getRedirectUrl(defaultUrl = 'my-mahall.html') {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('redirect');
+      if (!raw) return defaultUrl;
+      return decodeURIComponent(raw);
+    }
+
+    // Form Handlers
+    async function handleUserLogin(e) {
+      e.preventDefault();
+      hideAlert();
+      const ident = document.getElementById('login-identifier').value;
+      const pass = document.getElementById('login-password').value;
+
+      setLoading(true, 'Verifying credentials and authenticating...');
+      try {
+        const session = await AuthService.login(ident, pass);
+        showAlert(`Authentication successful! Welcome, ${session.user.name}. Redirecting...`, 'success');
+        
+        setTimeout(() => {
+          const redirect = session.role === 'admin' ? 'ADMIN/index.html' : getRedirectUrl('my-mahall.html');
+          window.location.href = redirect;
+        }, 750);
+      } catch (err) {
+        setLoading(false);
+        showAlert(err.message || 'Login failed. Please check credentials.', 'error');
+      }
+    }
+
+    async function handleUserSignup(e) {
+      e.preventDefault();
+      hideAlert();
+      const head = document.getElementById('signup-head').value;
+      const houseName = document.getElementById('signup-housename').value;
+      const houseNo = document.getElementById('signup-houseno').value;
+      const phone = document.getElementById('signup-phone').value;
+      const ward = document.getElementById('signup-ward').value;
+      const email = document.getElementById('signup-email').value;
+      const membersCount = document.getElementById('signup-members').value;
+      const password = document.getElementById('signup-password').value;
+
+      setLoading(true, 'Enrolling family household and creating authenticated credentials...');
+      try {
+        const session = await AuthService.registerFamily({
+          head,
+          houseName,
+          houseNo,
+          ward,
+          phone,
+          email,
+          password,
+          pin: password,
+          membersCount
+        });
+
+        showAlert(`Family registered successfully! Assigned Family ID: ${session.user.familyId}. Redirecting...`, 'success');
+        setTimeout(() => {
+          window.location.href = getRedirectUrl('my-mahall.html');
+        }, 900);
+      } catch (err) {
+        setLoading(false);
+        showAlert(err.message || 'Family registration failed.', 'error');
+      }
+    }
+
+
+    async function handlePasswordReset(e) {
+      e.preventDefault();
+      hideAlert();
+      const email = document.getElementById('reset-email').value;
+      setLoading(true, 'Sending Firebase password reset request...');
+      try {
+        await AuthService.resetPassword(email);
+        setLoading(false);
+        showAlert(`Password reset link dispatched to ${email}. Check your inbox.`, 'success');
+      } catch (err) {
+        setLoading(false);
+        showAlert(err.message || 'Password reset failed.', 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+
+      // If user is already authenticated, check query
+      AuthService.onAuthStateChanged(session => {
+        if (session && session.isAuthenticated) {
+          showAlert(`Currently signed in as ${session.user.name} (${session.user.username || session.uid}) • Role: ${session.role.toUpperCase()}`, 'info');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

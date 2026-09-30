@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Madrasa & Youth Education | Noorul Huda Mahall Jama'ath</title>
+  <meta name="description" content="Noorul Huda Islamic Academy, downloadable syllabus, interactive student tracker demo, Quran study circles, Arts Fest scoreboard, NHYM career cell, sports club, and parenting guidance." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="assets/images/mahall_logo.jpg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22'
+            },
+            amber: {
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Chart.js CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Design System Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col min-h-screen selection:bg-emerald-700 selection:text-white pb-16 md:pb-0">
+
+  <!-- ==========================================================================
+       TOP BAR: ROLE SWITCHER
+       ========================================================================== -->
+  <div class="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2 px-4 shadow-sm relative z-[70]">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Mahall Identity & Helpline -->
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs tracking-wide">
+          <i data-lucide="moon" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Noorul Huda Mahall Jama'ath</span>
+        </span>
+        <span class="hidden md:inline text-slate-600">•</span>
+        <span class="hidden md:flex items-center gap-1 text-slate-400 text-xs">
+          <i data-lucide="phone-call" class="w-3 h-3 text-emerald-400"></i>
+          <span>Office: +91 495 2724800</span>
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-200 border border-slate-700 transition">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span id="current-lang-text" class="font-medium">English</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+          </button>
+          <div class="absolute right-0 mt-1.5 w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl hidden group-hover:block z-[90] overflow-hidden py-1">
+            <button onclick="window.app.applyLanguage('en')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>English</span>
+              <span class="text-[10px] text-slate-400 font-mono">EN</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ml')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium flex items-center justify-between">
+              <span>മലയാളം (Malayalam)</span>
+              <span class="text-[10px] text-emerald-600 font-bold">ML</span>
+            </button>
+            <button onclick="window.app.applyLanguage('ar')" class="w-full text-left px-3.5 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 font-medium font-arabic flex items-center justify-between">
+              <span>العربية (Arabic)</span>
+              <span class="text-[10px] text-amber-600 font-bold">AR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button id="theme-toggle-btn" onclick="window.toggleTheme ? window.toggleTheme(event) : (window.app && window.app.toggleTheme && window.app.toggleTheme())" title="Toggle Theme" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer">
+          <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4 text-amber-400"></i>
+        </button>
+
+        <!-- Notification Bell -->
+        <button id="notif-bell-btn" onclick="window.toggleNotificationDrawer ? window.toggleNotificationDrawer(event) : (window.app && window.app.toggleNotificationDrawer && window.app.toggleNotificationDrawer(event))"
+          class="notif-trigger-btn relative p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer" title="Portal Notifications">
+          <i data-lucide="bell" class="w-4 h-4 text-emerald-400 pointer-events-none"></i>
+          <span id="notif-badge" class="notif-badge-el absolute -top-1 -right-1 bg-red-500 text-white font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] ring-2 ring-slate-900 pointer-events-none">0</span>
+        </button>
+
+        <!-- Auth Status Container (Firebase Multi-User) -->
+        <div id="top-resident-auth-status" class="auth-status-container flex items-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN BRAND HEADER & FLOATING CAPSULE NAVBAR
+       ========================================================================== -->
+  <header id="main-header" class="main-navbar-sticky sticky top-0 z-50 transition-all duration-300">
+    <div id="navbar-capsule" class="navbar-capsule-container transition-all duration-300">
+      <div id="navbar-inner-bar" class="flex items-center justify-between h-16 md:h-18 gap-2 lg:gap-4 w-full transition-all duration-300">
+        
+        <!-- Left: Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 shrink-0 group">
+          <img src="assets/images/mahall_logo.jpg" alt="Noorul Huda Mahall Logo" class="brand-logo-img w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-emerald-600 shadow-sm object-cover shrink-0 group-hover:scale-105 transition" />
+          <div class="leading-tight shrink-0">
+            <span class="brand-title text-base md:text-lg font-black tracking-tight text-emerald-950 dark:text-emerald-400 font-heading whitespace-nowrap">
+              Noorul Huda
+            </span>
+            <span class="brand-sub text-[10px] text-slate-500 dark:text-slate-400 font-medium block whitespace-nowrap">
+              Mahall Jama'ath • Estd 1968
+            </span>
+          </div>
+        </a>
+
+        <!-- Center: Mega Menu Navigation -->
+        <nav class="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1.5 text-sm font-medium mx-auto">
+
+            <!-- 1. PRAYER & MOSQUE -->
+            <div class="relative group">
+              <a href="prayer.html" class="nav-link text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
+                <span>Prayer & Mosque</span>
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+              
+              <!-- Mega Dropdown -->
+              <div class="mega-dropdown w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Prayer Schedules</div>
+                  <div class="space-y-1">
+                    <a href="prayer.html#daily-timetable" class="mega-item">
+                      <i data-lucide="clock" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Daily Prayer Timetable</span>
+                    </a>
+                    <a href="prayer.html#jumua" class="mega-item">
+                      <i data-lucide="sun" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Friday Jumu'ah Schedule</span>
+                    </a>
+                    <a href="prayer.html#adhan-offset" class="mega-item">
+                      <i data-lucide="bell" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Adhan & Iqamah Offset</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Mosque & Leadership</div>
+                  <div class="space-y-1">
+                    <a href="prayer.html#ramadan" class="mega-item">
+                      <i data-lucide="moon" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Ramadan Timetable</span>
+                    </a>
+                    <a href="prayer.html#scholars" class="mega-item">
+                      <i data-lucide="user-check" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Chief Imam & Scholars</span>
+                    </a>
+                    <a href="prayer.html#adhan-preview" class="mega-item">
+                      <i data-lucide="volume-2" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Audio Adhan Preview</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Special Services</div>
+                  <div class="space-y-1">
+                    <a href="prayer.html#janazah-desk" class="mega-item">
+                      <i data-lucide="flag" class="mega-item-icon text-red-500"></i>
+                      <span class="mega-item-title">Janazah Desk</span>
+                    </a>
+                    <a href="prayer.html#eid" class="mega-item">
+                      <i data-lucide="sparkles" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Eid Celebrations</span>
+                    </a>
+                    <a href="prayer.html#facilities" class="mega-item">
+                      <i data-lucide="map-pin" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Central Masjid Facilities</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">📍 Auto-calculated for Calicut, Kerala (11.25°N, 75.78°E)</span>
+                  <a href="prayer.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    Open Full Prayer Timetable &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. COMMUNITY & AID -->
+            <div class="relative group">
+              <a href="community.html" class="nav-link text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
+                <span>Community & Aid</span>
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+
+              <!-- Mega Dropdown -->
+              <div class="mega-dropdown w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Emergency & Medical</div>
+                  <div class="space-y-1">
+                    <a href="community.html#blood-donors" class="mega-item">
+                      <i data-lucide="droplet" class="mega-item-icon text-red-500"></i>
+                      <span class="mega-item-title">Blood Donor Directory</span>
+                    </a>
+                    <a href="community.html#ambulance" class="mega-item">
+                      <i data-lucide="truck" class="mega-item-icon text-red-600"></i>
+                      <span class="mega-item-title">24/7 Ambulance Desk</span>
+                    </a>
+                    <a href="community.html#emergency" class="mega-item">
+                      <i data-lucide="phone-call" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Emergency Helpdesk</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Welfare Initiatives</div>
+                  <div class="space-y-1">
+                    <a href="community.html#medical-fund" class="mega-item">
+                      <i data-lucide="heart" class="mega-item-icon text-emerald-600"></i>
+                      <span class="mega-item-title">Medical & Dialysis Fund</span>
+                    </a>
+                    <a href="community.html#ration-kits" class="mega-item">
+                      <i data-lucide="shopping-bag" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Monthly Ration Kits</span>
+                    </a>
+                    <a href="community.html#education-aid" class="mega-item">
+                      <i data-lucide="graduation-cap" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Higher Education Aid</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Campus Facilities</div>
+                  <div class="space-y-1">
+                    <a href="community.html#campus-map" class="mega-item">
+                      <i data-lucide="map" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Interactive Campus Map</span>
+                    </a>
+                    <a href="community.html#auditorium" class="mega-item">
+                      <i data-lucide="home" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Community Auditorium</span>
+                    </a>
+                    <a href="community.html#qabarstan" class="mega-item">
+                      <i data-lucide="cross" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Mahall Qabarstan</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">❤️ Powered by community Zakat and Sadaqah endowments</span>
+                  <a href="community.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    View Community Support Directory &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. MADRASA & YOUTH (ACTIVE PAGE) -->
+            <div class="relative group">
+              <a href="madrasa.html" class="nav-link text-emerald-700 dark:text-emerald-400 font-bold border-b-2 border-emerald-600">
+                <span>Madrasa & Youth</span>
+                <svg class="w-3.5 h-3.5 text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+
+              <!-- Mega Dropdown -->
+              <div class="mega-dropdown mega-dropdown-center w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Madrasa & Dars</div>
+                  <div class="space-y-1">
+                    <a href="madrasa.html#madrasa-overview" class="mega-item">
+                      <i data-lucide="book-open" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Noorul Huda Madrasa</span>
+                    </a>
+                    <a href="madrasa.html#syllabus" class="mega-item">
+                      <i data-lucide="file-text" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Syllabus & Downloads</span>
+                    </a>
+                    <a href="madrasa.html#student-tracker" class="mega-item">
+                      <i data-lucide="award" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Student Tracker Demo</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Programs & Circles</div>
+                  <div class="space-y-1">
+                    <a href="madrasa.html#programs-calendar" class="mega-item">
+                      <i data-lucide="calendar" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Programs Calendar</span>
+                    </a>
+                    <a href="madrasa.html#quran-circles" class="mega-item">
+                      <i data-lucide="book-marked" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Quran Study Circles</span>
+                    </a>
+                    <a href="madrasa.html#recitation-fest" class="mega-item">
+                      <i data-lucide="mic" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Children's Recitation Fest</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Youth Movement (NHYM)</div>
+                  <div class="space-y-1">
+                    <a href="madrasa.html#career" class="mega-item">
+                      <i data-lucide="compass" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Career & Civil Service</span>
+                    </a>
+                    <a href="madrasa.html#sports" class="mega-item">
+                      <i data-lucide="users" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Sports & Volunteering</span>
+                    </a>
+                    <a href="madrasa.html#parenting" class="mega-item">
+                      <i data-lucide="smile" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Family Parenting Wing</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">🎓 Educating 480 registered children with ethical values</span>
+                  <a href="madrasa.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    Visit Madrasa Education Portal &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+
+
+            <!-- 5. "MY MAHALL" (RESIDENT PORTAL) -->
+            <div class="relative group">
+              <a href="my-mahall.html" class="nav-link flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-lg px-2.5 py-1.5 shadow-sm hover:bg-emerald-100 transition">
+                <i data-lucide="home" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>My Mahall</span>
+                <svg class="w-3.5 h-3.5 text-emerald-600 group-hover:rotate-180 transition-transform duration-200" viewBox="0 0 16 16" fill="currentColor">
+                  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+
+              <!-- Mega Dropdown -->
+              <div class="mega-dropdown mega-dropdown-right w-[640px] grid grid-cols-3 gap-4">
+                <div>
+                  <div class="mega-col-header">Resident Identity</div>
+                  <div class="space-y-1">
+                    <a href="my-mahall.html#dashboard" class="mega-item">
+                      <i data-lucide="layout-dashboard" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Resident Dashboard</span>
+                    </a>
+                    <a href="my-mahall.html#family-id" class="mega-item">
+                      <i data-lucide="credit-card" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Smart Digital Family ID</span>
+                    </a>
+                    <a href="my-mahall.html#members" class="mega-item">
+                      <i data-lucide="users" class="mega-item-icon"></i>
+                      <span class="mega-item-title">5 Registered Members</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Services & Requests</div>
+                  <div class="space-y-1">
+                    <a href="my-mahall.html#request-cert" class="mega-item">
+                      <i data-lucide="file-plus" class="mega-item-icon text-emerald-600"></i>
+                      <span class="mega-item-title">Request Certificate</span>
+                    </a>
+                    <a href="my-mahall.html#download-certs" class="mega-item">
+                      <i data-lucide="printer" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Download Certificates</span>
+                    </a>
+                    <a href="my-mahall.html#app-status" class="mega-item">
+                      <i data-lucide="clock" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Application Status</span>
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div class="mega-col-header">Contributions & Dues</div>
+                  <div class="space-y-1">
+                    <a href="my-mahall.html#pay-dues" class="mega-item">
+                      <i data-lucide="wallet" class="mega-item-icon text-amber-600"></i>
+                      <span class="mega-item-title">Pay Subscription</span>
+                    </a>
+                    <a href="my-mahall.html#receipts" class="mega-item">
+                      <i data-lucide="receipt" class="mega-item-icon"></i>
+                      <span class="mega-item-title">Digital Receipts</span>
+                    </a>
+                    <a href="my-mahall.html#confidential-sulhu" class="mega-item">
+                      <i data-lucide="shield-alert" class="mega-item-icon text-amber-500"></i>
+                      <span class="mega-item-title">Confidential Sulhu</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-span-3 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">🏠 Personalized space for Mahall residents</span>
+                  <a href="my-mahall.html" class="text-emerald-700 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                    Go to My Mahall Resident Portal &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </nav>
+
+          <!-- Right Section -->
+          <div class="navbar-search-wrapper flex items-center gap-2 shrink-0 pr-1 sm:pr-2">
+            <div class="relative hidden sm:flex items-center">
+              <div class="relative flex items-center">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none"></i>
+                <input id="global-search-input" onkeyup="window.app.handleGlobalSearch(event)" type="text" placeholder="Search Mahall..." class="nav-search-input bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700/80 rounded-full pl-8 pr-8 py-1 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 transition-all shadow-inner" />
+                <div class="absolute right-2 flex items-center gap-1">
+                  <button onclick="window.app.toggleAIChat()" title="Ask Mahall AI Assistant" class="p-1 rounded-full text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile Hamburger -->
+            <button onclick="window.app.toggleMobileMenu()" aria-label="Toggle navigation menu" class="lg:hidden p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+      </div>
+
+      <!-- Mobile Collapsible Menu -->
+      <div id="mobile-collapsible-menu" class="lg:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 px-4 py-4 space-y-2 shadow-xl">
+        <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <a href="index.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="home" class="w-4 h-4 text-emerald-600"></i> Home
+          </a>
+          <a href="prayer.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="compass" class="w-4 h-4 text-emerald-600"></i> Prayer & Mosque
+          </a>
+          <a href="community.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="heart" class="w-4 h-4 text-emerald-600"></i> Community & Aid
+          </a>
+          <a href="madrasa.html" class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-left flex items-center gap-2 font-bold">
+            <i data-lucide="book-open" class="w-4 h-4"></i> Madrasa & Youth
+          </a>
+          <a href="my-mahall.html" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-left flex items-center gap-2">
+            <i data-lucide="user-check" class="w-4 h-4 text-emerald-600"></i> My Mahall
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO BANNER: MADRASA & YOUTH
+       ========================================================================== -->
+  <section class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-950 text-white py-10 px-4 relative overflow-hidden shadow-lg border-b border-emerald-800/40">
+    <div class="absolute inset-0 islamic-bg-pattern pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+            <a href="index.html" class="hover:underline flex items-center gap-1"><i data-lucide="home" class="w-3.5 h-3.5"></i> Home</a>
+            <span>/</span>
+            <span class="text-amber-400">Madrasa & Youth Wing</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-black font-heading tracking-tight flex items-center gap-3">
+            <i data-lucide="book-open" class="w-9 h-9 text-emerald-400"></i>
+            Noorul Huda Madrasa & Youth Academy
+          </h1>
+          <p class="text-slate-300 text-sm md:text-base max-w-3xl mt-2">
+            Nurturing knowledge, faith, and leadership since 1974. 480 enrolled students, 14 qualified Usthads, Samastha board curriculum, interactive student tracker, Quran circles, and youth movement.
+          </p>
+        </div>
+
+        <!-- Madrasa Live Stats Pill -->
+        <div class="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/15 text-right shrink-0 flex flex-col items-start md:items-end">
+          <span class="text-[11px] uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            SAMASTHA BOARD AFFILIATED
+          </span>
+          <div class="text-2xl md:text-3xl font-black font-mono text-white mt-1">
+            480 Students
+          </div>
+          <span class="text-xs text-amber-300">
+            Classes 1 to 12 • 14 Certified Scholars
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Sticky Sub-Navbar Filter Pills -->
+      <div class="mt-8 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-semibold">
+        <a href="#madrasa-overview" class="px-3.5 py-1.5 rounded-full bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 border border-emerald-600/50 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i> Madrasa Overview
+        </a>
+        <a href="#academic-courses" class="px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400 whitespace-nowrap transition flex items-center gap-1.5 font-bold shadow-sm">
+          <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-amber-300"></i> Academic Courses &amp; Halqas <span class="text-[9px] bg-amber-400 text-slate-950 font-black px-1.5 py-0.5 rounded-full">Live</span>
+        </a>
+        <a href="#syllabus" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-300"></i> Syllabus &amp; Downloads
+        </a>
+        <a href="#student-tracker" class="px-3.5 py-1.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/50 whitespace-nowrap transition flex items-center gap-1.5 font-bold">
+          <i data-lucide="award" class="w-3.5 h-3.5 text-amber-400"></i> Student Tracker Demo
+        </a>
+        <a href="#programs-calendar" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="calendar" class="w-3.5 h-3.5 text-teal-300"></i> Programs Calendar
+        </a>
+        <a href="#quran-circles" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="book-marked" class="w-3.5 h-3.5 text-amber-400"></i> Quran Study Circles
+        </a>
+        <a href="#recitation-fest" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="mic" class="w-3.5 h-3.5 text-emerald-300"></i> Recitation Fest
+        </a>
+        <a href="#career" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-blue-300"></i> Career &amp; Civil Service
+        </a>
+        <a href="#sports" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="users" class="w-3.5 h-3.5 text-amber-300"></i> Sports &amp; Volunteering
+        </a>
+        <a href="#parenting" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 whitespace-nowrap transition flex items-center gap-1.5">
+          <i data-lucide="smile" class="w-3.5 h-3.5 text-pink-300"></i> Parenting Wing
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       MAIN CONTENT: ALL SUB-NAVBAR FEATURES
+       ========================================================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
+
+    <!-- -----------------------------------------------------------------------
+         1. NOORUL HUDA MADRASA OVERVIEW
+         ----------------------------------------------------------------------- -->
+    <section id="madrasa-overview" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="book-open" class="w-4 h-4"></i> Education 01 • Samastha Board
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Noorul Huda Islamic Academy (Madrasa &amp; Dars)
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Info Card -->
+        <div class="lg:col-span-2 glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Academic Excellence with Islamic Character</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Founded in 1974, Noorul Huda Madrasa provides systematic Islamic education from Class 1 to Class 12, following the accredited syllabus of the Samastha Kerala Islam Matha Vidyabhyasa Board. We cultivate ethical values, Quranic comprehension, Arabic grammar, and contemporary life skills.
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+            <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl">
+              <span class="text-[11px] text-slate-500 uppercase font-semibold">Primary Batch</span>
+              <strong class="block text-slate-900 dark:text-white text-sm mt-0.5">Classes 1 to 4</strong>
+              <span class="text-[10px] text-emerald-600">Basic Tajweed &amp; Akhlaq</span>
+            </div>
+            <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl">
+              <span class="text-[11px] text-slate-500 uppercase font-semibold">Secondary Batch</span>
+              <strong class="block text-slate-900 dark:text-white text-sm mt-0.5">Classes 5 to 7</strong>
+              <span class="text-[10px] text-emerald-600">Fiqh, Thareekh &amp; Hadith</span>
+            </div>
+            <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl">
+              <span class="text-[11px] text-slate-500 uppercase font-semibold">Higher Secondary</span>
+              <strong class="block text-slate-900 dark:text-white text-sm mt-0.5">Classes 8 to 12</strong>
+              <span class="text-[10px] text-emerald-600">Samastha Board Exams</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">
+            <div><strong>Timings:</strong> Morning 06:30 AM - 08:30 AM (Mon - Sat)</div>
+            <div><strong>Hifdh Batch:</strong> Evening 04:30 PM - 06:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Headmaster Card -->
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-3">
+          <div class="w-16 h-16 rounded-full bg-emerald-800 text-white font-bold text-xl flex items-center justify-center mx-auto shadow">
+            MK
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400">Headmaster / Sadar Muallim</span>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm mt-0.5">Usthad Muhammadali Koya Baqavi</h4>
+            <p class="text-[11px] text-slate-500 mt-1">24 years in Islamic pedagogy. Recipient of District Best Muallim Award.</p>
+          </div>
+          <div class="pt-2 text-xs text-slate-600 dark:text-slate-300">
+            <div>Office: 1st Floor Admin Block</div>
+            <div>Contact: +91 94471 66554</div>
+          </div>
+          <a href="#academic-courses" class="w-full btn-primary text-xs !py-2 inline-flex items-center justify-center gap-1.5">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+            <span>Browse Active Programs</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         DYNAMIC ACADEMIC COURSES & HALQA PROGRAMS (SYNCED LIVE FROM ADMIN)
+         ----------------------------------------------------------------------- -->
+    <section id="academic-courses" class="scroll-mt-24 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="book-open" class="w-4 h-4"></i> Curricula &amp; Halqas
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] uppercase border border-emerald-300 dark:border-emerald-700 flex items-center gap-1.5 shadow-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Live Sync with Admin
+            </span>
+          </div>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Academic Courses &amp; Halqa Programs
+          </h2>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+            Active courses across morning, evening, and weekend batches. Synchronized in real time with the executive administration console.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-1.5 flex-wrap text-xs">
+          <button onclick="filterMadrasaCourses('All')" class="madrasa-course-filter px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold transition shadow-sm text-xs" data-filter="All">All Batches</button>
+          <button onclick="filterMadrasaCourses('Primary Madrasa')" class="madrasa-course-filter px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs" data-filter="Primary Madrasa">Primary</button>
+          <button onclick="filterMadrasaCourses('Secondary Madrasa')" class="madrasa-course-filter px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs" data-filter="Secondary Madrasa">Secondary</button>
+          <button onclick="filterMadrasaCourses('Quran Memorization')" class="madrasa-course-filter px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs" data-filter="Quran Memorization">Hifdh</button>
+          <button onclick="filterMadrasaCourses('Language Mastery')" class="madrasa-course-filter px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs" data-filter="Language Mastery">Arabic</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Grid -->
+      <div id="madrasa-courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Loaded dynamically from MahallDB.getCourses() -->
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         2. SYLLABUS & DOWNLOADS
+         ----------------------------------------------------------------------- -->
+    <section id="syllabus" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="file-text" class="w-4 h-4"></i> Curriculum 02 • Study Materials
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Syllabus, Textbooks &amp; Examination Downloads
+          </h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="education.html#scholarships-aid" class="px-3.5 py-1.5 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-bold hover:bg-amber-500/20 transition flex items-center gap-1.5">
+            <i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i> Scholarships &amp; Aid Desk
+          </a>
+          <button onclick="window.app.showToast('Downloaded Academic Calendar 2026 PDF', 'success')" class="btn-outline text-xs !py-1.5 !px-3 shadow-sm">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Academic Calendar (PDF)
+          </button>
+        </div>
+      </div>
+
+      <div id="madrasa-materials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <!-- Rendered dynamically via renderMadrasaMaterials() -->
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         3. STUDENT TRACKER & REPORT CARD LOOKUP (INTERACTIVE DEMO)
+         ----------------------------------------------------------------------- -->
+    <section id="student-tracker" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="award" class="w-4 h-4"></i> Interactive Tool 03 • Parent Portal
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Student Progress Tracker & Report Card Generator
+        </h2>
+      </div>
+
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Lookup Student Academic & Attendance Records</h3>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Enter a student roll number to view live attendance, exam grades, Tajweed recitation rank, and Usthad remarks. Try demo IDs: <strong>NHM-101</strong>, <strong>NHM-102</strong>, <strong>NHM-103</strong>, or <strong>NHM-104</strong>.
+          </p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="space-y-2 max-w-xl">
+          <div class="flex flex-wrap gap-2">
+            <input id="student-roll-input" type="text" value="NHM-101" placeholder="Search by Roll No, Name, or Class (e.g. NHM-101, Fatima, Standard 9)..." onkeydown="if(event.key === 'Enter') lookupStudentProgress()" class="flex-grow bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            <button onclick="lookupStudentProgress()" class="btn-primary text-xs !py-2.5 !px-5 shadow-sm">
+              <i data-lucide="search" class="w-3.5 h-3.5"></i> Track Student
+            </button>
+          </div>
+          <!-- Multiple Matching Students Chips -->
+          <div id="madrasa-student-matches" class="hidden"></div>
+        </div>
+
+        <!-- Interactive Student Report Card Display -->
+        <div id="student-report-card" class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div class="flex items-center gap-3">
+              <div id="st-avatar" class="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-black text-xl flex items-center justify-center border border-emerald-300">
+                FZ
+              </div>
+              <div>
+                <span id="st-roll-badge" class="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 uppercase font-mono">Roll No: NHM-101 • Ward 02</span>
+                <h4 id="st-name" class="text-lg font-black text-slate-900 dark:text-white">Fatima Zahra</h4>
+                <span id="st-class" class="text-xs text-slate-500">Standard 9 - Division B (Usthada Maimoona)</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="st-grade-badge" class="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-xs px-3 py-1 rounded-full border border-emerald-300">
+                Grade: A+ (Outstanding)
+              </span>
+              <button onclick="window.print()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 text-xs font-bold transition">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Metrics Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
+              <span class="text-slate-400 font-semibold block">Attendance</span>
+              <span id="st-att" class="text-xl font-black text-emerald-600 mt-1 block">96.4%</span>
+              <span class="text-[10px] text-slate-500">108 / 112 Working Days</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
+              <span class="text-slate-400 font-semibold block">Quran Hifdh</span>
+              <span id="st-hifdh" class="text-xl font-black text-amber-600 mt-1 block">Juz 4</span>
+              <span class="text-[10px] text-slate-500">Surah An-Nisa (Memorized)</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
+              <span class="text-slate-400 font-semibold block">Tajweed Fluency</span>
+              <span id="st-tajweed" class="text-xl font-black text-blue-600 mt-1 block">98 / 100</span>
+              <span class="text-[10px] text-slate-500">Makharij Verified</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700">
+              <span class="text-slate-400 font-semibold block">Class Rank</span>
+              <span id="st-rank" class="text-xl font-black text-emerald-700 mt-1 block">1st Rank</span>
+              <span class="text-[10px] text-slate-500">Out of 38 Students</span>
+            </div>
+          </div>
+
+          <!-- Subject Marks Table -->
+          <div class="overflow-x-auto text-xs">
+            <table class="w-full text-left">
+              <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 uppercase text-[10px]">
+                <tr>
+                  <th class="p-2.5">Subject</th>
+                  <th class="p-2.5">Maximum Marks</th>
+                  <th class="p-2.5">Marks Scored</th>
+                  <th class="p-2.5">Grade</th>
+                </tr>
+              </thead>
+              <tbody id="st-marks-body" class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
+                <tr><td class="p-2.5 font-bold">Quran Thilawath & Tajweed</td><td class="p-2.5">100</td><td class="p-2.5 font-bold text-emerald-600">98</td><td class="p-2.5 font-bold text-emerald-600">A+</td></tr>
+                <tr><td class="p-2.5 font-bold">Fiqh (Islamic Jurisprudence)</td><td class="p-2.5">100</td><td class="p-2.5 font-bold text-emerald-600">94</td><td class="p-2.5 font-bold text-emerald-600">A+</td></tr>
+                <tr><td class="p-2.5 font-bold">Aqeedah & Akhlaq (Moral Values)</td><td class="p-2.5">100</td><td class="p-2.5 font-bold text-emerald-600">96</td><td class="p-2.5 font-bold text-emerald-600">A+</td></tr>
+                <tr><td class="p-2.5 font-bold">Thareekh (Islamic History)</td><td class="p-2.5">100</td><td class="p-2.5 font-bold text-emerald-600">91</td><td class="p-2.5 font-bold text-emerald-600">A</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-xs">
+            <strong class="block text-slate-900 dark:text-white">Usthad's Remark:</strong>
+            <p id="st-remark" class="text-slate-600 dark:text-slate-400 mt-1 italic">
+              "Exemplary dedication in both Tajweed memorization and class discipline. Prompt in daily homework and highly respectful to peers."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         4. PROGRAMS CALENDAR
+         ----------------------------------------------------------------------- -->
+    <section id="programs-calendar" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-teal-600 dark:text-teal-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="calendar" class="w-4 h-4"></i> Schedule 04 • Spiritual Gatherings
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Madrasa Programs Calendar & Youth Majlis
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-[10px] font-bold text-emerald-600 uppercase">Every Friday Evening</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Spiritual Majlis & Surah Al-Kahf Tafsir</h4>
+          <p class="text-slate-500">07:00 PM - 08:30 PM at Central Masjid 1st Floor. Led by Chief Imam.</p>
+          <button onclick="window.app.showToast('Event added to Google Calendar', 'success')" class="text-emerald-600 font-bold flex items-center gap-1 hover:underline pt-1">
+            <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> Add to Calendar
+          </button>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-[10px] font-bold text-amber-600 uppercase">First Sunday of Month</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Parent-Usthad Interactive Forum</h4>
+          <p class="text-slate-500">09:30 AM - 11:30 AM at Madrasa Hall. Progress reviews and moral feedback.</p>
+          <button onclick="window.app.showToast('Event added to Google Calendar', 'success')" class="text-emerald-600 font-bold flex items-center gap-1 hover:underline pt-1">
+            <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> Add to Calendar
+          </button>
+        </div>
+
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <span class="text-[10px] font-bold text-blue-600 uppercase">Every Saturday Night</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Youth Qiyam-ul-Layl & Tahajjud Vigil</h4>
+          <p class="text-slate-500">03:30 AM - 05:00 AM. Congregational night prayers, reflection & dawn dhikr.</p>
+          <button onclick="window.app.showToast('Event added to Google Calendar', 'success')" class="text-emerald-600 font-bold flex items-center gap-1 hover:underline pt-1">
+            <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> Add to Calendar
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         5. QURAN STUDY CIRCLES
+         ----------------------------------------------------------------------- -->
+    <section id="quran-circles" class="scroll-mt-24 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+          <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+            <i data-lucide="book-marked" class="w-4 h-4"></i> Circles 05 • Lifelong Learning
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Adult & Youth Quran Study Circles
+          </h2>
+        </div>
+        <button onclick="window.app.showToast('Opening Quran Circle Registration...', 'info')" class="btn-primary text-xs !py-1.5 !px-3 shadow-sm">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i> Register for a Circle
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <span class="font-bold text-emerald-600 uppercase">Adult Tajweed Foundation</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Beginner's Quran Recitation</h4>
+          <p class="text-slate-500 leading-relaxed">
+            Designed for working professionals and elders wishing to correct pronunciation and master rules of Noon Sakinah, Meem Sakinah, and Madd.
+          </p>
+          <div class="text-[11px] text-slate-600 dark:text-slate-300">
+            <strong>When:</strong> Tue & Thu (08:00 PM - 09:00 PM)
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <span class="font-bold text-amber-600 uppercase">Tahfeez-ul-Quran (Hifdh)</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Youth Quran Memorization Batch</h4>
+          <p class="text-slate-500 leading-relaxed">
+            Dedicated evening program under Hafiz Salmanul Farisi for memorizing the 30 Juz with proper Waqf and Ibtida principles.
+          </p>
+          <div class="text-[11px] text-slate-600 dark:text-slate-300">
+            <strong>When:</strong> Daily 04:30 PM - 06:30 PM
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <span class="font-bold text-teal-600 uppercase">Online Women's Circle</span>
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">Sisters' Weekly Tajweed & Tafseer</h4>
+          <p class="text-slate-500 leading-relaxed">
+            Convenient Zoom live sessions conducted by certified female scholars covering Surah Yaseen and Surah Al-Mulk commentary.
+          </p>
+          <div class="text-[11px] text-slate-600 dark:text-slate-300">
+            <strong>When:</strong> Every Sunday 10:30 AM (Online)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         6. CHILDREN'S RECITATION FEST (SAHITHYA MELA)
+         ----------------------------------------------------------------------- -->
+    <section id="recitation-fest" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="mic" class="w-4 h-4"></i> Fest 06 • Islamic Arts Scoreboard
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Annual Children's Sahithya Mela & Recitation Fest
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Fest Leaderboard -->
+        <div class="lg:col-span-2 glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Live House Standings (2026 Season)</h3>
+            <span class="bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold text-xs px-2.5 py-1 rounded-full">
+              Round 3 Concluded
+            </span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">1</span>
+                <div>
+                  <strong class="text-slate-900 dark:text-white text-xs block">Al-Badr House (Green)</strong>
+                  <span class="text-[11px] text-slate-400">Led by Captain Zeeshan Ahmed</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-black text-emerald-600">342 Pts</span>
+                <span class="text-[10px] text-slate-400 block">12 Golds</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-blue-600 text-white font-bold flex items-center justify-center text-xs">2</span>
+                <div>
+                  <strong class="text-slate-900 dark:text-white text-xs block">Al-Quds House (Blue)</strong>
+                  <span class="text-[11px] text-slate-400">Led by Captain Rayan K.</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-black text-blue-600">318 Pts</span>
+                <span class="text-[10px] text-slate-400 block">9 Golds</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-amber-600 text-white font-bold flex items-center justify-center text-xs">3</span>
+                <div>
+                  <strong class="text-slate-900 dark:text-white text-xs block">Uhud House (Amber)</strong>
+                  <span class="text-[11px] text-slate-400">Led by Captain Bilal Shafi</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-black text-amber-600">295 Pts</span>
+                <span class="text-[10px] text-slate-400 block">7 Golds</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Competitions Categories -->
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3 text-xs">
+          <h3 class="font-bold text-slate-900 dark:text-white text-sm">Fest Categories</h3>
+          <ul class="space-y-2 text-slate-600 dark:text-slate-300">
+            <li class="flex items-center gap-2"><i data-lucide="mic" class="w-4 h-4 text-emerald-600"></i> Qira'at (Tajweed Recitation)</li>
+            <li class="flex items-center gap-2"><i data-lucide="music" class="w-4 h-4 text-amber-500"></i> Madeeh Song (Islamic Nasheed)</li>
+            <li class="flex items-center gap-2"><i data-lucide="volume-2" class="w-4 h-4 text-blue-500"></i> Adhan Call Competition</li>
+            <li class="flex items-center gap-2"><i data-lucide="pen-tool" class="w-4 h-4 text-purple-500"></i> Arabic & Malayalam Calligraphy</li>
+            <li class="flex items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4 text-pink-500"></i> Extempore Speech (Malayalam / English)</li>
+            <li class="flex items-center gap-2"><i data-lucide="help-circle" class="w-4 h-4 text-teal-500"></i> Grand Islamic Quiz Championship</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         7. NHYM CAREER & CIVIL SERVICE ACADEMY
+         ----------------------------------------------------------------------- -->
+    <section id="career" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="compass" class="w-4 h-4"></i> Youth 07 • Future Leadership
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          NHYM Career Guidance & Civil Service Academy
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">UPSC Civil Service Study Circle</h4>
+          <p class="text-slate-500">Weekly answer-writing sessions, newspaper analysis, and mentorship by IAS/IPS officers from Malabar.</p>
+        </div>
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">IIT / NIT / NEET Entrance Cell</h4>
+          <p class="text-slate-500">Doubt clearance sessions on weekends conducted by Mahall alumni engineering and medical scholars.</p>
+        </div>
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">1-on-1 Mentorship Booking</h4>
+          <p class="text-slate-500">Free confidential guidance for 10th & +2 students on course selection, foreign admissions, and scholarships.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         8. SPORTS & VOLUNTEERING
+         ----------------------------------------------------------------------- -->
+    <section id="sports" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="users" class="w-4 h-4"></i> Movement 08 • Physical Health & Service
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Youth Sports Club & Emergency Rescue Brigade
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Indoor Badminton & Fitness Court</h4>
+            <span class="text-emerald-600 font-bold">Open Daily 05:00 PM - 10:00 PM</span>
+          </div>
+          <p class="text-slate-500">
+            Professional wooden court with LED lighting situated behind the community auditorium. Slot booking is free for registered mahall youth.
+          </p>
+          <button onclick="window.app.showToast('Badminton court slots available from 08:30 PM today', 'info')" class="btn-outline text-xs !py-1.5 !px-3">
+            Book Court Slot
+          </button>
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Emergency Rescue Volunteer Brigade (NH-RVB)</h4>
+            <span class="text-red-600 font-bold">45 Certified Responders</span>
+          </div>
+          <p class="text-slate-500">
+            Trained in Red Cross First Aid, flood evacuation, and emergency logistics. Always deployed first during natural calamities or accidents.
+          </p>
+          <button onclick="window.app.showToast('Opening Volunteer Recruitment Form...', 'info')" class="btn-primary text-xs !py-1.5 !px-3 bg-emerald-700">
+            Join Rescue Brigade
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------------------------
+         9. FAMILY & PARENTING WING
+         ----------------------------------------------------------------------- -->
+    <section id="parenting" class="scroll-mt-24 space-y-4">
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+        <span class="text-pink-600 dark:text-pink-400 font-bold uppercase tracking-wider text-xs flex items-center gap-1.5">
+          <i data-lucide="smile" class="w-4 h-4"></i> Wellness 09 • Family Harmony
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Family Counseling & Positive Islamic Parenting
+        </h2>
+      </div>
+
+      <div class="glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="space-y-2">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Pre-Marital Course</h4>
+            <p class="text-slate-500">Comprehensive 2-day workshop for prospective brides and grooms covering Islamic marital responsibilities, legal rights, and emotional maturity.</p>
+          </div>
+          <div class="space-y-2">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Digital Age Parenting</h4>
+            <p class="text-slate-500">Seminars on guiding children away from smartphone addiction, cyberbullying, and nurturing healthy open family dialogue.</p>
+          </div>
+          <div class="space-y-2">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Confidential Family Help</h4>
+            <p class="text-slate-500">Discreet appointments with certified Islamic counselors and mental health professionals every Thursday.</p>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-3">
+          <span class="text-slate-500">Strictly confidential consultations conducted in private counseling suites.</span>
+          <button onclick="window.app.showToast('Booking confidential counseling session...', 'info')" class="btn-primary text-xs !py-1.5 !px-3.5">
+            Book Confidential Session
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       GLOBAL FOOTER
+       ========================================================================== -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-16 pt-12 pb-8 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <img src="assets/images/mahall_logo.jpg" alt="Logo" class="w-8 h-8 rounded-full border border-emerald-500" />
+          <span class="font-bold text-base text-white">Noorul Huda Mahall</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed mb-3">
+          Official digital portal for Noorul Huda Mahall Jama'ath, Central Mosque Road, Ward 02, Calicut, Kerala - 673004.
+        </p>
+        <div class="text-amber-400 font-medium">Estd. 1968 • Reg No: KL-KZK/1968/42</div>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Quick Navigation</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li><a href="index.html" class="hover:text-emerald-400 transition">Home Dashboard</a></li>
+          <li><a href="prayer.html" class="hover:text-emerald-400 transition">Prayer & Mosque</a></li>
+          <li><a href="community.html" class="hover:text-emerald-400 transition">Community & Aid</a></li>
+          <li><a href="madrasa.html" class="hover:text-emerald-400 transition font-bold text-emerald-400">Madrasa & Youth</a></li>
+          <li><a href="contributions.html" class="hover:text-emerald-400 transition">Contributions & Dues</a></li>
+          <li><a href="my-mahall.html" class="hover:text-emerald-400 transition">My Mahall Resident Portal</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Education Office</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li>Sadar Muallim: <strong class="text-white">+91 94471 66554</strong></li>
+          <li>Madrasa Desk: <strong class="text-white">+91 495 2724800</strong></li>
+          <li>Email: <span class="text-slate-300">madrasa@noorulhudamahall.org</span></li>
+          <li>Hours: <span class="text-white">06:30 AM - 12:00 PM</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Education Statistics</h4>
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1.5 text-[11px]">
+          <div class="flex justify-between"><span>Enrolled Pupils:</span><span class="text-emerald-400 font-bold">480 Students</span></div>
+          <div class="flex justify-between"><span>Teachers (Usthads):</span><span class="text-emerald-400 font-bold">14 Certified</span></div>
+          <div class="flex justify-between"><span>Public Exam Result:</span><span class="text-amber-400 font-bold">100% Pass (2025)</span></div>
+          <div class="flex justify-between"><span>Hifdh Graduates:</span><span class="text-teal-400 font-bold">32 Huffaz</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
+      <div>&copy; 2026 Noorul Huda Mahall Jama'ath. All rights reserved. Built for community service.</div>
+      <div class="flex gap-4">
+        <a href="about.html" class="hover:underline">About Mahall</a>
+        <a href="services.html" class="hover:underline">Services & FAQ</a>
+        <a href="index.html" class="hover:underline">Portal Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FLOATING MAHALL AI ASSISTANT CHAT WIDGET (ALL PAGES)
+       ========================================================================== -->
+  <div id="mahall-floating-chat-container" class="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-[80] font-sans">
+    <!-- Floating Trigger Button -->
+    <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+      id="ai-chat-floating-btn"
+      aria-label="Open Mahall AI Assistant"
+      title="Ask Mahall AI Assistant"
+      class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-800 via-emerald-700 to-teal-600 text-white shadow-2xl border-2 border-amber-400 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group relative">
+      <i data-lucide="bot" class="w-7 h-7 text-amber-300 group-hover:rotate-12 transition-transform"></i>
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-amber-500 text-[9px] font-black text-slate-950 items-center justify-center shadow">AI</span>
+      </span>
+    </button>
+
+    <!-- Interactive Chat Drawer -->
+    <div id="ai-chat-drawer"
+      class="absolute bottom-16 right-0 w-[340px] sm:w-[400px] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col hidden transition-all duration-300 z-[90]">
+      
+      <!-- Chat Header -->
+      <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center font-bold text-base shadow">
+            🌙
+          </div>
+          <div>
+            <h4 class="font-bold text-sm leading-tight flex items-center gap-1.5">
+              Mahall AI Assistant
+              <span class="text-[9px] bg-emerald-600/80 px-1.5 py-0.5 rounded-full font-medium text-emerald-100">Live</span>
+            </h4>
+            <p class="text-[11px] text-emerald-200">Full website guide & community assistant</p>
+          </div>
+        </div>
+        <button onclick="if(window.app && window.app.toggleAIChat){window.app.toggleAIChat();}else{MahallAI.toggle();}"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="p-2.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="MahallAI.handleChipClick('When is Jumu\'ah prayer and Khutbah?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🕌 Jumu'ah
+        </button>
+        <button onclick="MahallAI.handleChipClick('How can I get a Marriage NOC certificate?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🧾 Marriage NOC
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me about Noorul Huda Madrasa timings')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          📖 Madrasa
+        </button>
+        <button onclick="MahallAI.handleChipClick('Emergency ambulance number and blood donors')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🚑 Ambulance
+        </button>
+        <button onclick="MahallAI.handleChipClick('How to pay Mahall monthly subscription dues?')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          💳 Pay ₹250
+        </button>
+        <button onclick="MahallAI.handleChipClick('Tell me the history of Noorul Huda Mahall')"
+          class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 whitespace-nowrap hover:border-emerald-600 hover:text-emerald-700 transition">
+          🏛️ History
+        </button>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="ai-chat-messages" class="p-4 h-72 sm:h-80 overflow-y-auto space-y-3 text-slate-800 dark:text-slate-200">
+        <div class="flex items-start gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 text-xs font-bold shadow">
+            🌙
+          </div>
+          <div class="chat-bubble-ai text-xs md:text-sm px-4 py-2.5 max-w-[88%] border border-slate-200/80 dark:border-slate-700 shadow-sm leading-relaxed">
+            Assalamu Alaikum! I am the <strong>Noorul Huda Mahall AI Assistant</strong>. Ask me anything about prayer times, marriage NOC, madrasa, ambulance, Zakat, or community services across our entire website!
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field -->
+      <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-2">
+        <input id="ai-chat-input" onkeydown="if(event.key==='Enter') MahallAI.sendMessage()" type="text"
+          placeholder="Ask anything about our Mahall..."
+          class="flex-grow text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 transition" />
+        <button onclick="MahallAI.sendMessage()" class="btn-primary p-2.5 rounded-xl shadow hover:scale-105 transition" aria-label="Send Message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: MADRASA ACADEMIC COURSE ENROLMENT FORM
+       ========================================================================== -->
+  <div id="modal-madrasa-course-enrolment" class="fixed inset-0 z-[100] bg-slate-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target===this) closeMadrasaCourseEnrolModal()">
+    <div class="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-emerald-500/40 shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-950 text-white p-6 relative">
+        <button onclick="closeMadrasaCourseEnrolModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-xl shadow-md shrink-0">
+            <i data-lucide="book-open" class="w-6 h-6 text-slate-950"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-amber-300 uppercase tracking-widest block">MADRASA &amp; YOUTH ACADEMY</span>
+            <h3 class="text-xl font-black text-white">Course Enrolment &amp; Admission</h3>
+            <p class="text-xs text-emerald-200 mt-0.5">Samastha Affiliated Board • Direct Synchronized Application</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-emerald-50 dark:bg-emerald-950/60 border-b border-emerald-200 dark:border-emerald-800/80 px-6 py-3.5 flex items-center justify-between gap-3">
+        <div class="space-y-0.5">
+          <div class="flex items-center gap-2">
+            <span id="modal-madrasa-course-code" class="text-[10px] font-mono font-bold text-teal-700 dark:text-teal-300 bg-teal-100 dark:bg-teal-900 px-2 py-0.5 rounded border border-teal-300 dark:border-teal-700">CRS</span>
+            <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider">SELECTED PROGRAM</span>
+          </div>
+          <h4 id="modal-madrasa-course-title" class="text-sm font-bold text-slate-900 dark:text-white">-</h4>
+          <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-600 dark:text-slate-300">
+            <span><i data-lucide="clock" class="w-3 h-3 inline text-emerald-600"></i> <span id="modal-madrasa-course-schedule">-</span></span>
+            <span>•</span>
+            <span><i data-lucide="user" class="w-3 h-3 inline text-amber-500"></i> Lecturer: <strong id="modal-madrasa-course-usthad" class="text-slate-900 dark:text-white">-</strong></span>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shrink-0 shadow-xs">
+          Open Batch
+        </span>
+      </div>
+
+      <form id="form-madrasa-course-enrolment" onsubmit="handleMadrasaCourseEnrolSubmit(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="modal-madrasa-course-id" value="" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+              Candidate / Student Name <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="madrasa-student-name" required placeholder="e.g. Mohammed Faris K." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+              WhatsApp / Mobile Number <span class="text-red-500">*</span>
+            </label>
+            <input type="tel" id="madrasa-student-phone" required placeholder="+91 94470 XXXXX" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+              Age / Standard <span class="text-red-500">*</span>
+            </label>
+            <input type="number" id="madrasa-student-age" required min="4" max="90" placeholder="e.g. 14" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+              Parent / Guardian Name
+            </label>
+            <input type="text" id="madrasa-parent-name" placeholder="e.g. Ahmed Koya P. K." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+            Mahall Ward / House Address <span class="text-red-500">*</span>
+          </label>
+          <input type="text" id="madrasa-ward-info" required placeholder="e.g. Ward 2, Al-Falah Villa (or Non-Resident)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+          <button type="button" onclick="closeMadrasaCourseEnrolModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary text-xs px-5 py-2.5 rounded-xl font-bold flex items-center gap-1.5 shadow transition active:scale-95">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Submit Enrolment &amp; Get Pass
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DIGITAL ADMISSION PASS -->
+  <div id="modal-madrasa-course-pass" class="fixed inset-0 z-[100] bg-slate-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" onclick="if(event.target===this) closeMadrasaPassModal()">
+    <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-emerald-500/50 shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 text-white p-6 relative">
+        <button onclick="closeMadrasaPassModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition">&times;</button>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-xl shadow shrink-0">
+            <i data-lucide="award" class="w-6 h-6 text-slate-950"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-amber-300 uppercase tracking-widest block">ADMISSION REGISTERED</span>
+            <h3 class="text-xl font-black text-white">Course Enrolment Slip</h3>
+            <p class="text-xs text-emerald-100">Noorul Huda Islamic Academy • Samastha Board</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+            <div>
+              <span class="text-[10px] text-slate-500 block uppercase font-bold">Application Reference</span>
+              <strong id="pass-madrasa-id" class="text-base font-black font-mono text-emerald-600 dark:text-emerald-400">ADM-2026-092</strong>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-black text-[10px] uppercase">
+              CONFIRMED
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-slate-700 dark:text-slate-300">
+            <div>
+              <span class="text-[10px] text-slate-500 block">Candidate Name</span>
+              <strong id="pass-madrasa-name" class="text-slate-900 dark:text-white font-bold text-xs">-</strong>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 block">WhatsApp Mobile</span>
+              <strong id="pass-madrasa-phone" class="font-mono text-xs">-</strong>
+            </div>
+            <div class="col-span-2">
+              <span class="text-[10px] text-slate-500 block">Course / Halqa Program</span>
+              <strong id="pass-madrasa-title" class="text-slate-900 dark:text-white font-bold text-xs">-</strong>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 block">Course Code</span>
+              <strong id="pass-madrasa-code" class="text-teal-600 font-mono text-xs font-bold">-</strong>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 block">Class Schedule &amp; Timing</span>
+              <strong id="pass-madrasa-schedule" class="text-emerald-600 font-mono text-xs">-</strong>
+            </div>
+            <div class="col-span-2">
+              <span class="text-[10px] text-slate-500 block">Faculty In-Charge</span>
+              <strong id="pass-madrasa-usthad" class="text-slate-900 dark:text-white text-xs">-</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center pt-2">
+          <button onclick="closeMadrasaPassModal()" class="text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+            Close Window
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script>
+    // Dynamic Academic Courses Sync Logic
+    let currentMadrasaFilter = 'All';
+    let currentActiveMadrasaCourseId = null;
+
+    function filterMadrasaCourses(category) {
+      currentMadrasaFilter = category;
+      document.querySelectorAll('.madrasa-course-filter').forEach(btn => {
+        if (btn.dataset.filter === category) {
+          btn.className = 'madrasa-course-filter px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold transition shadow-sm text-xs';
+        } else {
+          btn.className = 'madrasa-course-filter px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs';
+        }
+      });
+      renderMadrasaCourses();
+    }
+
+    function renderMadrasaCourses() {
+      const container = document.getElementById('madrasa-courses-grid');
+      if (!container) return;
+
+      const courses = (typeof MahallDB !== 'undefined' && MahallDB.getCourses) ? MahallDB.getCourses() : [];
+      let filtered = courses;
+      if (currentMadrasaFilter !== 'All') {
+        filtered = courses.filter(c => (c.category || '').toLowerCase().includes(currentMadrasaFilter.toLowerCase()));
+      }
+
+      if (!filtered.length) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 px-6 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-800 text-center space-y-3">
+            <h4 class="text-base font-bold text-slate-900 dark:text-white">No courses registered under this category</h4>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">Courses registered via Admin Portal will appear here automatically.</p>
+            <button onclick="filterMadrasaCourses('All')" class="btn-primary text-xs px-4 py-2 rounded-xl">View All Batches</button>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(course => {
+        const savedEnrol = localStorage.getItem(`mahall_madrasa_enrol_${course.id}`);
+        const isEnrolled = !!savedEnrol;
+        const enrolData = isEnrolled ? JSON.parse(savedEnrol) : null;
+
+        const statusBadge = course.status === 'Admissions Open'
+          ? `<span class="px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-700 dark:text-amber-300 text-[10px] font-black tracking-wide flex items-center gap-1.5">
+               <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+               ${course.status}
+             </span>`
+          : `<span class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-[10px] font-black tracking-wide flex items-center gap-1.5">
+               <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+               ${course.status || 'Active'}
+             </span>`;
+
+        const actionButton = isEnrolled
+          ? `<div class="flex items-center justify-between w-full gap-2">
+               <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold text-[11px] border border-emerald-300 dark:border-emerald-700">
+                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i> Enrolled (#${enrolData.id || 'OK'})
+               </span>
+               <button onclick="showMadrasaPassModal('${course.id}')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 shadow transition">
+                 <i data-lucide="file-text" class="w-3.5 h-3.5"></i> <span>View Slip</span>
+               </button>
+             </div>`
+          : `<button onclick="openMadrasaCourseEnrolModal('${course.id}')" class="btn-primary text-xs px-4 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow transition active:scale-95 w-full">
+               <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+               <span>Enrol in Batch</span>
+             </button>`;
+
+        return `
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border-2 border-emerald-500/25 hover:border-emerald-500 shadow-sm space-y-4 flex flex-col justify-between hover:shadow-xl transition-all duration-300 group">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-teal-50 dark:bg-teal-950/80 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800 font-mono font-bold text-xs tracking-wider">
+                  ${course.code || 'CRS'}
+                </span>
+                ${statusBadge}
+              </div>
+
+              <div>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug font-heading group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
+                  ${course.title}
+                </h4>
+                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block mt-0.5">
+                  ${course.category || 'Primary Madrasa'}
+                </span>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/80 space-y-2 text-xs">
+                <div class="flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                  <i data-lucide="clock" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+                  <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Schedule</span>
+                    <strong class="font-mono text-emerald-950 dark:text-emerald-100">${course.timing || 'Daily'}</strong>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-emerald-200/60 dark:border-emerald-800/40 text-[11px] text-slate-600 dark:text-slate-300">
+                  <span>Capacity: <strong class="text-slate-900 dark:text-white">${course.intake || 'Open'}</strong></span>
+                  <span>Board: <strong>Samastha</strong></span>
+                </div>
+              </div>
+
+              <div class="text-[11px] text-slate-600 dark:text-slate-400 flex items-center gap-1.5 pt-0.5">
+                <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+                <span>In-Charge: <strong class="text-slate-900 dark:text-white">${course.usthad || 'Sadar Mudarris'}</strong></span>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              ${actionButton}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openMadrasaCourseEnrolModal(courseId) {
+      const courses = (typeof MahallDB !== 'undefined' && MahallDB.getCourses) ? MahallDB.getCourses() : [];
+      const course = courses.find(c => c.id === courseId) || { id: courseId, title: 'Academic Program', code: 'CRS', timing: 'Daily', usthad: 'Mudarris' };
+      currentActiveMadrasaCourseId = course.id;
+
+      document.getElementById('modal-madrasa-course-title').innerText = course.title;
+      document.getElementById('modal-madrasa-course-code').innerText = course.code || 'CRS';
+      document.getElementById('modal-madrasa-course-schedule').innerText = course.timing || 'Daily';
+      document.getElementById('modal-madrasa-course-usthad').innerText = course.usthad || 'Faculty';
+      document.getElementById('modal-madrasa-course-id').value = course.id;
+
+      const modal = document.getElementById('modal-madrasa-course-enrolment');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeMadrasaCourseEnrolModal() {
+      const modal = document.getElementById('modal-madrasa-course-enrolment');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleMadrasaCourseEnrolSubmit(e) {
+      e.preventDefault();
+      const courseId = document.getElementById('modal-madrasa-course-id').value || currentActiveMadrasaCourseId;
+      const courses = (typeof MahallDB !== 'undefined' && MahallDB.getCourses) ? MahallDB.getCourses() : [];
+      const course = courses.find(c => c.id === courseId) || { title: 'Academic Program', code: 'CRS', timing: 'Daily', usthad: 'Mudarris' };
+
+      const name = (document.getElementById('madrasa-student-name').value || '').trim();
+      const phone = (document.getElementById('madrasa-student-phone').value || '').trim();
+      const parent = (document.getElementById('madrasa-parent-name').value || '').trim();
+      const ward = (document.getElementById('madrasa-ward-info').value || '').trim();
+      const age = document.getElementById('madrasa-student-age').value;
+
+      const admId = `ADM-2026-${Math.floor(100 + Math.random() * 900)}`;
+
+      const enrolData = {
+        id: admId,
+        courseId: course.id,
+        courseTitle: course.title,
+        courseCode: course.code,
+        schedule: course.timing,
+        usthad: course.usthad,
+        studentName: name,
+        parentName: parent,
+        phone: phone,
+        ward: ward,
+        age: age,
+        enrolledAt: new Date().toISOString()
+      };
+
+      try {
+        localStorage.setItem(`mahall_madrasa_enrol_${course.id}`, JSON.stringify(enrolData));
+      } catch (err) {}
+
+      if (typeof MahallDB !== 'undefined' && MahallDB.createAdmission) {
+        MahallDB.createAdmission({
+          studentName: name,
+          course: `${course.title} (${course.code || 'CRS'})`,
+          parentName: parent || name,
+          phone: phone,
+          familyId: ward || 'W02-F005',
+          status: 'PENDING',
+          notes: `Enrolled via Madrasa Academy portal.`
+        });
+      }
+
+      closeMadrasaCourseEnrolModal();
+      renderMadrasaCourses();
+      showMadrasaPassModal(course.id);
+
+      if (window.app) {
+        window.app.showToast(`Application registered for ${course.title}! Ref #${admId}`, 'success');
+      }
+    }
+
+    function showMadrasaPassModal(courseId) {
+      currentActiveMadrasaCourseId = courseId || currentActiveMadrasaCourseId;
+      const savedRaw = localStorage.getItem(`mahall_madrasa_enrol_${currentActiveMadrasaCourseId}`);
+      const data = savedRaw ? JSON.parse(savedRaw) : null;
+      if (!data) return;
+
+      document.getElementById('pass-madrasa-id').innerText = data.id || 'ADM-2026-092';
+      document.getElementById('pass-madrasa-name').innerText = data.studentName || '-';
+      document.getElementById('pass-madrasa-phone').innerText = data.phone || '-';
+      document.getElementById('pass-madrasa-title').innerText = data.courseTitle || '-';
+      document.getElementById('pass-madrasa-code').innerText = data.courseCode || 'CRS';
+      document.getElementById('pass-madrasa-schedule').innerText = data.schedule || '-';
+      document.getElementById('pass-madrasa-usthad').innerText = data.usthad || '-';
+
+      const modal = document.getElementById('modal-madrasa-course-pass');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeMadrasaPassModal() {
+      const modal = document.getElementById('modal-madrasa-course-pass');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // Student Tracker Database Simulation
+    const studentDb = {
+      'NHM-101': {
+        name: 'Fatima Zahra',
+        class: 'Standard 9 - Division B (Usthada Maimoona)',
+        att: '96.4%',
+        hifdh: 'Juz 4',
+        tajweed: '98 / 100',
+        rank: '1st Rank',
+        remark: 'Exemplary dedication in both Tajweed memorization and class discipline. Prompt in daily homework and highly respectful to peers.',
+        marks: [
+          { subject: 'Quran Thilawath & Tajweed', max: 100, score: 98, grade: 'A+' },
+          { subject: 'Fiqh (Islamic Jurisprudence)', max: 100, score: 94, grade: 'A+' },
+          { subject: 'Aqeedah & Akhlaq (Moral Values)', max: 100, score: 96, grade: 'A+' },
+          { subject: 'Thareekh (Islamic History)', max: 100, score: 91, grade: 'A' }
+        ]
+      },
+      'NHM-102': {
+        name: 'Bilal Ahmed Koya',
+        class: 'Standard 4 - Division A (Usthad Farooq)',
+        att: '98.2%',
+        hifdh: 'Juz 30 (Amma)',
+        tajweed: '92 / 100',
+        rank: '2nd Rank',
+        remark: 'Very energetic and attentive during morning sessions. Recitation clarity is rapidly developing.',
+        marks: [
+          { subject: 'Quran Thilawath & Tajweed', max: 100, score: 92, grade: 'A+' },
+          { subject: 'Fiqh & Thahara', max: 100, score: 95, grade: 'A+' },
+          { subject: 'Dua & Adhkar', max: 100, score: 98, grade: 'A+' },
+          { subject: 'Islamic Stories & Akhlaq', max: 100, score: 90, grade: 'A' }
+        ]
+      },
+      'NHM-103': {
+        name: 'Aisha Maryam',
+        class: 'Standard 7 - Division A (Usthad Zubair)',
+        att: '94.0%',
+        hifdh: 'Juz 6',
+        tajweed: '95 / 100',
+        rank: '3rd Rank',
+        remark: 'Strong grasp in Arabic grammar and Tajweed rules. Consistently among top performers in Fiqh exams.',
+        marks: [
+          { subject: 'Quran Thilawath & Tajweed', max: 100, score: 95, grade: 'A+' },
+          { subject: 'Fiqh', max: 100, score: 93, grade: 'A+' },
+          { subject: 'Arabic Grammar', max: 100, score: 88, grade: 'A' },
+          { subject: 'Hadith Studies', max: 100, score: 94, grade: 'A+' }
+        ]
+      },
+      'NHM-104': {
+        name: 'Salman Faris M.',
+        class: 'Standard 10 - Board Batch',
+        att: '97.5%',
+        hifdh: 'Juz 12',
+        tajweed: '99 / 100',
+        rank: '1st Rank',
+        remark: 'Exceptional scholar material. Represented district in State Qiraat competition with high honors.',
+        marks: [
+          { subject: 'Quran Thilawath & Tajweed', max: 100, score: 99, grade: 'A+' },
+          { subject: 'Usool-ul-Fiqh', max: 100, score: 96, grade: 'A+' },
+          { subject: 'Tafseer & Hadith', max: 100, score: 97, grade: 'A+' },
+          { subject: 'Arabic Literature', max: 100, score: 94, grade: 'A+' }
+        ]
+      }
+    };
+
+    function getAllMadrasaStudents() {
+      const roster = [];
+      const seen = new Set();
+
+      // First include real students from MahallDB
+      if (typeof MahallDB !== 'undefined' && MahallDB.getStudents) {
+        const adminStudents = MahallDB.getStudents() || [];
+        adminStudents.forEach(st => {
+          if (st && st.roll) {
+            seen.add(st.roll.toUpperCase().replace(/\s+/g, ''));
+            roster.push({
+              roll: st.roll,
+              name: st.name || 'Enrolled Student',
+              class: st.class || 'Madrasa Class',
+              att: st.att || '95.0%',
+              hifdh: st.hifdh || 'Enrolled',
+              tajweed: st.tajweed || 'A (Good)',
+              rank: st.rank || 'Good Standing',
+              remark: st.remark || 'Regular attendee with commendable dedication to Quran recitation and Islamic ethics.',
+              marks: st.marks || [
+                { subject: 'Quran Thilawath & Tajweed', max: 100, score: 95, grade: 'A+' },
+                { subject: 'Fiqh (Jurisprudence)', max: 100, score: 92, grade: 'A+' },
+                { subject: 'Aqeedah & Akhlaq', max: 100, score: 94, grade: 'A+' },
+                { subject: 'Islamic History', max: 100, score: 90, grade: 'A' }
+              ]
+            });
+          }
+        });
+      }
+
+      // Merge with studentDb demo list
+      Object.keys(studentDb).forEach(key => {
+        const cleanKey = key.toUpperCase().replace(/\s+/g, '');
+        if (!seen.has(cleanKey)) {
+          roster.push({
+            roll: key,
+            ...studentDb[key]
+          });
+        }
+      });
+
+      return roster;
+    }
+
+    function searchMadrasaStudents(rawQuery) {
+      const q = (rawQuery || '').trim().toLowerCase();
+      if (!q) return [];
+      const cleanNum = q.replace(/[^0-9]/g, '');
+      const all = getAllMadrasaStudents();
+
+      return all.filter(s => {
+        const rollLower = (s.roll || '').toLowerCase();
+        const rollClean = rollLower.replace(/\s+/g, '');
+        const nameLower = (s.name || '').toLowerCase();
+        const classLower = (s.class || '').toLowerCase();
+
+        const matchRoll = rollLower.includes(q) || rollClean.includes(q) || (cleanNum.length >= 2 && rollClean.includes(cleanNum));
+        const matchName = nameLower.includes(q);
+        const matchClass = classLower.includes(q);
+
+        return matchRoll || matchName || matchClass;
+      });
+    }
+
+    function renderMadrasaStudentReport(st, matches) {
+      if (!st) return;
+
+      const initials = (st.name || 'ST')
+        .split(' ')
+        .filter(Boolean)
+        .map(w => w[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase() || 'ST';
+
+      const avatarEl = document.getElementById('st-avatar');
+      if (avatarEl) avatarEl.innerText = initials;
+
+      const rollBadge = document.getElementById('st-roll-badge');
+      if (rollBadge) rollBadge.innerText = `Roll No: ${st.roll}`;
+
+      const nameEl = document.getElementById('st-name');
+      if (nameEl) nameEl.innerText = st.name;
+
+      const classEl = document.getElementById('st-class');
+      if (classEl) classEl.innerText = st.class;
+
+      const attEl = document.getElementById('st-att');
+      if (attEl) attEl.innerText = st.att;
+
+      const hifdhEl = document.getElementById('st-hifdh');
+      if (hifdhEl) hifdhEl.innerText = st.hifdh;
+
+      const tajweedEl = document.getElementById('st-tajweed');
+      if (tajweedEl) tajweedEl.innerText = st.tajweed;
+
+      const rankEl = document.getElementById('st-rank');
+      if (rankEl) rankEl.innerText = st.rank;
+
+      const remarkEl = document.getElementById('st-remark');
+      if (remarkEl) remarkEl.innerText = `"${st.remark || 'Regular attendee with commendable dedication.'}"`;
+
+      const marks = st.marks && st.marks.length ? st.marks : [
+        { subject: 'Quran Thilawath & Tajweed', max: 100, score: 95, grade: 'A+' },
+        { subject: 'Fiqh (Jurisprudence)', max: 100, score: 92, grade: 'A+' },
+        { subject: 'Aqeedah & Akhlaq', max: 100, score: 94, grade: 'A+' },
+        { subject: 'Islamic History', max: 100, score: 90, grade: 'A' }
+      ];
+
+      const marksBody = document.getElementById('st-marks-body');
+      if (marksBody) {
+        marksBody.innerHTML = marks.map(m => `
+          <tr>
+            <td class="p-2.5 font-bold">${m.subject}</td>
+            <td class="p-2.5">${m.max}</td>
+            <td class="p-2.5 font-bold text-emerald-600">${m.score}</td>
+            <td class="p-2.5 font-bold text-emerald-600">${m.grade}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Render selection chips if multiple matches found
+      const matchesBox = document.getElementById('madrasa-student-matches');
+      if (matchesBox) {
+        if (matches && matches.length > 1) {
+          matchesBox.innerHTML = `
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+              <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300 block">Found ${matches.length} students matching your search:</span>
+              <div class="flex flex-wrap gap-1.5">
+                ${matches.map(m => `
+                  <button type="button" onclick="selectMadrasaStudent('${m.roll}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition ${m.roll === st.roll ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 hover:bg-emerald-100 hover:text-emerald-800'}">
+                    ${m.name} <span class="font-mono text-[10px] opacity-80">(${m.roll} • ${m.class})</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+          matchesBox.classList.remove('hidden');
+        } else {
+          matchesBox.classList.add('hidden');
+          matchesBox.innerHTML = '';
+        }
+      }
+    }
+
+    function selectMadrasaStudent(roll) {
+      const all = getAllMadrasaStudents();
+      const target = all.find(s => s.roll.toUpperCase() === roll.toUpperCase());
+      if (target) {
+        renderMadrasaStudentReport(target, null);
+        if (window.app) window.app.showToast(`Loaded ${target.name} (${target.roll})`, 'info');
+      }
+    }
+
+    function lookupStudentProgress() {
+      const query = (document.getElementById('student-roll-input').value || '').trim();
+      if (!query) {
+        if (window.app) window.app.showToast('Please enter a Roll Number, Student Name, or Class to search', 'warning');
+        return;
+      }
+
+      const matches = searchMadrasaStudents(query);
+
+      if (!matches.length) {
+        if (window.app) window.app.showToast(`No student records found matching "${query}". Try searching by Roll No, Name, or Class`, 'error');
+        return;
+      }
+
+      const selected = matches[0];
+      renderMadrasaStudentReport(selected, matches);
+
+      if (window.app) {
+        const extraText = matches.length > 1 ? ` (1 of ${matches.length} matches)` : '';
+        window.app.showToast(`Found academic report card for ${selected.name} (${selected.roll})${extraText}`, 'success');
+      }
+    }
+
+    function renderMadrasaMaterials() {
+      const container = document.getElementById('madrasa-materials-grid');
+      if (!container) return;
+
+      const list = (typeof MahallDB !== 'undefined' && MahallDB.getMaterials) ? MahallDB.getMaterials() : [];
+
+      if (!list.length) {
+        container.innerHTML = `
+          <div class="col-span-full p-6 text-center text-slate-500 bg-slate-50 dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-800 rounded-2xl">
+            No materials published yet. New documents added in Admin Portal will appear here.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(m => `
+        <div class="glass-panel p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3 flex flex-col justify-between hover:border-emerald-500 transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-1">
+              <span class="font-bold text-emerald-600 uppercase text-[10px] bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                ${m.category || 'Study Material'}
+              </span>
+              <span class="text-[10px] text-slate-400 font-medium">${m.class || 'All Classes'}</span>
+            </div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm leading-snug">${m.title}</h4>
+            <div class="text-[11px] text-slate-500 font-mono flex items-center gap-1.5">
+              <span>${m.file || 'document.pdf'}</span> • <span>${m.date || 'Recent'}</span>
+            </div>
+          </div>
+          <button onclick="downloadSample('${(m.title || 'Document').replace(/'/g, "\\'")}')" class="btn-primary text-xs !py-2 !px-3 flex items-center justify-center gap-1.5 w-full mt-2">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF
+          </button>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function downloadSample(name) {
+      if (window.app) {
+        window.app.showToast(`Downloading ${name}...`, 'info');
+        setTimeout(() => window.app.showToast(`${name} downloaded successfully!`, 'success'), 1000);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      window.app = new MahallApp();
+
+      renderMadrasaCourses();
+      renderMadrasaMaterials();
+
+      // Real-time synchronization with Admin portal for courses, students, and materials
+      window.addEventListener('storage', (e) => {
+        if (!e.key || e.key === 'mahall_education_courses' || e.key === 'mahall_last_course_sync') {
+          renderMadrasaCourses();
+        }
+        if (!e.key || e.key === 'mahall_madrasa_students') {
+          lookupStudentProgress();
+        }
+        if (!e.key || e.key === 'mahall_education_materials') {
+          renderMadrasaMaterials();
+        }
+      });
+      window.addEventListener('mahalldb_updated', (e) => {
+        if (!e.detail || e.detail.event === 'mahall_education_courses' || e.detail.key === 'mahall_education_courses') {
+          renderMadrasaCourses();
+        }
+        if (!e.detail || e.detail.event === 'mahall_madrasa_students' || e.detail.key === 'mahall_madrasa_students') {
+          lookupStudentProgress();
+        }
+        if (!e.detail || e.detail.event === 'mahall_education_materials' || e.detail.key === 'mahall_education_materials') {
+          renderMadrasaMaterials();
+        }
+      });
+      window.addEventListener('mahall-courses-updated', () => {
+        renderMadrasaCourses();
+      });
+
+      // Scroll morph
+      const header = document.getElementById('main-header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      });
+    });
+  </script>
+  <!-- Notification Drawer Container -->
+  <div id="notification-drawer" class="hidden"></div>
+</body>
+</html>
